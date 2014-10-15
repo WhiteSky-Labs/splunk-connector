@@ -17,7 +17,7 @@ import java.util.List;
 
 public class SplunkClient {
 
-    private String ENTITY_PACKAGE = "";
+    private static String ENTITY_PACKAGE = "com.splunk";
 
     private SplunkConnector splunkConnector;
 
@@ -50,7 +50,7 @@ public class SplunkClient {
      */
     public List<MetaDataKey> getMetadata() {
         List<MetaDataKey> metaDataKeyList = new LinkedList<MetaDataKey>();
-        //metaDataKeyList.add(createKey(Account.class));
+        metaDataKeyList.add(createKey(Application.class));
         return metaDataKeyList;
     }
 
