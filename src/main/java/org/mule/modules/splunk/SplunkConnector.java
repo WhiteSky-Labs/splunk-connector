@@ -16,6 +16,7 @@ import org.mule.api.ConnectionException;
 import org.mule.common.metadata.MetaData;
 import org.mule.common.metadata.MetaDataKey;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -83,7 +84,7 @@ public class SplunkConnector {
     @ValidateConnection
     public boolean isConnected() {
 
-        if (splunkClient.getService() != null) {
+        if (splunkClient != null) {
             return splunkClient.getService().getToken() != null;
         }
         return false;
@@ -107,7 +108,8 @@ public class SplunkConnector {
      *
      * @return Applications
      */
-    public java.util.Collection<Application> getApplications() {
+    @Processor
+    public List<Application> getApplications() {
         return splunkClient.getApplications();
     }
 

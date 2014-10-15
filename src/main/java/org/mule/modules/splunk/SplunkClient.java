@@ -10,6 +10,8 @@ package org.mule.modules.splunk;
 import com.splunk.Application;
 import com.splunk.Service;
 import com.splunk.ServiceArgs;
+import org.mule.api.ConnectionException;
+import org.mule.api.ConnectionExceptionCode;
 import org.mule.common.metadata.*;
 
 import java.util.LinkedList;
@@ -34,13 +36,49 @@ public class SplunkClient {
      * @param username
      * @param password
      */
-    public void connect(String username, String password) {
-        ServiceArgs loginArgs = new ServiceArgs();
-        loginArgs.setUsername(username);
-        loginArgs.setPassword(password);
-        loginArgs.setHost(splunkConnector.getHost());
-        loginArgs.setPort(splunkConnector.getPort());
-        service = Service.connect(loginArgs);
+    public void connect(String username, String password) throws ConnectionException {
+        try {
+            ServiceArgs loginArgs = new ServiceArgs();
+            loginArgs.setUsername(username);
+            loginArgs.setPassword(password);
+            loginArgs.setHost(splunkConnector.getHost());
+            loginArgs.setPort(splunkConnector.getPort());
+            service = Service.connect(loginArgs);
+
+        } catch (com.splunk.HttpException splunkException) {
+            switch (splunkException.getStatus()) {
+                case 401:
+                case 402:
+                case 403:
+                    // credentials no good
+                    throw new ConnectionException(
+                            ConnectionExceptionCode.INCORRECT_CREDENTIALS,
+                            Integer.toString(splunkException.getStatus()),
+                            splunkException.getMessage());
+                case 404:
+                    // can't reach
+                    throw new ConnectionException(
+                            ConnectionExceptionCode.CANNOT_REACH,
+                            Integer.toString(splunkException.getStatus()),
+                            splunkException.getMessage());
+                case 405:
+                case 409:
+                case 500:
+                case 503:
+                    throw new ConnectionException(
+                            ConnectionExceptionCode.UNKNOWN_HOST,
+                            Integer.toString(splunkException.getStatus()),
+                            splunkException.getMessage());
+                default:
+                    // unknown error
+                    throw new ConnectionException(
+                            ConnectionExceptionCode.UNKNOWN,
+                            Integer.toString(splunkException.getStatus()),
+                            splunkException.getMessage());
+            }
+
+        }
+
     }
 
     /**
@@ -77,10 +115,11 @@ public class SplunkClient {
 
     /**
      * Get All the Applications
+     *
      * @return
      */
-    public java.util.Collection<Application> getApplications() {
-       return service.getApplications().values();
+    public List<Application> getApplications() {
+        return (List<Application>) service.getApplications().values();
     }
 
     /**

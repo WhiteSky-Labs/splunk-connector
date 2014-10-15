@@ -9,10 +9,10 @@
         http://www.mulesoft.org/schema/mule/splunk
         http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd ">
 
-    <splunk:config host="localhost" port="8080"
-                   username="xxx" password="yyy"/>
+    <splunk:config host="localhost" port="8089"
+                   username="admin" password="admin"/>
 
-    <flow name="testFlow">
+    <flow name="testGetApplication">
         <splunk:get-applications/>
     </flow>
 
