@@ -1,0 +1,3 @@
+<!-- BEGIN_INCLUDE(splunk:my-processor) -->
+    <splunk:my-processor content="#[map-payload:content]" />
+<!-- END_INCLUDE(splunk:my-processor) -->

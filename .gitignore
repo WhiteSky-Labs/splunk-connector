@@ -1,16 +1,27 @@
-# Created by .gitignore support plugin (hsz.mobi)
-### Java template
-*.class
+# maven
+target/
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+# IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# eclipse
+.classpath
+.settings/
+.project
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-.idea
-splunk-connector.iml
+# Mule Studio
+demo/**/.studio/
+demo/**/bin/
+demo/**/src/test/resources/input/*
+demo/**/src/test/resources/output/*
+
+# OS X
+.DS_Store
+
+# Windows
+
+# Linux
+/bin
