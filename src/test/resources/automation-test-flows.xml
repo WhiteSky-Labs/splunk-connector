@@ -6,13 +6,14 @@
       xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-        http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd">
+        http://www.mulesoft.org/schema/mule/splunk
+        http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd ">
 
-    <splunk:config myProperty="Some string"
-            username="xxx" password="yyy"/>
+    <splunk:config host="localhost" port="8080"
+                   username="xxx" password="yyy"/>
 
     <flow name="testFlow">
-        <splunk:my-processor content="Another string"/>
+        <splunk:get-applications/>
     </flow>
 
 </mule>
