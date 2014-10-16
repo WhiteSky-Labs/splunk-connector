@@ -14,6 +14,7 @@ import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.common.metadata.*;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class SplunkClient {
      * @return List of MetaData
      */
     public List<MetaDataKey> getMetadata() {
-        List<MetaDataKey> metaDataKeyList = new LinkedList<MetaDataKey>();
+        List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
         metaDataKeyList.add(createKey(Application.class));
         return metaDataKeyList;
     }
