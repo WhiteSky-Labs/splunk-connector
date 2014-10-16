@@ -1,3 +1,15 @@
 <!-- BEGIN_INCLUDE(splunk:get-applications) -->
     <splunk:get-applications />
 <!-- END_INCLUDE(splunk:get-applications) -->
+<!-- BEGIN_INCLUDE(splunk:get-saved-searches) -->
+    <splunk:get-saved-searches />
+<!-- END_INCLUDE(splunk:get-saved-searches) -->
+<!-- BEGIN_INCLUDE(splunk:create-saved-searches) -->
+    <splunk:create-saved-searches searchName="#[map-payload:searchName]" searchQuery="#[map-payload:searchQuery]" />
+<!-- END_INCLUDE(splunk:create-saved-searches) -->
+<!-- BEGIN_INCLUDE(splunk:view-saved-search) -->
+    <splunk:view-saved-search searchName="#[map-payload:searchName]" />
+<!-- END_INCLUDE(splunk:view-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
+    <splunk:get-saved-search-history searchName="#[map-payload:searchName]" />
+<!-- END_INCLUDE(splunk:get-saved-search-history) -->

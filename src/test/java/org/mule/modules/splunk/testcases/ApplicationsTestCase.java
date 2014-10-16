@@ -13,6 +13,7 @@ import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.splunk.SmokeTests;
 
 import java.util.Collection;
+import java.util.List;
 
 import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
@@ -31,7 +32,7 @@ public class ApplicationsTestCase extends SplunkTestParent {
         MessageProcessor flow = lookupFlowConstruct("testGetApplication");
         MuleEvent response = flow.process(getTestEvent(null));
         assertNotNull(response.getMessage().getPayload());
-        Collection<Application> applications = (Collection<Application>) response.getMessage().getPayload();
+        List<Application> applications = (List<Application>) response.getMessage().getPayload();
         assertTrue(applications.size() > 0);
     }
 
