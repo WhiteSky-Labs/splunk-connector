@@ -9,9 +9,14 @@ package org.mule.modules.splunk;
 
 import com.splunk.*;
 import org.apache.commons.lang.Validate;
+import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
+import org.mule.api.MuleEvent;
 import org.mule.common.metadata.*;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
+import org.mule.transport.polling.MessageProcessorPollingInterceptor;
+import org.mule.transport.polling.watermark.Watermark;
 import org.quartz.CronExpression;
 import org.slf4j.*;
 
@@ -94,6 +99,8 @@ public class SplunkClient {
         List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
         metaDataKeyList.add(createKey(Application.class));
         metaDataKeyList.add(createKey(SavedSearch.class));
+        metaDataKeyList.add(createKey(SavedSearchDispatchArgs.class));
+        metaDataKeyList.add(createKey(Job.class));
         return metaDataKeyList;
     }
 
@@ -202,15 +209,94 @@ public class SplunkClient {
         return jobList;
     }
 
-    public void listenFinishJobs() {
-        // Retrieve the collection
-        JobCollection jobs = service.getJobs();
-        System.out.println("There are " + jobs.size() + " jobs available to 'admin'\n");
-
-        // List the job SIDs
-        for (Job job : jobs.values()) {
-            System.out.println(job.getName());
+    /**
+     * Run a Saved Search
+     *
+     * @param searchName The name of query
+     * @return
+     * @throws InterruptedException
+     */
+    public List<Map<String, Object>> runSavedSearch(String searchName) throws SplunkConnectorException {
+        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
+        JobArgs jobargs = new JobArgs();
+        jobargs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
+        Job job;
+        try {
+            job = savedSearch.dispatch();
+            while (!job.isDone()) {
+                Thread.sleep(500);
+            }
+            return populateEventResponse(job);
+        } catch (InterruptedException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
         }
+    }
+
+    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, String searchQuery,
+                                                                 Map<String, Object> customArgs,
+                                                                 SavedSearchDispatchArgs searchDispatchArgs)
+            throws SplunkConnectorException {
+        SavedSearch savedSearch = service.getSavedSearches().create(searchName, searchQuery);
+        String queryParams = "";
+        for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue().toString();
+            queryParams += " " + key + "=$args." + key + "$";
+            searchDispatchArgs.add("args." + key, value);
+        }
+        LOGGER.debug("Query Params: " + queryParams);
+        Job job;
+        try {
+            job = savedSearch.dispatch(searchDispatchArgs);
+            while (!job.isDone()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                LOGGER.debug("Done! The job finished with " + job.getEventCount() + " events.");
+
+            }
+            return populateEventResponse(job);
+        } catch (InterruptedException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+    }
+
+    private List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
+        List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
+        JobResultsArgs resultsArgs = new JobResultsArgs();
+        resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
+        InputStream results = job.getResults(resultsArgs);
+        ResultsReaderJson resultsReader;
+        try {
+            resultsReader = new ResultsReaderJson(results);
+            HashMap<String, String> event;
+            while ((event = resultsReader.getNextEvent()) != null) {
+                Map<String, Object> eventData = new HashMap<String, Object>();
+                for (String key : event.keySet()) {
+                    System.out.println("   " + key + ":  " + event.get(key));
+                    eventData.put(convertToJavaConvention(key), event.get(key));
+                }
+                searchResponseList.add(eventData);
+            }
+            resultsReader.close();
+            return searchResponseList;
+        } catch (IOException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Delete Saved Search
+     *
+     * @param searchName The name of query
+     * @return
+     */
+    public boolean deleteSavedSearch(String searchName) {
+        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
+        savedSearch.remove();
+        return true;
     }
 
     public void listenRun(SplunkConnector.SoftCallback callback) throws IOException {
@@ -220,18 +306,23 @@ public class SplunkClient {
                 System.out.println("There are " + jobs.size() + " jobs available to 'admin'\n");
                 // List the job SIDs
                 for (Job job : jobs.values()) {
-                    System.out.println(job.getName() + job.isFinalized());
-                    // Specify JSON as the output mode for results
-                    JobResultsArgs resultsArgs = new JobResultsArgs();
-                    resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
-                    InputStream results = job.getResults(resultsArgs);
-                    ResultsReaderJson resultsReader = new ResultsReaderJson(results);
-                    Map<String, String> event;
-                    System.out.println("\nFormatted results from the search job as JSON\n");
-                    resultsReader.close();
-                    callback.process(job);
+                    if (job.isDone()) {
+                        JobResultsArgs resultsArgs = new JobResultsArgs();
+                        resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
+                        InputStream results = job.getResults(resultsArgs);
+                        ResultsReaderJson resultsReader = new ResultsReaderJson(results);
+                        // Specify JSON as the output mode for results
+                        HashMap<String, String> event;
+                        System.out.println("\nFormatted results from the search job as JSON\n");
+                        while ((event = resultsReader.getNextEvent()) != null) {
+                            for (String key : event.keySet())
+                                System.out.println("   " + key + ":  " + event.get(key));
+                        }
+                        resultsReader.close();
+                        //callback.process(job);
+                    }
                 }
-                Thread.sleep(1000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -257,4 +348,15 @@ public class SplunkClient {
     public void setService(Service service) {
         this.service = service;
     }
+
+    /**
+     * Convert the java key
+     *
+     * @param key
+     * @return
+     */
+    private String convertToJavaConvention(String key) {
+        return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
+    }
+
 }

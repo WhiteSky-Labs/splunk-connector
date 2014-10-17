@@ -11,6 +11,7 @@ package org.mule.modules.splunk;
 import com.splunk.Application;
 import com.splunk.Job;
 import com.splunk.SavedSearch;
+import com.splunk.SavedSearchDispatchArgs;
 import org.apache.commons.lang.UnhandledException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -24,6 +25,7 @@ import org.mule.api.callback.SourceCallback;
 import org.mule.api.context.MuleContextAware;
 import org.mule.common.metadata.MetaData;
 import org.mule.common.metadata.MetaDataKey;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 import org.springframework.security.web.savedrequest.SavedCookie;
 
 import java.io.IOException;
@@ -150,7 +152,7 @@ public class SplunkConnector implements MuleContextAware {
      * @return SavedSearch
      */
     @Processor
-    public SavedSearch createSavedSearch(String searchName, String searchQuery) throws Exception{
+    public SavedSearch createSavedSearch(String searchName, String searchQuery) throws Exception {
         return splunkClient.createSavedSearch(searchName, searchQuery);
     }
 
@@ -198,13 +200,53 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Try to Listen in savedSearch
+     * Run the saved Search
+     *
+     * @param searchName The name of the search
+     * @return Job
+     * @throws InterruptedException
      */
-    @Source
-    public void listenRun(final SourceCallback callback_) throws IOException {
-        final SoftCallback callback = new SoftCallback(callback_);
-        splunkClient.listenRun(callback);
+    @Processor
+    public List<Map<String, Object>> runSavedSearch(String searchName) throws SplunkConnectorException {
+        return splunkClient.runSavedSearch(searchName);
     }
+
+    /**
+     * Run a saved search with run-time arguments
+     *
+     * @param searchName         The name of the search
+     * @param searchQuery        The query
+     * @param customArgs         Custom Arguments
+     * @param searchDispatchArgs SearchDispatch Args
+     * @return
+     * @throws SplunkConnectorException
+     */
+    @Processor
+    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, String searchQuery,
+                                                                 Map<String, Object> customArgs,
+                                                                 SavedSearchDispatchArgs searchDispatchArgs)
+            throws SplunkConnectorException {
+        return splunkClient.runSavedSearchWithArguments(searchName, searchQuery, customArgs, searchDispatchArgs);
+    }
+
+    /**
+     * Delete the Specified saved Search
+     * @param searchName The name of the search
+     * @return true
+     */
+    @Processor
+    public boolean deleteSavedSearch(String searchName) {
+        return splunkClient.deleteSavedSearch(searchName);
+    }
+
+    /**
+     * Try to Listen in savedSearch
+
+     @Source public void listenRun(final SourceCallback callback_) throws IOException {
+     final SoftCallback callback = new SoftCallback(callback_);
+     splunkClient.listenRun(callback);
+     }
+     */
 
     /**
      * Get the host value

@@ -5,13 +5,16 @@
 package org.mule.modules.splunk.testcases;
 
 import com.splunk.SavedSearch;
+import com.splunk.SavedSearchDispatchArgs;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.splunk.SmokeTests;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static junit.framework.Assert.*;
@@ -130,6 +133,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
 
     /**
      * Test for non existing SavedSearch
+     *
      * @throws Exception
      */
     @Test(expected = org.mule.api.MessagingException.class)
@@ -143,6 +147,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
 
     /**
      * Test Sample
+     *
      * @throws Exception
      */
     @Test(expected = org.mule.api.MessagingException.class)
@@ -155,6 +160,62 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     }
 
 
+
+    /**
+     * Run a saved search
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(SmokeTests.class)
+    public void testRunSavedSearch() throws Exception {
+        testObjects.put("searchName", createSavedSearch().getName());
+        MessageProcessor flow = lookupFlowConstruct("testRunSavedSearch");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        List<Map<String, Object>> listResponse = (List<Map<String, Object>>) response.getMessage().getPayload();
+        assertTrue(listResponse.size() > 0);
+    }
+
+    /**
+     * Test for running saved search
+     * @throws Exception
+     */
+    @Test
+    @Category(SmokeTests.class)
+    public void testRunSavedSearchWithArgument() throws Exception {
+        Map<String, Object> customArgs = new HashMap<String, Object>();
+        SavedSearchDispatchArgs searchDispatchArgs = new SavedSearchDispatchArgs();
+        customArgs.put("mysourcetype", "jenkins");
+        searchDispatchArgs.setDispatchEarliestTime("-20m@m");
+        searchDispatchArgs.setDispatchLatestTime("now");
+
+        testObjects.put("searchName", UUID.randomUUID());
+        testObjects.put("searchQuery", "index=main");
+        testObjects.put("customArgs", customArgs);
+        testObjects.put("searchDispatchArgs", searchDispatchArgs);
+        MessageProcessor flow = lookupFlowConstruct("testRunSavedSearchWithArgument");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        List<Map<String, Object>> listResponse = (List<Map<String, Object>>) response.getMessage().getPayload();
+        assertTrue(listResponse.size() > 0);
+    }
+
+    /**
+     * Test for deleting saved search
+     * @throws Exception
+     */
+    @Test
+    @Category(SmokeTests.class)
+    public void testDeleteSavedSearch() throws Exception {
+        testObjects.put("searchName", createSavedSearch().getName());
+        MessageProcessor flow = lookupFlowConstruct("testDeleteSavedSearch");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        assertEquals(response.getMessage().getPayload(), true);
+
+    }
+
     /**
      * Create a saved search
      *
@@ -164,13 +225,11 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     private SavedSearch createSavedSearch() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
         testObjects.put("searchName", UUID.randomUUID());
-        testObjects.put("searchQuery", "* | head 10");
+        testObjects.put("searchQuery", "jenkins | head 100");
         MuleEvent response = flow.process(getTestEvent(testObjects));
-        assertNotNull(response.getMessage().getPayload());
         SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
         return savedSearch;
     }
-
 
 
 }

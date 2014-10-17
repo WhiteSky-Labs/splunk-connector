@@ -13,3 +13,12 @@
 <!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
     <splunk:get-saved-search-history searchName="#[map-payload:searchName]" />
 <!-- END_INCLUDE(splunk:get-saved-search-history) -->
+<!-- BEGIN_INCLUDE(splunk:run-job) -->
+    <splunk:run-job searchName="#[map-payload:searchName]" />
+<!-- END_INCLUDE(splunk:run-job) -->
+<!-- BEGIN_INCLUDE(splunk:run-saved-search-with-arguments) -->
+    <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+            <splunk:custom-args ref="#[payload.customArgs]" />
+            <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
+        </splunk:run-saved-search-with-arguments>
+<!-- END_INCLUDE(splunk:run-saved-search-with-arguments) -->
