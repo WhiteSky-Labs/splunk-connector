@@ -23,7 +23,7 @@
     </flow>
     <flow name="testRunOneShotSearch">
         <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
-                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]" />
     </flow>
     <flow name="testGetSavedSearches">
         <splunk:get-saved-searches/>
@@ -54,4 +54,16 @@
     <flow name="testDeleteSavedSearch">
         <splunk:delete-saved-search  searchName="#[payload.searchName]" />
     </flow>
+    <flow name="testRunRealtimeSearch">
+        <splunk:run-realtime-search searchQuery="#[payload.searchQuery]">
+            <splunk:job-args ref="#[payload.jobArgs]"/>
+            <splunk:preview-args ref="#[payload.previewArgs]"/>
+        </splunk:run-realtime-search>
+    </flow>
+    <flow name="testRunExportSearch">
+        <splunk:run-export-search searchQuery="#[payload.searchQuery]">
+            <splunk:export-args ref="#[payload.exportArgs]" />
+        </splunk:run-export-search>
+    </flow>
+
 </mule>

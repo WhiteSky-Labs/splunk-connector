@@ -6,11 +6,8 @@
  * place, you may not use the software.
  **/
 package org.mule.modules.splunk;
-import com.splunk.Application;
-import com.splunk.Job;
-import com.splunk.JobArgs;
-import com.splunk.SavedSearch;
-import com.splunk.SavedSearchDispatchArgs;
+
+import com.splunk.*;
 import org.apache.commons.lang.UnhandledException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -25,6 +22,8 @@ import org.mule.api.context.MuleContextAware;
 import org.mule.common.metadata.MetaData;
 import org.mule.common.metadata.MetaDataKey;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -163,7 +162,7 @@ public class SplunkConnector implements MuleContextAware {
      * @return
      */
     @Processor
-    public Map<String, Object> runOneShotSearch(String searchQuery, String earliestTime, String latestTime) {
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime) throws SplunkConnectorException {
         return splunkClient.runOneShotSearch(searchQuery, earliestTime, latestTime);
     }
 
@@ -278,14 +277,28 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Try to Listen in savedSearch
-
-     @Source public void listenRun(final SourceCallback callback_) throws IOException {
-     final SoftCallback callback = new SoftCallback(callback_);
-     splunkClient.listenRun(callback);
-     }
+     * Run realtime search
+     *
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
      */
+    @Processor
+    public Map<String, Object> runRealtimeSearch(String searchQuery, JobArgs jobArgs, JobResultsPreviewArgs previewArgs) throws IOException, InterruptedException {
+        return splunkClient.runRealtimeSearch(searchQuery, jobArgs, previewArgs);
+    }
 
+    /**
+     * Run export search
+     * @param searchQuery The query
+     * @param exportArgs The export arguments
+     * @return
+     * @throws IOException
+     */
+     @Processor
+     public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+         return splunkClient.runExportSearch(searchQuery, exportArgs);
+     }
     /**
      * Get the host value
      */

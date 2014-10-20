@@ -14,16 +14,11 @@ import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
-import org.opensaml.ws.wstrust.OnBehalfOf;
 import org.slf4j.*;
-
-import javax.validation.Valid;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -104,6 +99,8 @@ public class SplunkClient {
         metaDataKeyList.add(createKey(SavedSearch.class));
         metaDataKeyList.add(createKey(SavedSearchDispatchArgs.class));
         metaDataKeyList.add(createKey(Job.class));
+        metaDataKeyList.add(createKey(SearchResults.class));
+        metaDataKeyList.add(createKey(JobCollection.class));
         return metaDataKeyList;
     }
 
@@ -267,6 +264,7 @@ public class SplunkClient {
 
     /**
      * Catch the result of the job response
+     *
      * @param job
      * @return
      * @throws SplunkConnectorException
@@ -291,13 +289,14 @@ public class SplunkClient {
      * @return
      * @throws SplunkConnectorException
      */
-    private List<Map<String, Object>> parseEvents(ResultsReaderJson resultsReader) throws SplunkConnectorException {
+    private List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
         List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
         try {
             HashMap<String, String> event;
             while ((event = resultsReader.getNextEvent()) != null) {
                 Map<String, Object> eventData = new HashMap<String, Object>();
                 for (String key : event.keySet()) {
+                    LOGGER.debug("Something: " + key + " : " + event.get(key));
                     eventData.put(convertToJavaConvention(key), event.get(key));
                 }
                 searchResponseList.add(eventData);
@@ -420,26 +419,77 @@ public class SplunkClient {
      * @param latestTime   The latest time
      * @return
      */
-    public List<Map<String, Object>> runOneShotSearch(String searchQuery,
-                                                      String earliestTime, String latestTime)
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime)
             throws SplunkConnectorException {
         Args oneshotSearchArgs = new Args();
-
         oneshotSearchArgs.put("earliest_time", earliestTime);
+        oneshotSearchArgs.put("latest_time", latestTime);
 
-        // The search results are returned directly
-        InputStream results_oneshot = service.oneshotSearch(searchQuery, oneshotSearchArgs);
-
-        JobResultsArgs resultsArgs = new JobResultsArgs();
-        resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
-        ResultsReaderJson resultsReader;
+        InputStream resultsOneshot = service.oneshotSearch(searchQuery, oneshotSearchArgs);
+        ResultsReaderXml resultsReader;
         try {
-            resultsReader = new ResultsReaderJson(results_oneshot);
+            resultsReader = new ResultsReaderXml(resultsOneshot);
             return parseEvents(resultsReader);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new SplunkConnectorException(e.getMessage(), e);
         }
-        return null;
+    }
+
+    /**
+     * Run RealtimeSearch
+     *
+     * @return
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public Map<String, Object> runRealtimeSearch(String searchQuery, JobArgs jobArgs, JobResultsPreviewArgs previewArgs)
+            throws InterruptedException, IOException {
+
+        Job job = service.search(searchQuery, jobArgs);
+
+        // Wait for the job to be ready
+        while (!job.isReady()) {
+            Thread.sleep(500);
+        }
+        // Use a continual loop
+        while (true) {
+            InputStream stream = job.getResultsPreview(previewArgs);
+            String line = null;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(
+                    stream, "UTF-8"));
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            reader.close();
+            stream.close();
+            Thread.sleep(500);
+        }
+    }
+
+    /**
+     * Run an export search
+     *
+     * @param searchQuery
+     * @param exportArgs
+     * @return
+     * @throws IOException
+     */
+    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+        List<SearchResults> searchResultsList = new ArrayList<SearchResults>();
+        InputStream exportSearch = service.export(searchQuery, exportArgs);
+        MultiResultsReaderXml multiResultsReader = null;
+        try {
+            multiResultsReader = new MultiResultsReaderXml(exportSearch);
+
+            for (SearchResults searchResults : multiResultsReader) {
+                searchResultsList.add(searchResults);
+            }
+            multiResultsReader.close();
+
+        } catch (IOException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+        return searchResultsList;
     }
 
     /**
