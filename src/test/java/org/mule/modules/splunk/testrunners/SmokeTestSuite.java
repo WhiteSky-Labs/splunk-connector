@@ -10,10 +10,12 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.mule.modules.splunk.SmokeTests;
+import org.mule.modules.splunk.testcases.JobsTestCase;
 
 @RunWith(Categories.class)
 @IncludeCategory(SmokeTests.class)
 @SuiteClasses({
+        JobsTestCase.class
 
 })
 public class SmokeTestSuite {

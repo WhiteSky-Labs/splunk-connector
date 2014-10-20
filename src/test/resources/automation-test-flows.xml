@@ -9,11 +9,20 @@
         http://www.mulesoft.org/schema/mule/splunk
         http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd ">
 
-    <splunk:config host="localhost" port="8089"
-                   username="admin" password="admin"/>
+    <splunk:config host="192.168.1.33" port="8089"
+                   username="admin" password="Wslph@123"/>
 
     <flow name="testGetApplication">
         <splunk:get-applications/>
     </flow>
-
+    <flow name="testGetJobs">
+        <splunk:get-jobs/>
+    </flow>
+    <flow name="testRunSearch">
+        <splunk:run-search searchQuery="#[payload.searchQuery]" executionMode="#[payload.executionMode]"/>
+    </flow>
+    <flow name="testRunOneShotSearch">
+        <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
+    </flow>
 </mule>

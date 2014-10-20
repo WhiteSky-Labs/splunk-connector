@@ -9,6 +9,8 @@
 package org.mule.modules.splunk;
 
 import com.splunk.Application;
+import com.splunk.Job;
+import com.splunk.JobArgs;
 import org.mule.api.annotations.*;
 import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.param.ConnectionKey;
@@ -18,6 +20,7 @@ import org.mule.common.metadata.MetaDataKey;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Cloud Connector
@@ -113,6 +116,45 @@ public class SplunkConnector {
         return splunkClient.getApplications();
     }
 
+    /**
+     * Get Jobs
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-jobs}
+     *
+     * @return List of jobs of the current user
+     */
+    @Processor
+    public List<Job> getJobs() {
+        return splunkClient.getJobs();
+    }
+
+
+    /**
+     * Run the saved search
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-search}
+     *
+     * @param searchQuery   The search Query
+     * @param executionMode The execution Mode
+     * @return The job ans result
+     */
+    @Processor
+    public Map<String, Object> runSearch(String searchQuery, JobArgs.ExecutionMode executionMode) {
+        return splunkClient.runSearch(searchQuery, executionMode);
+    }
+
+
+    /**
+     * Run a basic oneshot search and display results
+     * @param searchQuery The search query
+     * @param earliestTime The earliest time
+     * @param latestTime The latest time
+     * @return
+     */
+    @Processor
+    public Map<String, Object> runOneShotSearch(String searchQuery, String earliestTime, String latestTime) {
+        return splunkClient.runOneShotSearch(searchQuery, earliestTime, latestTime);
+    }
 
     /**
      * Get the host value

@@ -1,3 +1,13 @@
 <!-- BEGIN_INCLUDE(splunk:get-applications) -->
     <splunk:get-applications />
 <!-- END_INCLUDE(splunk:get-applications) -->
+<!-- BEGIN_INCLUDE(splunk:get-jobs) -->
+    <splunk:get-jobs />
+<!-- END_INCLUDE(splunk:get-jobs) -->
+<!-- BEGIN_INCLUDE(splunk:run-search) -->
+    <splunk:run-search searchQuery="#[payload.searchQuery]" executionMode="#[payload.executionMode]"/>
+<!-- END_INCLUDE(splunk:run-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-one-shot-search) -->
+    <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
+<!-- END_INCLUDE(splunk:run-one-shot-search) -->
