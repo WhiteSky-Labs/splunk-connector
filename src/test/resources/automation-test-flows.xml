@@ -25,4 +25,33 @@
         <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
                                     earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
     </flow>
+    <flow name="testGetSavedSearches">
+        <splunk:get-saved-searches/>
+    </flow>
+    <flow name="testCreateSavedSearch">
+        <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]"/>
+    </flow>
+    <flow name="testViewSavedSearch">
+        <splunk:view-saved-search searchName="#[payload.searchName]"/>
+    </flow>
+    <flow name="testModifySavedSearch">
+        <splunk:modify-saved-search searchName="#[payload.searchName]" description="#[payload.description]"
+                                    isSetScheduled="#[payload.isSetScheduled]" cronSchedule="#[payload.cronSchedule]"/>
+    </flow>
+    <flow name="testGetSavedSearchHistory">
+        <splunk:get-saved-search-history searchName="#[payload.searchName]"/>
+    </flow>
+    <flow name="testRunSavedSearch">
+        <splunk:run-saved-search searchName="#[payload.searchName]"/>
+    </flow>
+
+    <flow name="testRunSavedSearchWithArgument">
+        <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+            <splunk:custom-args ref="#[payload.customArgs]" />
+            <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
+        </splunk:run-saved-search-with-arguments>
+    </flow>
+    <flow name="testDeleteSavedSearch">
+        <splunk:delete-saved-search  searchName="#[payload.searchName]" />
+    </flow>
 </mule>
