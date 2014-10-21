@@ -330,7 +330,18 @@ public class SplunkClient {
         }
     }
 
+    /**
+     * Retrieve an individual data model,
+     *
+     * @return
+     */
+    public DataModel getDataModel(String dataModelName) {
+        DataModelCollection dataModelCollection = service.getDataModels();
+        return dataModelCollection.get(dataModelName);
+    }
 
+
+    
     /**
      * Get the Service
      *

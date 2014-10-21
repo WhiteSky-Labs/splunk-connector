@@ -9,10 +9,12 @@ import org.junit.experimental.categories.Categories.IncludeCategory;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.mule.modules.splunk.RegressionTests;
+import org.mule.modules.splunk.testcases.DataModelTestCase;
 
 @RunWith(Categories.class)
 @IncludeCategory(RegressionTests.class)
 @SuiteClasses({
+        DataModelTestCase.class
 
 
 })
