@@ -14,6 +14,7 @@ import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.annotations.*;
 import org.mule.api.annotations.display.Password;
+import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.ConnectionException;
 import org.mule.api.annotations.param.Default;
@@ -277,28 +278,39 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Run realtime search
+     * Run realtime search and process the response
      *
      * @return
      * @throws IOException
      * @throws InterruptedException
      */
-    @Processor
-    public Map<String, Object> runRealtimeSearch(String searchQuery, JobArgs jobArgs, JobResultsPreviewArgs previewArgs) throws IOException, InterruptedException {
-        return splunkClient.runRealtimeSearch(searchQuery, jobArgs, previewArgs);
+    @Source
+    public void runRealTimeSearch(String searchQuery,
+                                  @Placement(group = "Job Properties") JobArgs.ExecutionMode executionMode,
+                                  @Placement(group = "Job Properties") JobArgs.SearchMode searchMode,
+                                  @Placement(group = "Job Properties") String earliestTime,
+                                  @Placement(group = "Job Properties") String latestTime,
+                                  @Placement(group = "Job Properties") @Default("300") int statusBuckets,
+                                  @Placement(group = "Preview Properties") @Default("300") int previewCount,
+                                  final SourceCallback callback_) throws SplunkConnectorException {
+        final SoftCallback callback = new SoftCallback(callback_);
+        splunkClient.runRealtimeSearch(searchQuery, executionMode, searchMode,
+                earliestTime, latestTime, statusBuckets, previewCount, callback);
     }
 
     /**
      * Run export search
+     *
      * @param searchQuery The query
-     * @param exportArgs The export arguments
+     * @param exportArgs  The export arguments
      * @return
      * @throws IOException
      */
-     @Processor
-     public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
-         return splunkClient.runExportSearch(searchQuery, exportArgs);
-     }
+    @Processor
+    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+        return splunkClient.runExportSearch(searchQuery, exportArgs);
+    }
+
     /**
      * Get the host value
      */

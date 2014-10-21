@@ -12,9 +12,11 @@ import org.apache.commons.lang.Validate;
 import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
+import org.mule.api.callback.SourceCallback;
 import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 import org.slf4j.*;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -402,7 +404,7 @@ public class SplunkClient {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-
+                throw new SplunkConnectorException(e.getMessage(), e);
             }
         }
         Map<String, Object> searchResponse = new HashMap<String, Object>();
@@ -442,27 +444,58 @@ public class SplunkClient {
      * @throws InterruptedException
      * @throws IOException
      */
-    public Map<String, Object> runRealtimeSearch(String searchQuery, JobArgs jobArgs, JobResultsPreviewArgs previewArgs)
-            throws InterruptedException, IOException {
+    public void runRealtimeSearch(String searchQuery,
+                                  JobArgs.ExecutionMode executionMode,
+                                  JobArgs.SearchMode searchMode,
+                                  String earliestTime,
+                                  String latestTime,
+                                  int statusBuckets,
+                                  int previewCount,
+                                  final SourceCallback callback)
+            throws SplunkConnectorException {
 
+        Validate.notNull(executionMode, "Execution mode is empty.");
+        Validate.notNull(searchMode, "Search mode is empty.");
+        Validate.notEmpty(earliestTime, "Earliest time is empty.");
+        Validate.notEmpty(latestTime, "Latest time is empty.");
+
+        JobArgs jobArgs = new JobArgs();
+        jobArgs.setExecutionMode(executionMode);
+        jobArgs.setSearchMode(searchMode);
+        jobArgs.setEarliestTime(earliestTime);
+        jobArgs.setLatestTime(latestTime);
+        jobArgs.setStatusBuckets(statusBuckets);
+
+        JobResultsPreviewArgs previewArgs = new JobResultsPreviewArgs();
+        previewArgs.setCount(previewCount);
+        previewArgs.setOutputMode(JobResultsPreviewArgs.OutputMode.JSON);
         Job job = service.search(searchQuery, jobArgs);
 
-        // Wait for the job to be ready
         while (!job.isReady()) {
-            Thread.sleep(500);
-        }
-        // Use a continual loop
-        while (true) {
-            InputStream stream = job.getResultsPreview(previewArgs);
-            String line = null;
-            BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    stream, "UTF-8"));
-            while ((line = reader.readLine()) != null) {
-                System.out.println(line);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
             }
-            reader.close();
-            stream.close();
-            Thread.sleep(500);
+        }
+
+        while (true) {
+            InputStream results = job.getResultsPreview(previewArgs);
+            ResultsReaderJson resultsReader;
+            try {
+                resultsReader = new ResultsReaderJson(results);
+                callback.process(parseEvents(resultsReader));
+                results.close();
+                resultsReader.close();
+            } catch (Exception e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
         }
     }
 
