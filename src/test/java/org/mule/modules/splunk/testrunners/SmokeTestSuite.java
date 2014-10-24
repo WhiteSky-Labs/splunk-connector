@@ -11,11 +11,18 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.mule.modules.splunk.SmokeTests;
 import org.mule.modules.splunk.testcases.DataModelTestCase;
+import org.mule.modules.splunk.testcases.ApplicationsTestCase;
+import org.mule.modules.splunk.testcases.JobsTestCase;
+import org.mule.modules.splunk.testcases.SavedSearchesTestCase;
 
 @RunWith(Categories.class)
 @IncludeCategory(SmokeTests.class)
 @SuiteClasses({
-        DataModelTestCase.class
+        DataModelTestCase.class,
+        JobsTestCase.class,
+        ApplicationsTestCase.class,
+        SavedSearchesTestCase.class
+
 })
 public class SmokeTestSuite {
 

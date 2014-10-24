@@ -5,7 +5,6 @@
  * into between you and MuleSoft. If such an agreement is not in
  * place, you may not use the software.
  **/
-
 package org.mule.modules.splunk;
 
 import com.splunk.*;
@@ -15,6 +14,7 @@ import org.mule.api.MuleEvent;
 import org.mule.api.MuleException;
 import org.mule.api.annotations.*;
 import org.mule.api.annotations.display.Password;
+import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.ConnectionException;
 import org.mule.api.annotations.param.Default;
@@ -23,10 +23,8 @@ import org.mule.api.context.MuleContextAware;
 import org.mule.common.metadata.MetaData;
 import org.mule.common.metadata.MetaDataKey;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
-import org.springframework.security.web.savedrequest.SavedCookie;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -125,6 +123,48 @@ public class SplunkConnector implements MuleContextAware {
     @Processor
     public List<Application> getApplications() {
         return splunkClient.getApplications();
+    }
+
+    /**
+     * <<<<<<< HEAD
+     * Get Jobs
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-jobs}
+     *
+     * @return List of jobs of the current user
+     */
+    @Processor
+    public List<Job> getJobs() {
+        return splunkClient.getJobs();
+    }
+
+
+    /**
+     * Run the saved search
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-search}
+     *
+     * @param searchQuery   The search Query
+     * @param executionMode The execution Mode
+     * @return The job ans result
+     */
+    @Processor
+    public Map<String, Object> runSearch(String searchQuery, JobArgs.ExecutionMode executionMode) throws SplunkConnectorException {
+        return splunkClient.runSearch(searchQuery, executionMode);
+    }
+
+
+    /**
+     * Run a basic oneshot search and display results
+     *
+     * @param searchQuery  The search query
+     * @param earliestTime The earliest time
+     * @param latestTime   The latest time
+     * @return
+     */
+    @Processor
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime) throws SplunkConnectorException {
+        return splunkClient.runOneShotSearch(searchQuery, earliestTime, latestTime);
     }
 
     /**
@@ -245,6 +285,39 @@ public class SplunkConnector implements MuleContextAware {
     @Processor
     public DataModel getDataModel(String dataModelName) {
         return splunkClient.getDataModel(dataModelName);
+    }
+
+    /** Run realtime search and process the response
+     *
+     * @return
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    @Source
+    public void runRealTimeSearch(String searchQuery,
+                                  @Placement(group = "Job Properties") JobArgs.ExecutionMode executionMode,
+                                  @Placement(group = "Job Properties") JobArgs.SearchMode searchMode,
+                                  @Placement(group = "Job Properties") String earliestTime,
+                                  @Placement(group = "Job Properties") String latestTime,
+                                  @Placement(group = "Job Properties") @Default("300") int statusBuckets,
+                                  @Placement(group = "Preview Properties") @Default("300") int previewCount,
+                                  final SourceCallback callback_) throws SplunkConnectorException {
+        final SoftCallback callback = new SoftCallback(callback_);
+        splunkClient.runRealtimeSearch(searchQuery, executionMode, searchMode,
+                earliestTime, latestTime, statusBuckets, previewCount, callback);
+    }
+
+    /**
+     * Run export search
+     *
+     * @param searchQuery The query
+     * @param exportArgs  The export arguments
+     * @return
+     * @throws IOException
+     */
+    @Processor
+    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+        return splunkClient.runExportSearch(searchQuery, exportArgs);
     }
 
     /**

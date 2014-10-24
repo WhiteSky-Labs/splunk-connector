@@ -1,6 +1,12 @@
 <!-- BEGIN_INCLUDE(splunk:get-applications) -->
     <splunk:get-applications />
 <!-- END_INCLUDE(splunk:get-applications) -->
+<!-- BEGIN_INCLUDE(splunk:get-jobs) -->
+    <splunk:get-jobs />
+<!-- END_INCLUDE(splunk:get-jobs) -->
+<!-- BEGIN_INCLUDE(splunk:run-search) -->
+    <splunk:run-search searchQuery="#[payload.searchQuery]" executionMode="#[payload.executionMode]"/>
+<!-- END_INCLUDE(splunk:run-search) -->
 <!-- BEGIN_INCLUDE(splunk:get-saved-searches) -->
     <splunk:get-saved-searches />
 <!-- END_INCLUDE(splunk:get-saved-searches) -->
@@ -20,5 +26,20 @@
     <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
             <splunk:custom-args ref="#[payload.customArgs]" />
             <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
-        </splunk:run-saved-search-with-arguments>
+    </splunk:run-saved-search-with-arguments>
 <!-- END_INCLUDE(splunk:run-saved-search-with-arguments) -->
+<!-- BEGIN_INCLUDE(splunk:run-one-shot-search) -->
+    <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
+<!-- END_INCLUDE(splunk:run-one-shot-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-realtime-search) -->
+    <splunk:run-realtime-search searchQuery="">
+                <splunk:job-args ref="#[payload.jobArgs]"/>
+                <splunk:preview-args ref="#[payload.previewArgs]"/>
+    </splunk:run-realtime-search>
+<!-- END_INCLUDE(splunk:run-realtime-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-export-search) -->
+     <splunk:run-export-search searchQuery="#[payload.searchQuery]">
+            <splunk:export-args ref="#[payload.exportArgs]" />
+     </splunk:run-export-search>
+<!-- END_INCLUDE(splunk:run-export-search) -->

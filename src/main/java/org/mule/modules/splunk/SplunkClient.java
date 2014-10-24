@@ -12,15 +12,15 @@ import org.apache.commons.lang.Validate;
 import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
-import org.mule.api.MuleEvent;
+import org.mule.api.callback.SourceCallback;
 import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
-import org.mule.transport.polling.MessageProcessorPollingInterceptor;
-import org.mule.transport.polling.watermark.Watermark;
-import org.quartz.CronExpression;
 import org.slf4j.*;
 
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.io.InputStream;
 import java.util.*;
 
@@ -101,6 +101,8 @@ public class SplunkClient {
         metaDataKeyList.add(createKey(SavedSearch.class));
         metaDataKeyList.add(createKey(SavedSearchDispatchArgs.class));
         metaDataKeyList.add(createKey(Job.class));
+        metaDataKeyList.add(createKey(SearchResults.class));
+        metaDataKeyList.add(createKey(JobCollection.class));
         return metaDataKeyList;
     }
 
@@ -244,7 +246,6 @@ public class SplunkClient {
             queryParams += " " + key + "=$args." + key + "$";
             searchDispatchArgs.add("args." + key, value);
         }
-        LOGGER.debug("Query Params: " + queryParams);
         Job job;
         try {
             job = savedSearch.dispatch(searchDispatchArgs);
@@ -254,7 +255,7 @@ public class SplunkClient {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                LOGGER.debug("Done! The job finished with " + job.getEventCount() + " events.");
+
 
             }
             return populateEventResponse(job);
@@ -263,19 +264,41 @@ public class SplunkClient {
         }
     }
 
+    /**
+     * Catch the result of the job response
+     *
+     * @param job
+     * @return
+     * @throws SplunkConnectorException
+     */
     private List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
-        List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
         JobResultsArgs resultsArgs = new JobResultsArgs();
         resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
         InputStream results = job.getResults(resultsArgs);
         ResultsReaderJson resultsReader;
         try {
             resultsReader = new ResultsReaderJson(results);
+            return parseEvents(resultsReader);
+        } catch (IOException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Parse the events
+     *
+     * @param resultsReader
+     * @return
+     * @throws SplunkConnectorException
+     */
+    private List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
+        List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
+        try {
             HashMap<String, String> event;
             while ((event = resultsReader.getNextEvent()) != null) {
                 Map<String, Object> eventData = new HashMap<String, Object>();
                 for (String key : event.keySet()) {
-                    System.out.println("   " + key + ":  " + event.get(key));
+                    LOGGER.debug("Something: " + key + " : " + event.get(key));
                     eventData.put(convertToJavaConvention(key), event.get(key));
                 }
                 searchResponseList.add(eventData);
@@ -358,6 +381,159 @@ public class SplunkClient {
      */
     public void setService(Service service) {
         this.service = service;
+    }
+
+    /**
+     * List Jobs
+     *
+     * @return
+     */
+    public List<Job> getJobs() {
+        JobCollection jobs = service.getJobs();
+        List<Job> jobList = new ArrayList<Job>();
+        for (Job job : jobs.values()) {
+            jobList.add(job);
+        }
+        return jobList;
+    }
+
+    /**
+     * Run a  search and wait for response
+     *
+     * @param searchQuery   The sea
+     * @param executionMode
+     * @return
+     */
+    public Map<String, Object> runSearch(String searchQuery, JobArgs.ExecutionMode executionMode) throws SplunkConnectorException {
+        Validate.notEmpty(searchQuery, "Search Query is empty.");
+        Validate.notNull(executionMode, "Execution mode is empty.");
+        JobArgs jobargs = new JobArgs();
+        jobargs.setExecutionMode(executionMode);
+        Job job = service.getJobs().create(searchQuery, jobargs);
+
+        while (!job.isDone()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
+        }
+        Map<String, Object> searchResponse = new HashMap<String, Object>();
+        searchResponse.put("job", job);
+        searchResponse.put("events", populateEventResponse(job));
+        return searchResponse;
+    }
+
+    /**
+     * Run a basic oneshot search and display results
+     *
+     * @param searchQuery  The search query
+     * @param earliestTime The earliest time
+     * @param latestTime   The latest time
+     * @return
+     */
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime)
+            throws SplunkConnectorException {
+        Args oneshotSearchArgs = new Args();
+        oneshotSearchArgs.put("earliest_time", earliestTime);
+        oneshotSearchArgs.put("latest_time", latestTime);
+
+        InputStream resultsOneshot = service.oneshotSearch(searchQuery, oneshotSearchArgs);
+        ResultsReaderXml resultsReader;
+        try {
+            resultsReader = new ResultsReaderXml(resultsOneshot);
+            return parseEvents(resultsReader);
+        } catch (Exception e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Run RealtimeSearch
+     *
+     * @return
+     * @throws InterruptedException
+     * @throws IOException
+     */
+    public void runRealtimeSearch(String searchQuery,
+                                  JobArgs.ExecutionMode executionMode,
+                                  JobArgs.SearchMode searchMode,
+                                  String earliestTime,
+                                  String latestTime,
+                                  int statusBuckets,
+                                  int previewCount,
+                                  final SourceCallback callback)
+            throws SplunkConnectorException {
+
+        Validate.notNull(executionMode, "Execution mode is empty.");
+        Validate.notNull(searchMode, "Search mode is empty.");
+        Validate.notEmpty(earliestTime, "Earliest time is empty.");
+        Validate.notEmpty(latestTime, "Latest time is empty.");
+
+        JobArgs jobArgs = new JobArgs();
+        jobArgs.setExecutionMode(executionMode);
+        jobArgs.setSearchMode(searchMode);
+        jobArgs.setEarliestTime(earliestTime);
+        jobArgs.setLatestTime(latestTime);
+        jobArgs.setStatusBuckets(statusBuckets);
+
+        JobResultsPreviewArgs previewArgs = new JobResultsPreviewArgs();
+        previewArgs.setCount(previewCount);
+        previewArgs.setOutputMode(JobResultsPreviewArgs.OutputMode.JSON);
+        Job job = service.search(searchQuery, jobArgs);
+
+        while (!job.isReady()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
+        }
+
+        while (true) {
+            InputStream results = job.getResultsPreview(previewArgs);
+            ResultsReaderJson resultsReader;
+            try {
+                resultsReader = new ResultsReaderJson(results);
+                callback.process(parseEvents(resultsReader));
+                results.close();
+                resultsReader.close();
+            } catch (Exception e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                throw new SplunkConnectorException(e.getMessage(), e);
+            }
+        }
+    }
+
+    /**
+     * Run an export search
+     *
+     * @param searchQuery
+     * @param exportArgs
+     * @return
+     * @throws IOException
+     */
+    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+        List<SearchResults> searchResultsList = new ArrayList<SearchResults>();
+        InputStream exportSearch = service.export(searchQuery, exportArgs);
+        MultiResultsReaderXml multiResultsReader = null;
+        try {
+            multiResultsReader = new MultiResultsReaderXml(exportSearch);
+
+            for (SearchResults searchResults : multiResultsReader) {
+                searchResultsList.add(searchResults);
+            }
+            multiResultsReader.close();
+
+        } catch (IOException e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+        return searchResultsList;
     }
 
     /**

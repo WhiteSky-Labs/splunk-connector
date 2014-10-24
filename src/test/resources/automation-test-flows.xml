@@ -15,6 +15,16 @@
     <flow name="testGetApplication">
         <splunk:get-applications/>
     </flow>
+    <flow name="testGetJobs">
+        <splunk:get-jobs/>
+    </flow>
+    <flow name="testRunSearch">
+        <splunk:run-search searchQuery="#[payload.searchQuery]" executionMode="#[payload.executionMode]"/>
+    </flow>
+    <flow name="testRunOneShotSearch">
+        <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]"/>
+    </flow>
     <flow name="testGetSavedSearches">
         <splunk:get-saved-searches/>
     </flow>
@@ -37,14 +47,19 @@
 
     <flow name="testRunSavedSearchWithArgument">
         <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
-            <splunk:custom-args ref="#[payload.customArgs]" />
-            <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
+            <splunk:custom-args ref="#[payload.customArgs]"/>
+            <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]"/>
         </splunk:run-saved-search-with-arguments>
     </flow>
     <flow name="testDeleteSavedSearch">
-        <splunk:delete-saved-search  searchName="#[payload.searchName]" />
+        <splunk:delete-saved-search searchName="#[payload.searchName]"/>
     </flow>
     <flow name="testGetDataModel">
         <splunk:get-data-model dataModelName="#[payload.dataModelName]"/>
+    </flow>
+    <flow name="testRunExportSearch">
+        <splunk:run-export-search searchQuery="#[payload.searchQuery]">
+            <splunk:export-args ref="#[payload.exportArgs]"/>
+        </splunk:run-export-search>
     </flow>
 </mule>
