@@ -8,10 +8,7 @@
 
 package org.mule.modules.splunk;
 
-import com.splunk.Application;
-import com.splunk.Job;
-import com.splunk.SavedSearch;
-import com.splunk.SavedSearchDispatchArgs;
+import com.splunk.*;
 import org.apache.commons.lang.UnhandledException;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
@@ -231,6 +228,7 @@ public class SplunkConnector implements MuleContextAware {
 
     /**
      * Delete the Specified saved Search
+     *
      * @param searchName The name of the search
      * @return true
      */
@@ -240,13 +238,14 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Try to Listen in savedSearch
-
-     @Source public void listenRun(final SourceCallback callback_) throws IOException {
-     final SoftCallback callback = new SoftCallback(callback_);
-     splunkClient.listenRun(callback);
-     }
+     * Retrieve an individual data model,
+     *
+     * @return DataModel
      */
+    @Processor
+    public DataModel getDataModel(String dataModelName) {
+        return splunkClient.getDataModel(dataModelName);
+    }
 
     /**
      * Get the host value

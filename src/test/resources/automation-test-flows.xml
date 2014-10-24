@@ -44,4 +44,7 @@
     <flow name="testDeleteSavedSearch">
         <splunk:delete-saved-search  searchName="#[payload.searchName]" />
     </flow>
+    <flow name="testGetDataModel">
+        <splunk:get-data-model dataModelName="#[payload.dataModelName]"/>
+    </flow>
 </mule>
