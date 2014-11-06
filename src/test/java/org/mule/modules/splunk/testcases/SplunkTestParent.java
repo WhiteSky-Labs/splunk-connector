@@ -1,4 +1,13 @@
 /**
+ *
+ * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * copyright law. All use of this software is subject to MuleSoft's Master
+ * Subscription Agreement (or other Terms of Service) separately entered
+ * into between you and MuleSoft. If such an agreement is not in
+ * place, you may not use the software.
+ */
+
+/**
  * (c) 2003-2014 MuleSoft, Inc. The software in this package is published under the terms of the CPAL v1.0 license,
  * a copy of which has been included with this distribution in the LICENSE.md file.
  **/
@@ -22,18 +31,16 @@ import java.util.Map;
 
 public class SplunkTestParent extends ConnectorTestCase {
 
-    protected static final String[] SPRING_CONFIG_FILES = new String[]{"AutomationSpringBeans.xml"};
+    private static final String[] SPRING_CONFIG_FILES = new String[]{"AutomationSpringBeans.xml"};
 
-    protected String getCurrentDirectory;
-
-    protected static ApplicationContext context;
+    private static ApplicationContext context;
 
     @Override
     protected String getConfigResources() {
         return "automation-test-flows.xml";
     }
 
-    protected Map<String, Object> testObjects;
+    Map<String, Object> testObjects;
 
     @Rule
     public Timeout globalTimeout = new Timeout(300000);
@@ -49,7 +56,7 @@ public class SplunkTestParent extends ConnectorTestCase {
         setObjectMapper(new ObjectMapper());
         testObjects = new HashMap<String, Object>();
         context = new ClassPathXmlApplicationContext(SPRING_CONFIG_FILES);
-        getCurrentDirectory = System.getProperty("user.dir");
+        String getCurrentDirectory = System.getProperty("user.dir");
     }
 
 
@@ -66,7 +73,7 @@ public class SplunkTestParent extends ConnectorTestCase {
         return objectMapper;
     }
 
-    public void setObjectMapper(ObjectMapper objectMapper) {
+    void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 

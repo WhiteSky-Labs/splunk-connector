@@ -1,4 +1,13 @@
 /**
+ *
+ * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * copyright law. All use of this software is subject to MuleSoft's Master
+ * Subscription Agreement (or other Terms of Service) separately entered
+ * into between you and MuleSoft. If such an agreement is not in
+ * place, you may not use the software.
+ */
+
+/**
  * (c) 2003-2014 MuleSoft, Inc. The software in this package is published under the terms of the CPAL v1.0 license,
  * a copy of which has been included with this distribution in the LICENSE.md file.
  **/
@@ -59,7 +68,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     }
 
     /**
-     * Test to create a random Saved Searches
+     * Test to create a random Saved Searche
      *
      * @throws Exception
      */
@@ -160,7 +169,6 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     }
 
 
-
     /**
      * Run a saved search
      *
@@ -179,6 +187,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
 
     /**
      * Test for running saved search
+     *
      * @throws Exception
      */
     @Test
@@ -186,7 +195,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     public void testRunSavedSearchWithArgument() throws Exception {
         Map<String, Object> customArgs = new HashMap<String, Object>();
         SavedSearchDispatchArgs searchDispatchArgs = new SavedSearchDispatchArgs();
-        customArgs.put("mysourcetype", "jenkins");
+        customArgs.put("mysourcetype", "systemlog");
         searchDispatchArgs.setDispatchEarliestTime("-20m@m");
         searchDispatchArgs.setDispatchLatestTime("now");
 
@@ -203,6 +212,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
 
     /**
      * Test for deleting saved search
+     *
      * @throws Exception
      */
     @Test
@@ -212,6 +222,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
         MessageProcessor flow = lookupFlowConstruct("testDeleteSavedSearch");
         MuleEvent response = flow.process(getTestEvent(testObjects));
         assertNotNull(response.getMessage().getPayload());
+        //noinspection AssertEqualsBetweenInconvertibleTypes
         assertEquals(response.getMessage().getPayload(), true);
 
     }
@@ -219,16 +230,16 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     /**
      * Create a saved search
      *
-     * @return
+     * @return The Saved Search pointer
      * @throws Exception
      */
     private SavedSearch createSavedSearch() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
         testObjects.put("searchName", UUID.randomUUID());
-        testObjects.put("searchQuery", "jenkins | head 100");
+        testObjects.put("searchQuery", ".db | head 100");
         MuleEvent response = flow.process(getTestEvent(testObjects));
-        SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
-        return savedSearch;
+
+        return (SavedSearch) response.getMessage().getPayload();
     }
 
 
