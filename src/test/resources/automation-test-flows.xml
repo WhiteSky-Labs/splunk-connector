@@ -3,23 +3,26 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
-      xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+      xmlns:context="http://www.springframework.org/schema/context"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         http://www.mulesoft.org/schema/mule/splunk
-        http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd ">
+        http://www.mulesoft.org/schema/mule/splunk/1.0.0-SNAPSHOT/mule-splunk.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd">
 
-    <splunk:config host="192.168.1.33" port="8089"
-                   username="admin" password="Wslph@123"/>
+    <context:property-placeholder location="automation-credentials.properties"/>
 
-    <flow name="testGetApplication">
-        <splunk:get-applications/>
+
+    <splunk:config host="${splunk.host}" port="${splunk.port}" username="${splunk.username}"
+                   password="${splunk.password}"/>
+
+    <flow name="testGetApplications">
+    <splunk:get-applications/>
     </flow>
     <flow name="testGetJobs">
         <splunk:get-jobs/>
     </flow>
-    <flow name="testRunSearch">
-        <splunk:run-search searchQuery="#[payload.searchQuery]" executionMode="#[payload.executionMode]"/>
+    <flow name="testRunNormalSearch">
+        <splunk:run-normal-search searchQuery="#[payload.searchQuery]"/>
     </flow>
     <flow name="testRunOneShotSearch">
         <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
@@ -54,6 +57,7 @@
     <flow name="testDeleteSavedSearch">
         <splunk:delete-saved-search searchName="#[payload.searchName]"/>
     </flow>
+
     <flow name="testGetDataModel">
         <splunk:get-data-model dataModelName="#[payload.dataModelName]"/>
     </flow>
@@ -62,4 +66,10 @@
             <splunk:export-args ref="#[payload.exportArgs]"/>
         </splunk:run-export-search>
     </flow>
+    <flow name="testRunRealTimeSearch">
+        <splunk:run-real-time-search searchQuery="#[payload.searchQuery]"/>
+        <logger level="INFO" message="#[payload]"/>
+    </flow>
+
+
 </mule>
