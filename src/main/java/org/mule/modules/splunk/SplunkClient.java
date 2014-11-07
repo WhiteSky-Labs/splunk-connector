@@ -57,6 +57,7 @@ public class SplunkClient {
                 case 402:
                 case 403:
                     // credentials no good
+
                     throw new ConnectionException(
                             ConnectionExceptionCode.INCORRECT_CREDENTIALS,
                             Integer.toString(splunkException.getStatus()),
@@ -110,7 +111,7 @@ public class SplunkClient {
      * @return The MetaData Key
      */
     public MetaData getMetaDataKey(MetaDataKey key) throws ClassNotFoundException {
-        String ENTITY_PACKAGE = "com.splunk";
+        final String ENTITY_PACKAGE = "com.splunk";
         Class<?> clazz = Class.forName(String.format("%s.%s", ENTITY_PACKAGE, key.getId()));
         return new DefaultMetaData(new DefaultPojoMetaDataModel(clazz));
     }
@@ -262,7 +263,7 @@ public class SplunkClient {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    throw new SplunkConnectorException(e.getMessage(), e);
                 }
 
 
@@ -303,7 +304,7 @@ public class SplunkClient {
     private List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
         List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
         try {
-            HashMap<String, String> event;
+            Map<String, String> event;
             while ((event = resultsReader.getNextEvent()) != null) {
                 Map<String, Object> eventData = new HashMap<String, Object>();
                 for (String key : event.keySet()) {
@@ -334,37 +335,6 @@ public class SplunkClient {
             return false;
         }
     }
-
-    /*public void listenRun(SplunkConnector.SoftCallback callback) throws IOException {
-        while (true) {
-            try {
-                JobCollection jobs = service.getJobs();
-                System.out.println("There are " + jobs.size() + " jobs available to 'admin'\n");
-                // List the job SIDs
-                for (Job job : jobs.values()) {
-                    if (job.isDone()) {
-                        JobResultsArgs resultsArgs = new JobResultsArgs();
-                        resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
-                        InputStream results = job.getResults(resultsArgs);
-                        ResultsReaderJson resultsReader = new ResultsReaderJson(results);
-                        // Specify JSON as the output mode for results
-                        HashMap<String, String> event;
-                        System.out.println("\nFormatted results from the search job as JSON\n");
-                        while ((event = resultsReader.getNextEvent()) != null) {
-                            for (String key : event.keySet())
-                                System.out.println("   " + key + ":  " + event.get(key));
-                        }
-                        resultsReader.close();
-                        //callback.process(job);
-                    }
-                }
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    }*/
 
     /**
      * Retrieve an individual data model
