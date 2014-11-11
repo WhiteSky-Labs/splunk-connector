@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
+/**
+ * Class SplunkClient, implements the Splunk Connector
+ */
 public class SplunkClient {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SplunkClient.class);
@@ -29,6 +32,11 @@ public class SplunkClient {
 
     private Service service;
 
+    /**
+     * Instantiate a SplunkClient, with a SplunkConnector object containing the configurable host and port.
+     *
+     * @param splunkConnector The instantiated SplunkConnector with hostname and port
+     */
     public SplunkClient(SplunkConnector splunkConnector) {
         this.splunkConnector = splunkConnector;
     }
@@ -52,6 +60,7 @@ public class SplunkClient {
             // Create a Service instance and log in with the argument map
             service = Service.connect(loginArgs);
         } catch (com.splunk.HttpException splunkException) {
+            LOGGER.error("HTTPException Connecting to Splunk", splunkException);
             switch (splunkException.getStatus()) {
                 case 401:
                 case 402:
@@ -111,8 +120,8 @@ public class SplunkClient {
      * @return The MetaData Key
      */
     public MetaData getMetaDataKey(MetaDataKey key) throws ClassNotFoundException {
-        final String ENTITY_PACKAGE = "com.splunk";
-        Class<?> clazz = Class.forName(String.format("%s.%s", ENTITY_PACKAGE, key.getId()));
+        final String entityPackage = "com.splunk";
+        Class<?> clazz = Class.forName(String.format("%s.%s", entityPackage, key.getId()));
         return new DefaultMetaData(new DefaultPojoMetaDataModel(clazz));
     }
 
@@ -154,9 +163,8 @@ public class SplunkClient {
      * @param searchName  The name of query
      * @param searchQuery The query
      * @return SavedSearch the SavedSearch object that can then be executed
-     * @throws com.splunk.HttpException when communications are interrupted
      */
-    public SavedSearch createSavedSearch(String searchName, String searchQuery) throws com.splunk.HttpException {
+    public SavedSearch createSavedSearch(String searchName, String searchQuery){
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
         service.getSavedSearches().create(searchName, searchQuery);
@@ -179,6 +187,9 @@ public class SplunkClient {
      * Modify Properties
      *
      * @param searchName The name of query
+     * @param description The description of the modification
+     * @param isSetScheduled Is the search to run on a schedule or not
+     * @param cronSchedule The Schedule to use
      * @return The Modified Saved Search
      */
     public SavedSearch modifySavedSearch(String searchName, String description,
@@ -260,16 +271,11 @@ public class SplunkClient {
         try {
             Job job = savedSearch.dispatch(searchDispatchArgs);
             while (!job.isDone()) {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    throw new SplunkConnectorException(e.getMessage(), e);
-                }
-
-
+                Thread.sleep(500);
             }
             return populateEventResponse(job);
         } catch (InterruptedException e) {
+            LOGGER.info("Saved Search run interrupted", e);
             throw new SplunkConnectorException(e.getMessage(), e);
         }
     }
@@ -307,9 +313,8 @@ public class SplunkClient {
             Map<String, String> event;
             while ((event = resultsReader.getNextEvent()) != null) {
                 Map<String, Object> eventData = new HashMap<String, Object>();
-                for (String key : event.keySet()) {
-                    LOGGER.debug("Something: " + key + " : " + event.get(key));
-                    eventData.put(convertToJavaConvention(key), event.get(key));
+                for (Map.Entry<String, String> entry : event.entrySet()) {
+                    eventData.put(convertToJavaConvention(entry.getKey()), entry.getValue());
                 }
                 searchResponseList.add(eventData);
             }
@@ -332,6 +337,7 @@ public class SplunkClient {
             savedSearch.remove();
             return true;
         } catch (HttpException e) {
+            LOGGER.info("Exception occurred deleting saved search", e);
             return false;
         }
     }
@@ -437,6 +443,7 @@ public class SplunkClient {
      * @param searchQuery   The query to run in realtime
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount  the number of previews to retrieve - defaults to 100
+     * @param callback The callback object to stream results
      * @throws SplunkConnectorException when there is a problem setting up the runtime search
      * @
      */

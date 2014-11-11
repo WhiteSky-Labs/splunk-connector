@@ -17,7 +17,12 @@ package org.mule.modules.splunk.exception;
  * Exception thrown by the connector when we cannot resolve it to {@link org.mule.modules.splunk.exception.SplunkConnectorException}
  */
 public class SplunkConnectorException extends Exception {
-
+    /**
+     * Create a SplunkConnectorException
+     *
+     * @param message The human-readable message
+     * @param cause   The underlying exception
+     */
     public SplunkConnectorException(String message, Throwable cause) {
         super(message, cause);
     }
