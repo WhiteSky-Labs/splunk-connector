@@ -19,6 +19,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.api.MuleEvent;
 import org.mule.api.processor.MessageProcessor;
+import org.mule.modules.splunk.RegressionTests;
 import org.mule.modules.splunk.SmokeTests;
 
 import java.util.HashMap;
@@ -37,7 +38,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
      * @throws Exception
      */
     @Test
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testGetAllSavedSearches() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testGetSavedSearches");
         MuleEvent response = flow.process(getTestEvent(null));
@@ -48,6 +49,27 @@ public class SavedSearchesTestCase extends SplunkTestParent {
         }
         assertTrue(savedSearchList.size() > 0);
     }
+
+    /**
+     * Get All The Saved Searches
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(RegressionTests.class)
+    public void testGetSavedSearchesWithNamespace() throws Exception {
+        MessageProcessor flow = lookupFlowConstruct("testGetSavedSearches");
+        testObjects.put("app", "search");
+        testObjects.put("owner", "admin");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        List<SavedSearch> savedSearchList = (List<SavedSearch>) response.getMessage().getPayload();
+        for (SavedSearch savedSearch : savedSearchList) {
+            assertTrue(savedSearch.getName().length() > 0);
+        }
+        assertTrue(savedSearchList.size() > 0);
+    }
+
 
     /**
      * Test for creating already exist saved search
@@ -195,8 +217,8 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     public void testRunSavedSearchWithArgument() throws Exception {
         Map<String, Object> customArgs = new HashMap<String, Object>();
         SavedSearchDispatchArgs searchDispatchArgs = new SavedSearchDispatchArgs();
-        customArgs.put("mysourcetype", "systemlog");
-        searchDispatchArgs.setDispatchEarliestTime("-20m@m");
+        customArgs.put("mysourcetype", "*");
+        searchDispatchArgs.setDispatchEarliestTime("-20h@m");
         searchDispatchArgs.setDispatchLatestTime("now");
 
         testObjects.put("searchName", UUID.randomUUID());

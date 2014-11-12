@@ -42,12 +42,14 @@ public class SplunkConnector implements MuleContextAware {
      * The Splunk Host
      */
     @Configurable
+    @Default("localhost")
     private String host;
 
     /**
      * The Splunk Host
      */
     @Configurable
+    @Default("8089")
     private int port;
 
     private SplunkClient splunkClient;
@@ -187,11 +189,13 @@ public class SplunkConnector implements MuleContextAware {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-searches}
      *
+     * @param app Optional the name of the App to restrict the namespace of the list of saved searches to
+     * @param owner Optional the owner of the namespace to restrict the list of saved searches by
      * @return SavedSearchCollection
      */
     @Processor
-    public List<SavedSearch> getSavedSearches() {
-        return splunkClient.getSavedSearches();
+    public List<SavedSearch> getSavedSearches(@Optional String app, @Optional String owner) {
+        return splunkClient.getSavedSearches(app, owner);
     }
 
     /**

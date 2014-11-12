@@ -145,13 +145,26 @@ public class SplunkClient {
     }
 
     /**
-     * Get All the saved searches
+     * Get all the saved searches, optionally within a restricted namespace
      *
+     * @param app The Application namespace to restrict the list of searches to
+     * @param owner The user namespace to restrict the namespace to
      * @return List of Saved Searches
      */
-    public List<SavedSearch> getSavedSearches() {
+    public List<SavedSearch> getSavedSearches(String app, String owner) {
         List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
-        for (SavedSearch entity : service.getSavedSearches().values()) {
+        SavedSearchCollection savedSearches;
+
+        ServiceArgs namespace = new ServiceArgs();
+        if ((app != null) || (owner != null)) {
+            namespace.setApp(app);
+            namespace.setOwner(owner);
+            savedSearches = service.getSavedSearches(namespace);
+        } else {
+            savedSearches = service.getSavedSearches();
+        }
+
+        for (SavedSearch entity : savedSearches.values()) {
             savedSearchList.add(entity);
         }
         return savedSearchList;

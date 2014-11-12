@@ -29,7 +29,7 @@
                                     earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]"/>
     </flow>
     <flow name="testGetSavedSearches">
-        <splunk:get-saved-searches/>
+        <splunk:get-saved-searches app="#[payload.app]" owner="#[payload.owner]"/>
     </flow>
     <flow name="testCreateSavedSearch">
         <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]"/>
