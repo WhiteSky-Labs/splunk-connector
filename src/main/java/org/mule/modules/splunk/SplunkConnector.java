@@ -52,11 +52,23 @@ public class SplunkConnector implements MuleContextAware {
 
     private SplunkClient splunkClient;
 
+    /**
+     * Get list of metadata keys for datasense
+     *
+     * @return List<MetaDataKey> the list of metadata keys for datasense
+     */
     @MetaDataKeyRetriever
     public List<MetaDataKey> getMetadataKeys() {
         return splunkClient.getMetadata();
     }
 
+    /**
+     * Get an individual MetaData object by key
+     *
+     * @param key The key to find the metadata for
+     * @return MetaData the item of metadata found for the key
+     * @throws ClassNotFoundException when the class is not recognized
+     */
     @MetaDataRetriever
     public MetaData getMetadata(MetaDataKey key) throws ClassNotFoundException {
         return splunkClient.getMetaDataKey(key);
@@ -78,7 +90,8 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Disconnect
+     * Disconnect the connector
+     *
      */
     @Disconnect
     public void disconnect() {
@@ -91,7 +104,8 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Are we connected
+     * Validate the connection
+     * @return true/false if the Connection is valid
      */
     @ValidateConnection
     public boolean isConnected() {
@@ -100,7 +114,8 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Connection identifier
+     * Get the Connection Identifier (the token)
+     * @return the token, or 001 if there is no token
      */
     @ConnectionIdentifier
     public String connectionId() {
@@ -186,11 +201,10 @@ public class SplunkConnector implements MuleContextAware {
      *
      * @param searchName  The name of the search
      * @param searchQuery The query
-     * @throws com.splunk.HttpException when communications are interrupted
      * @return SavedSearch the SavedSearch object that can then be executed
      */
     @Processor
-    public SavedSearch createSavedSearch(String searchName, String searchQuery) throws HttpException {
+    public SavedSearch createSavedSearch(String searchName, String searchQuery) {
         return splunkClient.createSavedSearch(searchName, searchQuery);
     }
 
@@ -305,7 +319,7 @@ public class SplunkConnector implements MuleContextAware {
      * @param searchQuery The query to run in realtime
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount the number of previews to retrieve - defaults to 100
-     * @param callback_ the SourceCallback to capture the response
+     * @param callback the SourceCallback to capture the response
      * @throws SplunkConnectorException when there is a problem setting up the runtime search
      *
      */
@@ -313,9 +327,9 @@ public class SplunkConnector implements MuleContextAware {
     public void runRealTimeSearch(String searchQuery,
                                   @Placement(group = "Job Properties") @Optional @Default("300") int statusBuckets,
                                   @Placement(group = "Preview Properties") @Optional @Default("100") int previewCount,
-                                  final SourceCallback callback_) throws SplunkConnectorException {
-        final SoftCallback callback = new SoftCallback(callback_);
-        splunkClient.runRealTimeSearch(searchQuery, statusBuckets, previewCount, callback);
+                                  final SourceCallback callback) throws SplunkConnectorException {
+        final SoftCallback softCallback = new SoftCallback(callback);
+        splunkClient.runRealTimeSearch(searchQuery, statusBuckets, previewCount, softCallback);
     }
 
     /**
@@ -334,15 +348,15 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * Get the host value
+     * Get the Hostname
+     * @return the Splunk Server hostname
      */
-
     public String getHost() {
         return this.host;
     }
 
     /**
-     * Set splunk host
+     * Set splunk hostnmae
      *
      * @param host The splunk host
      */
@@ -368,6 +382,11 @@ public class SplunkConnector implements MuleContextAware {
         this.port = port;
     }
 
+    /**
+     * Set the MuleContext
+     *
+     * @param context to set
+     */
     @Override
     public void setMuleContext(MuleContext context) {
         this.muleContext = context;
@@ -376,6 +395,10 @@ public class SplunkConnector implements MuleContextAware {
     static final class SoftCallback implements SourceCallback {
         private final SourceCallback callback;
 
+        /**
+         * Create a SoftCallback
+         * @param callback The SourceCallback from which to create
+         */
         public SoftCallback(SourceCallback callback) {
             this.callback = callback;
         }
