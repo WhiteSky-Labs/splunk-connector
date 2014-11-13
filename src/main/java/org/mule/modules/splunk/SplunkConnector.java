@@ -27,6 +27,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Cloud Connector
@@ -216,35 +217,34 @@ public class SplunkConnector implements MuleContextAware {
     /**
      * View the properties of the  saved search
      * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search}
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search-properties}
      *
      * @param searchName The name of the search
-     * @return SavedSearch
+     * @param app The Optional App to restrict the namespace
+     * @param owner The Optional Owner to restrict the namespace
+     * @return EntrySet of the properties
      */
     @Processor
-    public SavedSearch viewSavedSearch(String searchName) {
-        return splunkClient.getSavedSearch(searchName);
+    public Set<Map.Entry<String, Object>> viewSavedSearchProperties(String searchName, @Optional String app, @Optional String owner) {
+        return splunkClient.viewSavedSearchProperties(searchName, app, owner);
     }
 
     /**
-     * View the properties of the  saved search
+     * Modify the properties of the  saved search
      * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search}
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-saved-search-properties}
      *
      * @param searchName     The name of the search
-     * @param description    The desired description
-     * @param isSetScheduled Set the Schedule to true
-     * @param cronSchedule   The Cron Expression
-     * @return SavedSearch
+     * @param searchProperties  The map of search properties to apply
+     * @return The updated SavedSearch
      */
     @Processor
-    public SavedSearch modifySavedSearch(String searchName, String description,
-                                         boolean isSetScheduled, @Default("15 4 * * 6") String cronSchedule) {
-        return splunkClient.modifySavedSearch(searchName, description, isSetScheduled, cronSchedule);
+    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) {
+        return splunkClient.modifySavedSearchProperties(searchName, searchProperties);
     }
 
     /**
-     * List the saved search history
+     * Modify the Saved Search Properties
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-search-history}
      *

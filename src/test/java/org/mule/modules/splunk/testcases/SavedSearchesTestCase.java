@@ -22,10 +22,7 @@ import org.mule.api.processor.MessageProcessor;
 import org.mule.modules.splunk.RegressionTests;
 import org.mule.modules.splunk.SmokeTests;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static junit.framework.Assert.*;
 
@@ -107,20 +104,27 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     }
 
     /**
-     * Test to View Saved Search
+     * Test to View Saved Search Properties
      *
      * @throws Exception
      */
     @Test
     @Category({SmokeTests.class, RegressionTests.class})
-    public void testViewSavedSearch() throws Exception {
+    public void testViewSavedSearchProperties() throws Exception {
         SavedSearch dummySavedSearch = createSavedSearch();
+        dummySavedSearch.setDescription("This is a test description");
         testObjects.put("searchName", dummySavedSearch.getName());
-        MessageProcessor flow = lookupFlowConstruct("testViewSavedSearch");
+        MessageProcessor flow = lookupFlowConstruct("testViewSavedSearchProperties");
         MuleEvent response = flow.process(getTestEvent(testObjects));
         assertNotNull(response.getMessage().getPayload());
-        SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
-        assertEquals(savedSearch.getName(), dummySavedSearch.getName());
+        Set<Map.Entry<String, Object>> searchProperties = (Set<Map.Entry<String, Object>>) response.getMessage().getPayload();
+        for (Iterator<Map.Entry<String, Object>> it = searchProperties.iterator(); it.hasNext(); ) {
+            Map.Entry<String, Object> property = it.next();
+            if (property.getKey() == "description") {
+                assertEquals(property.getValue(), dummySavedSearch.getDescription());
+            }
+        }
+
     }
 
     /**
@@ -177,17 +181,19 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     public void testModifySavedSearch() throws Exception {
         SavedSearch dummySavedSearch = createSavedSearch();
         testObjects.put("searchName", dummySavedSearch.getName());
-        testObjects.put("description", "Sample Description");
-        testObjects.put("isSetScheduled", true);
-        testObjects.put("cronSchedule", "15 4 * * 6");
-        MessageProcessor flow = lookupFlowConstruct("testModifySavedSearch");
+        Map<String, Object> searchProperties = new HashMap<String, Object>();
+        searchProperties.put("description", "Sample Description");
+        searchProperties.put("is_scheduled", true);
+        searchProperties.put("cron_schedule", "15 4 * * 6");
+        testObjects.put("searchProperties", searchProperties);
+        MessageProcessor flow = lookupFlowConstruct("testModifySavedSearchProperties");
         MuleEvent response = flow.process(getTestEvent(testObjects));
         assertNotNull(response.getMessage().getPayload());
         SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
         assertEquals(savedSearch.getName(), dummySavedSearch.getName());
-        assertEquals(savedSearch.getDescription(), testObjects.get("description"));
-        assertEquals(savedSearch.isScheduled(), testObjects.get("isSetScheduled"));
-        assertEquals(savedSearch.getCronSchedule(), testObjects.get("cronSchedule"));
+        assertEquals(savedSearch.getDescription(), searchProperties.get("description"));
+        assertEquals(savedSearch.isScheduled(), searchProperties.get("is_scheduled"));
+        assertEquals(savedSearch.getCronSchedule(), searchProperties.get("cron_schedule"));
 
     }
 

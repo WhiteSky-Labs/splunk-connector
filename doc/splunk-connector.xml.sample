@@ -15,9 +15,9 @@
         <splunk:search-args ref="#[payload.searchArgs]"/>
     </splunk:create-saved-search>
 <!-- END_INCLUDE(splunk:create-saved-search) -->
-<!-- BEGIN_INCLUDE(splunk:view-saved-search) -->
-    <splunk:view-saved-search searchName="#[payload.searchName]" />
-<!-- END_INCLUDE(splunk:view-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:view-saved-search-properties) -->
+    <splunk:view-saved-search-properties searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]"/>
+<!-- END_INCLUDE(splunk:view-saved-search-properties) -->
 <!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
     <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]" />
 <!-- END_INCLUDE(splunk:get-saved-search-history) -->
@@ -51,3 +51,8 @@
 <!-- BEGIN_INCLUDE(splunk:get-data-model) -->
     <splunk:get-data-model dataModelName="#[payload.dataModelName]" />
 <!-- END_INCLUDE(splunk:get-data-model) -->
+<!-- BEGIN_INCLUDE(splunk:modify-saved-search-properties) -->
+    <splunk:modify-saved-search-properties searchName="#[payload.searchName]">
+        <splunk:search-properties ref="#[payload.searchProperties]" />
+    </splunk:modify-saved-search-properties>
+<!-- END_INCLUDE(splunk:modify-saved-search-properties) -->

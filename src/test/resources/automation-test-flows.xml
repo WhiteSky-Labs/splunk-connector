@@ -36,12 +36,14 @@
             <splunk:search-args ref="#[payload.searchArgs]"/>
         </splunk:create-saved-search>
     </flow>
-    <flow name="testViewSavedSearch">
-        <splunk:view-saved-search searchName="#[payload.searchName]"/>
+    <flow name="testViewSavedSearchProperties">
+        <splunk:view-saved-search-properties searchName="#[payload.searchName]" app="#[payload.app]"
+                                             owner="#[payload.owner]"/>
     </flow>
-    <flow name="testModifySavedSearch">
-        <splunk:modify-saved-search searchName="#[payload.searchName]" description="#[payload.description]"
-                                    isSetScheduled="#[payload.isSetScheduled]" cronSchedule="#[payload.cronSchedule]"/>
+    <flow name="testModifySavedSearchProperties">
+        <splunk:modify-saved-search-properties searchName="#[payload.searchName]">
+            <splunk:search-properties ref="#[payload.searchProperties]"/>
+        </splunk:modify-saved-search-properties>
     </flow>
     <flow name="testGetSavedSearchHistory">
         <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]"
