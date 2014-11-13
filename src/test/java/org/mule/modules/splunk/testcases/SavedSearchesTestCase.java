@@ -72,12 +72,12 @@ public class SavedSearchesTestCase extends SplunkTestParent {
 
 
     /**
-     * Test for creating already exist saved search
+     * Test for creating already existing saved search
      *
      * @throws Exception
      */
     @Test(expected = org.mule.api.MessagingException.class)
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testCreateSavedSearchAlreadyExist() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
         testObjects.put("searchName", "Test Search");
@@ -90,12 +90,12 @@ public class SavedSearchesTestCase extends SplunkTestParent {
     }
 
     /**
-     * Test to create a random Saved Searche
+     * Test to create a random Saved Search
      *
      * @throws Exception
      */
     @Test
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testCreateSavedSearch() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
         testObjects.put("searchName", UUID.randomUUID());
@@ -112,7 +112,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
      * @throws Exception
      */
     @Test
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testViewSavedSearch() throws Exception {
         SavedSearch dummySavedSearch = createSavedSearch();
         testObjects.put("searchName", dummySavedSearch.getName());
@@ -121,6 +121,50 @@ public class SavedSearchesTestCase extends SplunkTestParent {
         assertNotNull(response.getMessage().getPayload());
         SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
         assertEquals(savedSearch.getName(), dummySavedSearch.getName());
+    }
+
+    /**
+     * Test for creating already existing saved search with search arguments
+     *
+     * @throws Exception
+     */
+    @Test(expected = org.mule.api.MessagingException.class)
+    @Category(RegressionTests.class)
+    public void testCreateSavedSearchAlreadyExistWithSearchArgs() throws Exception {
+        MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
+        Map savedSearchArgs = new HashMap();
+        savedSearchArgs.put("description", "This is a test search");
+        testObjects.put("searchName", "Test Search");
+        testObjects.put("searchQuery", "* | head 10");
+        testObjects.put("searchArgs", savedSearchArgs);
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
+        logger.debug(savedSearch.getName());
+        assertEquals(savedSearch.getName(), testObjects.get("searchName").toString());
+        assertEquals(savedSearch.getDescription(), "This is a test search");
+    }
+
+    /**
+     * Test to create a random Saved Search with search arguments
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(RegressionTests.class)
+    public void testCreateSavedSearchWithArgs() throws Exception {
+        MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
+        Map savedSearchArgs = new HashMap();
+        savedSearchArgs.put("description", "This is a test search");
+
+        testObjects.put("searchName", UUID.randomUUID());
+        testObjects.put("searchQuery", "* | head 10");
+        testObjects.put("searchArgs", savedSearchArgs);
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+        SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
+        assertEquals(savedSearch.getName(), testObjects.get("searchName").toString());
+        assertEquals(savedSearch.getDescription(), "This is a test search");
     }
 
     /**

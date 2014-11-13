@@ -32,7 +32,9 @@
         <splunk:get-saved-searches/>
     </flow>
     <flow name="testCreateSavedSearch">
-        <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]"/>
+        <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+            <splunk:search-args ref="#[payload.searchArgs]"/>
+        </splunk:create-saved-search>
     </flow>
     <flow name="testViewSavedSearch">
         <splunk:view-saved-search searchName="#[payload.searchName]"/>

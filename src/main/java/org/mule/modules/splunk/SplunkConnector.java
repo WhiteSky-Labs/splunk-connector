@@ -205,11 +205,12 @@ public class SplunkConnector implements MuleContextAware {
      *
      * @param searchName  The name of the search
      * @param searchQuery The query
+     * @param searchArgs A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
      * @return SavedSearch the SavedSearch object that can then be executed
      */
     @Processor
-    public SavedSearch createSavedSearch(String searchName, String searchQuery) {
-        return splunkClient.createSavedSearch(searchName, searchQuery);
+    public SavedSearch createSavedSearch(String searchName, String searchQuery, @Optional Map<String, Object> searchArgs) {
+        return splunkClient.createSavedSearch(searchName, searchQuery, searchArgs);
     }
 
     /**

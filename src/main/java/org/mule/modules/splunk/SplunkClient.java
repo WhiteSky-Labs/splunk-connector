@@ -175,14 +175,19 @@ public class SplunkClient {
      *
      * @param searchName  The name of query
      * @param searchQuery The query
+     * @param searchArgs Optional Map of Key-Value Pairs of Saved Search Arguments
      * @return SavedSearch the SavedSearch object that can then be executed
      */
-    public SavedSearch createSavedSearch(String searchName, String searchQuery){
+    public SavedSearch createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
-        service.getSavedSearches().create(searchName, searchQuery);
-
-        return service.getSavedSearches().get(searchName);
+        SavedSearch createdSearch;
+        if (searchArgs != null && searchArgs.size() > 0) {
+            createdSearch = service.getSavedSearches().create(searchName, searchQuery, searchArgs);
+        } else {
+            createdSearch = service.getSavedSearches().create(searchName, searchQuery);
+        }
+        return createdSearch;
     }
 
     /**
