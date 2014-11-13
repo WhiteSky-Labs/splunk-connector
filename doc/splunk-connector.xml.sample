@@ -12,7 +12,7 @@
 <!-- END_INCLUDE(splunk:get-saved-searches) -->
 <!-- BEGIN_INCLUDE(splunk:create-saved-search) -->
     <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
-        <splunk:search-args ref="#[payload.searchArgs]/>
+        <splunk:search-args ref="#[payload.searchArgs]"/>
     </splunk:create-saved-search>
 <!-- END_INCLUDE(splunk:create-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:view-saved-search) -->
