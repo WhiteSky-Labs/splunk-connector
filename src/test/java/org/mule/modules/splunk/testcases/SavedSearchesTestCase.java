@@ -153,7 +153,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
      * @throws Exception
      */
     @Test
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testListJobSavedSearchHistory() throws Exception {
         SavedSearch dummySavedSearch = createSavedSearch();
         testObjects.put("searchName", dummySavedSearch.getName());
@@ -162,19 +162,67 @@ public class SavedSearchesTestCase extends SplunkTestParent {
         assertNotNull(response.getMessage().getPayload());
     }
 
+
     /**
      * Test for non existing SavedSearch
      *
      * @throws Exception
      */
     @Test(expected = org.mule.api.MessagingException.class)
-    @Category(SmokeTests.class)
+    @Category({SmokeTests.class, RegressionTests.class})
     public void testListJobNotExistSavedSearchHistory() throws Exception {
         testObjects.put("searchName", "Sample");
         MessageProcessor flow = lookupFlowConstruct("testGetSavedSearchHistory");
         MuleEvent response = flow.process(getTestEvent(testObjects));
         assertNull(response.getMessage().getPayload());
     }
+
+    /**
+     * Test saved search history without a search name
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(RegressionTests.class)
+    public void testListAllSavedSearchHistory() throws Exception {
+        MessageProcessor flow = lookupFlowConstruct("testGetSavedSearchHistory");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+    }
+
+    /**
+     * Test to List Job Search with a namespace and a name
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(RegressionTests.class)
+    public void testListJobSavedSearchHistoryWithNamespace() throws Exception {
+        SavedSearch dummySavedSearch = createSavedSearch();
+        testObjects.put("searchName", dummySavedSearch.getName());
+        testObjects.put("app", "search");
+        testObjects.put("owner", "admin");
+        MessageProcessor flow = lookupFlowConstruct("testGetSavedSearchHistory");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+    }
+
+    /**
+     * Test to List Job Search History with namespace and no name
+     *
+     * @throws Exception
+     */
+    @Test
+    @Category(RegressionTests.class)
+    public void testListAllSavedSearchHistoryWithNamespace() throws Exception {
+        SavedSearch dummySavedSearch = createSavedSearch();
+        testObjects.put("app", "search");
+        testObjects.put("owner", "admin");
+        MessageProcessor flow = lookupFlowConstruct("testGetSavedSearchHistory");
+        MuleEvent response = flow.process(getTestEvent(testObjects));
+        assertNotNull(response.getMessage().getPayload());
+    }
+
 
     /**
      * Test Sample

@@ -247,12 +247,14 @@ public class SplunkConnector implements MuleContextAware {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-search-history}
      *
-     * @param searchName The name of the search
+     * @param searchName (Optional) The name of the search
+     * @param app (Optional) The application namespace for the saved search
+     * @param owner (Optional) The owner of the namespace for the saved search
      * @return List of Job History
      */
     @Processor
-    public List<Job> getSavedSearchHistory(String searchName) {
-        return splunkClient.getSavedSearchHistory(searchName);
+    public List<Job> getSavedSearchHistory(@Optional String searchName, @Optional String app, @Optional String owner) {
+        return splunkClient.getSavedSearchHistory(searchName, app, owner);
     }
 
     /**

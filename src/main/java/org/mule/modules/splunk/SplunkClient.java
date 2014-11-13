@@ -222,14 +222,34 @@ public class SplunkClient {
     /**
      * List the past and current instances (jobs) of the search.
      *
-     * @param searchName The The name of query
+     * @param searchName The (Optional) name of query
+     * @param app The (Optional) application of the namespace
+     * @param owner The (Optional) owner of the namespace
      * @return List of Job
      */
-    public List<Job> getSavedSearchHistory(String searchName) {
+    public List<Job> getSavedSearchHistory(String searchName, String app, String owner) {
         List<Job> jobList = new ArrayList<Job>();
-        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-        Validate.notNull(savedSearch, "SavedSearch doesn't exist.");
-        Collections.addAll(jobList, savedSearch.history());
+        SavedSearchCollection savedSearches;
+
+        // Set up the namespace first
+        ServiceArgs namespace = new ServiceArgs();
+        if ((app != null) || (owner != null)) {
+            namespace.setApp(app);
+            namespace.setOwner(owner);
+
+        }
+        // If there is no name provided, get all saved searches
+        if (searchName == null || searchName.isEmpty()) {
+            savedSearches = service.getSavedSearches(namespace);
+            for (SavedSearch entity : savedSearches.values()) {
+                Collections.addAll(jobList, entity.history());
+            }
+        } else {
+            SavedSearch savedSearch = service.getSavedSearches(namespace).get(searchName);
+            Validate.notNull(savedSearch, "SavedSearch doesn't exist.");
+            Collections.addAll(jobList, savedSearch.history());
+        }
+
         return jobList;
     }
 

@@ -11,19 +11,19 @@
     <splunk:get-saved-searches app="#[payload.app]" owner="#[payload.owner]"/>
 <!-- END_INCLUDE(splunk:get-saved-searches) -->
 <!-- BEGIN_INCLUDE(splunk:create-saved-search) -->
-    <splunk:create-saved-search searchName="#[payload:searchName]" searchQuery="#[payload:searchQuery]" />
+    <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]" />
 <!-- END_INCLUDE(splunk:create-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:view-saved-search) -->
-    <splunk:view-saved-search searchName="#[payload:searchName]" />
+    <splunk:view-saved-search searchName="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:view-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
-    <splunk:get-saved-search-history searchName="#[payload:searchName]" />
+    <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]" />
 <!-- END_INCLUDE(splunk:get-saved-search-history) -->
 <!-- BEGIN_INCLUDE(splunk:run-job) -->
-    <splunk:run-job searchName="#[payload:searchName]" />
+    <splunk:run-job searchName="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:run-job) -->
 <!-- BEGIN_INCLUDE(splunk:run-saved-search) -->
-    <splunk:run-saved-search searchName="#[payload:searchName]" />
+    <splunk:run-saved-search searchName="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:run-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:run-saved-search-with-arguments) -->
     <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
@@ -44,8 +44,8 @@
      </splunk:run-export-search>
 <!-- END_INCLUDE(splunk:run-export-search) -->
 <!-- BEGIN_INCLUDE(splunk:delete-saved-search) -->
-    <splunk:delete-saved-search searchName ="#[payload:searchName]" />
+    <splunk:delete-saved-search searchName ="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:delete-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:get-data-model) -->
-    <splunk:get-data-model dataModelName="#[payload:dataModelName]" />
+    <splunk:get-data-model dataModelName="#[payload.dataModelName]" />
 <!-- END_INCLUDE(splunk:get-data-model) -->

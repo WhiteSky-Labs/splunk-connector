@@ -15,11 +15,11 @@
     <splunk:config host="${splunk.host}" port="${splunk.port}" username="${splunk.username}"
                    password="${splunk.password}"/>
 
-    <flow name="testGetApplications">
-    <splunk:get-applications/>
-    </flow>
     <flow name="testGetJobs">
         <splunk:get-jobs/>
+    </flow>
+    <flow name="testGetApplications">
+        <splunk:get-applications/>
     </flow>
     <flow name="testRunNormalSearch">
         <splunk:run-normal-search searchQuery="#[payload.searchQuery]"/>
@@ -29,7 +29,7 @@
                                     earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]"/>
     </flow>
     <flow name="testGetSavedSearches">
-        <splunk:get-saved-searches app="#[payload.app]" owner="#[payload.owner]"/>
+        <splunk:get-saved-searches/>
     </flow>
     <flow name="testCreateSavedSearch">
         <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]"/>
@@ -42,7 +42,8 @@
                                     isSetScheduled="#[payload.isSetScheduled]" cronSchedule="#[payload.cronSchedule]"/>
     </flow>
     <flow name="testGetSavedSearchHistory">
-        <splunk:get-saved-search-history searchName="#[payload.searchName]"/>
+        <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]"
+                                         owner="#[payload.owner]"/>
     </flow>
     <flow name="testRunSavedSearch">
         <splunk:run-saved-search searchName="#[payload.searchName]"/>
