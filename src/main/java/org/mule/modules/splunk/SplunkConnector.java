@@ -236,10 +236,11 @@ public class SplunkConnector implements MuleContextAware {
      *
      * @param searchName     The name of the search
      * @param searchProperties  The map of search properties to apply
+     * @throws SplunkConnectorException when the search properties are invalid
      * @return The updated SavedSearch
      */
     @Processor
-    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) {
+    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
         return splunkClient.modifySavedSearchProperties(searchName, searchProperties);
     }
 

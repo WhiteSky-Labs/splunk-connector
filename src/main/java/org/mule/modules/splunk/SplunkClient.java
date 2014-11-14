@@ -15,6 +15,7 @@ import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.callback.SourceCallback;
 import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
+import org.mule.modules.splunk.util.SplunkUtils;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -182,7 +183,7 @@ public class SplunkClient {
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
         SavedSearch createdSearch;
-        if (searchArgs != null && searchArgs.size() > 0) {
+        if (searchArgs != null && searchArgs.isEmpty()) {
             createdSearch = service.getSavedSearches().create(searchName, searchQuery, searchArgs);
         } else {
             createdSearch = service.getSavedSearches().create(searchName, searchQuery);
@@ -232,197 +233,15 @@ public class SplunkClient {
      * @param searchName The name of query
      * @param searchProperties The map of search properties to modify
      * @return The Modified Saved Search
+     * @throws SplunkConnectorException when the properties aren't valid
      */
-    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) {
+    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
         Validate.notEmpty(searchName, "You must provide a search name to modify");
         Validate.notNull(searchProperties, "You must provide some properties to modify");
         Validate.notEmpty(searchProperties, "You must provide some properties to modify");
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-        for (Map.Entry<String, Object> entry : searchProperties.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("action.email.auth_password")) {
-                savedSearch.setActionEmailAuthPassword((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.auth_username")) {
-                savedSearch.setActionEmailAuthUsername((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.bcc")) {
-                savedSearch.setActionEmailBcc((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.cc")) {
-                savedSearch.setActionEmailCc((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.command")) {
-                savedSearch.setActionEmailCommand((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.format")) {
-                savedSearch.setActionEmailFormat((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.from")) {
-                savedSearch.setActionEmailFrom((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.hostname")) {
-                savedSearch.setActionEmailHostname((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.inline")) {
-                savedSearch.setActionEmailInline((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.mailserver")) {
-                savedSearch.setActionEmailMailServer((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.maxresults")) {
-                savedSearch.setActionEmailMaxResults((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.maxtime")) {
-                savedSearch.setActionEmailMaxTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.pdfview")) {
-                savedSearch.setActionEmailPdfView((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.preprocess_results")) {
-                savedSearch.setActionEmailPreProcessResults((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.reportPaperOrientation")) {
-                savedSearch.setActionEmailReportPaperOrientation((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.reportPaperSize")) {
-                savedSearch.setActionEmailReportPaperSize((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.reportServerEnabled")) {
-                savedSearch.setActionEmailReportServerEnabled((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.reportServerURL")) {
-                savedSearch.setActionEmailReportServerUrl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.sendpdf")) {
-                savedSearch.setActionEmailSendPdf((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.sendresults")) {
-                savedSearch.setActionEmailSendResults((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.subject")) {
-                savedSearch.setActionEmailSubject((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.to")) {
-                savedSearch.setActionEmailTo((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.track_alert")) {
-                savedSearch.setActionEmailTrackAlert((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.ttl")) {
-                savedSearch.setActionEmailTo((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.use_ssl")) {
-                savedSearch.setActionEmailUseSsl((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.use_tls")) {
-                savedSearch.setActionEmailUseTls((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.email.width_sort_columns")) {
-                savedSearch.setActionEmailWidthSortColumns((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.command")) {
-                savedSearch.setActionPopulateLookupCommand((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.dest")) {
-                savedSearch.setActionPopulateLookupDest((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.hostname")) {
-                savedSearch.setActionPopulateLookupHostname((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.maxresults")) {
-                savedSearch.setActionPopulateLookupMaxResults((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.maxtime")) {
-                savedSearch.setActionPopulateLookupMaxTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.track_alert")) {
-                savedSearch.setActionPopulateLookupTrackAlert((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.populate_lookup.ttl")) {
-                savedSearch.setActionPopulateLookupTtl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.command")) {
-                savedSearch.setActionRssCommand((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.hostname")) {
-                savedSearch.setActionRssHostname((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.maxresults")) {
-                savedSearch.setActionRssMaxResults((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.maxtime")) {
-                savedSearch.setActionRssMaxTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.track_alert")) {
-                savedSearch.setActionRssTrackAlert((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.rss.ttl")) {
-                savedSearch.setActionRssTtl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.command")) {
-                savedSearch.setActionScriptCommand((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.filename")) {
-                savedSearch.setActionScriptFilename((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.hostname")) {
-                savedSearch.setActionScriptHostname((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.maxresults")) {
-                savedSearch.setActionScriptMaxResults((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.maxtime")) {
-                savedSearch.setActionScriptMaxTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.track_alert")) {
-                savedSearch.setActionScriptTrackAlert((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.script.ttl")) {
-                savedSearch.setActionScriptTtl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index._name")) {
-                savedSearch.setActionSummaryIndexName((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.command")) {
-                savedSearch.setActionSummaryIndexCommand((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.hostname")) {
-                savedSearch.setActionSummaryIndexHostname((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.inline")) {
-                savedSearch.setActionSummaryIndexInline((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.maxresults")) {
-                savedSearch.setActionSummaryIndexMaxResults((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.maxtime")) {
-                savedSearch.setActionSummaryIndexMaxTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.track_alert")) {
-                savedSearch.setActionSummaryIndexTrackAlert((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("action.summary_index.ttl")) {
-                savedSearch.setActionSummaryIndexTtl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("actions")) {
-                savedSearch.setActions((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.digest_mode")) {
-                savedSearch.setAlertDigestMode((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.expires")) {
-                savedSearch.setAlertExpires((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.severity")) {
-                savedSearch.setAlertSeverity((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.suppress")) {
-                savedSearch.setAlertSuppress((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.suppress.fields")) {
-                savedSearch.setAlertSuppressFields((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.suppress.period")) {
-                savedSearch.setAlertSuppressPeriod((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert.track")) {
-                savedSearch.setAlertTrack((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert_comparator")) {
-                savedSearch.setAlertComparator((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert_condition")) {
-                savedSearch.setAlertCondition((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert_threshold")) {
-                savedSearch.setAlertThreshold((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("alert_type")) {
-                savedSearch.setAlertType((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("cron_schedule")) {
-                savedSearch.setCronSchedule((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("description")) {
-                savedSearch.setDescription((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("disabled")) {
-                savedSearch.setDisabled((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.buckets")) {
-                savedSearch.setDispatchBuckets((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.earliest_time")) {
-                savedSearch.setDispatchEarliestTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.latest_time")) {
-                savedSearch.setDispatchLatestTime((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.lookups")) {
-                savedSearch.setDispatchLookups((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.max_count")) {
-                savedSearch.setDispatchMaxCount((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.max_time")) {
-                savedSearch.setDispatchMaxTime((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.reduce_freq")) {
-                savedSearch.setDispatchReduceFrequency((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.rt_backfill")) {
-                savedSearch.setDispatchRealTimeBackfill((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.spawn_process")) {
-                savedSearch.setDispatchSpawnProcess((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.time_format")) {
-                savedSearch.setDispatchTimeFormat((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("dispatch.ttl")) {
-                savedSearch.setDispatchTtl((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("displayview")) {
-                savedSearch.setDisplayView((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("is_scheduled")) {
-                savedSearch.setIsScheduled((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("is_visible")) {
-                savedSearch.setIsVisible((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("max_concurrent")) {
-                savedSearch.setMaxConcurrent((Integer) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("realtime_schedule")) {
-                savedSearch.setRealtimeSchedule((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("request.ui_dispatch_app")) {
-                savedSearch.setRequestUiDispatchApp((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("request.ui_dispatch_view")) {
-                savedSearch.setRequestUiDispatchView((String) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("restart_on_searchpeer_add")) {
-                savedSearch.setRestartOnSearchPeerAdd((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("run_on_startup")) {
-                savedSearch.setRunOnStartup((Boolean) entry.getValue());
-            } else if (entry.getKey().equalsIgnoreCase("vsid")) {
-                savedSearch.setVsid((String) entry.getValue());
-            }
-        }
+
+        savedSearch = SplunkUtils.setSearchProperties(searchProperties, savedSearch);
         savedSearch.update();
         return savedSearch;
     }
@@ -768,5 +587,6 @@ public class SplunkClient {
     private String convertToJavaConvention(String key) {
         return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
     }
+
 
 }
