@@ -13,6 +13,7 @@ import com.splunk.SavedSearch;
 import org.modeshape.common.text.Inflector;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -24,7 +25,7 @@ import java.util.Set;
  */
 public class SplunkUtils {
 
-    private static final Set<String> booleanParameters = new HashSet<String>(Arrays.asList(
+    private static final Set<String> BOOLEAN_PARAMETERS = new HashSet<String>(Arrays.asList(
             new String[]{
                     "action.email.inline",
                     "action.email.reportServerEnabled",
@@ -51,7 +52,7 @@ public class SplunkUtils {
             }
     ));
 
-    private static final Set<String> integerParameters = new HashSet<String>(Arrays.asList(
+    private static final Set<String> INTEGER_PARAMETERS = new HashSet<String>(Arrays.asList(
             new String[]{
                     "action.email.maxresults",
                     "action.populate_lookup.maxresults",
@@ -67,31 +68,41 @@ public class SplunkUtils {
             }
     ));
 
-    public SplunkUtils() {
-
-    }
-
+    /**
+     * Set the Search Properties by reflection
+     *
+     * @param searchProperties The Properties to set
+     * @param search           The SavedSearch to set the properties to
+     * @return the SavedSearch with modified properties
+     * @throws SplunkConnectorException
+     */
     public static SavedSearch setSearchProperties(Map<String, Object> searchProperties, SavedSearch search) throws SplunkConnectorException {
         try {
             Class cls = Class.forName("com.splunk.SavedSearch");
             Method method = null;
 
             for (Map.Entry<String, Object> entry : searchProperties.entrySet()) {
-                if (booleanParameters.contains(entry.getKey())) {
+                if (BOOLEAN_PARAMETERS.contains(entry.getKey())) {
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-                    method.invoke(search, ((Boolean) entry.getValue()).booleanValue());
-                } else if (integerParameters.contains(entry.getKey())) {
+
+                } else if (INTEGER_PARAMETERS.contains(entry.getKey())) {
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-                    method.invoke(search, ((Integer) entry.getValue()).intValue());
+
                 } else {
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
-                    method.invoke(search, entry.getValue());
-                }
 
+                }
+                method.invoke(search, entry.getValue());
             }
             return search;
-        } catch (Exception e) {
-            throw new SplunkConnectorException("Error reflecting Search Properties", e);
+        } catch (IllegalAccessException iae) {
+            throw new SplunkConnectorException("Error reflecting Search Properties", iae);
+        } catch (InvocationTargetException ite) {
+            throw new SplunkConnectorException("Error reflecting Search Properties", ite);
+        } catch (NoSuchMethodException nsme) {
+            throw new SplunkConnectorException("No matching method, check your properties are correct", nsme);
+        } catch (ClassNotFoundException e) {
+            throw new SplunkConnectorException("Class not found for com.splunk.SavedSearch - check your build path", e);
         }
 
     }
