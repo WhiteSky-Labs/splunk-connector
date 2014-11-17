@@ -75,7 +75,7 @@ public class SavedSearchesTestCase extends SplunkTestParent {
      */
     @Test(expected = org.mule.api.MessagingException.class)
     @Category({SmokeTests.class, RegressionTests.class})
-    public void testCreateSavedSearchAlreadyExist() throws Exception {
+    public void testCreateSavedSearchAlreadyExists() throws Exception {
         MessageProcessor flow = lookupFlowConstruct("testCreateSavedSearch");
         testObjects.put("searchName", "Test Search");
         testObjects.put("searchQuery", "* | head 10");
@@ -167,8 +167,8 @@ public class SavedSearchesTestCase extends SplunkTestParent {
         MuleEvent response = flow.process(getTestEvent(testObjects));
         assertNotNull(response.getMessage().getPayload());
         SavedSearch savedSearch = (SavedSearch) response.getMessage().getPayload();
-        assertEquals(savedSearch.getName(), testObjects.get("searchName").toString());
-        assertEquals(savedSearch.getDescription(), "This is a test search");
+        assertEquals(testObjects.get("searchName").toString(), savedSearch.getName());
+        assertEquals("This is a test search", savedSearch.getDescription());
     }
 
     /**

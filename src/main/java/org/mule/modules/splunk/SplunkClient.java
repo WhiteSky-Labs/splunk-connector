@@ -183,7 +183,7 @@ public class SplunkClient {
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
         SavedSearch createdSearch;
-        if (searchArgs != null && searchArgs.isEmpty()) {
+        if (searchArgs != null && !searchArgs.isEmpty()) {
             createdSearch = service.getSavedSearches().create(searchName, searchQuery, searchArgs);
         } else {
             createdSearch = service.getSavedSearches().create(searchName, searchQuery);

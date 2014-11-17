@@ -68,6 +68,10 @@ public class SplunkUtils {
             }
     ));
 
+    private SplunkUtils() {
+        super();
+    }
+
     /**
      * Set the Search Properties by reflection
      *
