@@ -16,7 +16,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -87,7 +89,81 @@ public class SplunkConnectorTest {
         assertEquals(savedSearches, client.getSavedSearches("search", "admin"));
     }
 
-    
+    @Test
+    public void testGetSavedSearchHistory() throws Exception {
+        List<Job> jobs = new ArrayList<Job>();
+        when(client.getSavedSearchHistory("Test", "search", "admin")).thenReturn(jobs);
+        assertEquals(jobs, connector.getSavedSearchHistory("Test", "search", "admin"));
+    }
+
+    @Test
+    public void testModifySavedSearchProperties() throws Exception {
+        SavedSearch search = null;
+        Map<String, Object> props = new HashMap<String, Object>();
+        props.put("description", "test");
+        when(client.modifySavedSearchProperties("Test", props)).thenReturn(search);
+        assertEquals(search, connector.modifySavedSearchProperties("Test", props));
+    }
+
+    @Test
+    public void testRunBlockingSearchTestCase() throws Exception {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+        when(client.runBlockingSearch("Test", null)).thenReturn(results);
+        assertEquals(results, connector.runBlockingSearch("Test", null));
+    }
+
+    @Test
+    public void testRunOneShotSearch() throws Exception {
+        List<Map<String, Object>> oneshotResult = new ArrayList<Map<String, Object>>();
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+        oneshotResult.add(results);
+        when(client.runOneShotSearch("Test", "-1h", "now", null)).thenReturn(oneshotResult);
+        assertEquals(oneshotResult, connector.runOneShotSearch("Test", "-1h", "now", null));
+    }
+
+    @Test
+    public void testRunSavedSearch() throws Exception {
+        List<Map<String, Object>> searchResult = new ArrayList<Map<String, Object>>();
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+        searchResult.add(results);
+        when(client.runSavedSearch("Test")).thenReturn(searchResult);
+        assertEquals(searchResult, connector.runSavedSearch("Test"));
+    }
+
+    @Test
+    public void testRunSavedSearchWithArguments() throws Exception {
+        List<Map<String, Object>> searchResult = new ArrayList<Map<String, Object>>();
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+        searchResult.add(results);
+
+        Map<String, Object> customArgs = new HashMap<String, Object>();
+        results.put("alert.email", "Yes");
+        results.put("output_mode", "JSON");
+
+        SavedSearchDispatchArgs searchArgs = new SavedSearchDispatchArgs();
+        searchArgs.setDispatchLatestTime("now");
+        searchArgs.setForceDispatch(true);
+
+        when(client.runSavedSearchWithArguments("Test", customArgs, searchArgs)).thenReturn(searchResult);
+        assertEquals(searchResult, connector.runSavedSearchWithArguments("Test", customArgs, searchArgs));
+    }
+
+    @Test
+    public void testViewSavedSearchProperties() throws Exception {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+        when(client.viewSavedSearchProperties("Test", "search", "admin")).thenReturn(results.entrySet());
+        assertEquals(results.entrySet(), connector.viewSavedSearchProperties("Test", "search", "admin"));
+    }
 
 
 }
