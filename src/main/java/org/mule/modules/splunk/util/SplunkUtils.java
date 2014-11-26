@@ -81,32 +81,25 @@ public class SplunkUtils {
      * @return the SavedSearch with modified properties
      * @throws SplunkConnectorException
      */
+    @SuppressWarnings("unchecked")
     public static SavedSearch setSearchProperties(Map<String, Object> searchProperties, SavedSearch search) throws SplunkConnectorException {
         try {
             Class cls = Class.forName("com.splunk.SavedSearch");
             Method method;
 
             for (Map.Entry<String, Object> entry : searchProperties.entrySet()) {
+                Object value = null;
                 if (BOOLEAN_PARAMETERS.contains(entry.getKey())) {
-                    if (entry.getValue() instanceof String) {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-                        method.invoke(search, Boolean.parseBoolean((String) entry.getValue()));
-                    } else {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-                        method.invoke(search, entry.getValue());
-                    }
+                    value = entry.getValue() instanceof String ? Boolean.parseBoolean((String) entry.getValue()) : entry.getValue();
+                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
                 } else if (INTEGER_PARAMETERS.contains(entry.getKey())) {
-                    if (entry.getValue() instanceof String) {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-                        method.invoke(search, Integer.parseInt((String) entry.getValue()));
-                    } else {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-                        method.invoke(search, entry.getValue());
-                    }
+                    value = entry.getValue() instanceof String ? Integer.parseInt((String) entry.getValue()) : entry.getValue();
+                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
                 } else {
+                    value = (String) entry.getValue();
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
-                    method.invoke(search, entry.getValue());
                 }
+                method.invoke(search, value);
             }
             return search;
         } catch (IllegalAccessException iae) {
@@ -135,26 +128,18 @@ public class SplunkUtils {
             Method method;
 
             for (Map.Entry<String, Object> entry : jobProperties.entrySet()) {
+                Object value = null;
                 if (BOOLEAN_PARAMETERS.contains(entry.getKey())) {
-                    if (entry.getValue() instanceof String) {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-                        method.invoke(jobArgs, Boolean.parseBoolean((String) entry.getValue()));
-                    } else {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-                        method.invoke(jobArgs, entry.getValue());
-                    }
+                    value = entry.getValue() instanceof String ? Boolean.parseBoolean((String) entry.getValue()) : entry.getValue();
+                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
                 } else if (INTEGER_PARAMETERS.contains(entry.getKey())) {
-                    if (entry.getValue() instanceof String) {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-                        method.invoke(jobArgs, Integer.parseInt((String) entry.getValue()));
-                    } else {
-                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-                        method.invoke(jobArgs, entry.getValue());
-                    }
+                    value = entry.getValue() instanceof String ? Integer.parseInt((String) entry.getValue()) : entry.getValue();
+                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
                 } else {
+                    value = (String) entry.getValue();
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
-                    method.invoke(jobArgs, entry.getValue());
                 }
+                method.invoke(jobArgs, value);
             }
             return jobArgs;
         } catch (IllegalAccessException iae) {

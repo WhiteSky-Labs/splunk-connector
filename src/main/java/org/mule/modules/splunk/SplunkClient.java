@@ -608,12 +608,6 @@ public class SplunkClient {
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
     public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, JobExportArgs exportArgs, final SourceCallback callback) throws SplunkConnectorException {
-        System.out.println("Searchmode is " + searchMode);
-        System.out.println("OutputMode is " + outputMode);
-        System.out.println("Export args is " + exportArgs);
-        System.out.println("Earliest is " + earliestTime);
-        System.out.println("Latest is " + latestTime);
-        System.out.println("Search Query is " + searchQuery);
         if (exportArgs == null) {
             exportArgs = new JobExportArgs();
         }

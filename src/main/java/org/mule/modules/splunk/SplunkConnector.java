@@ -48,10 +48,18 @@ public class SplunkConnector {
 
     private SplunkClient splunkClient;
 
+    /**
+     * Public Constructor to support Unit Tests
+     */
     public SplunkConnector() {
 
     }
 
+    /**
+     * Instantiate a Splunk Connector using a pre-created client
+     *
+     * @param client The Splunk Client to use
+     */
     public SplunkConnector(SplunkClient client) {
         this.splunkClient = client;
     }
