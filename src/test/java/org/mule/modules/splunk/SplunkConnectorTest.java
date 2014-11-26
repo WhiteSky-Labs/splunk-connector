@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 /**
  * Test {@link org.mule.modules.splunk.SplunkConnector} internals
  * <p/>
- * TODO: Implement Unit Tests once approach is clearer
+ *
  */
 public class SplunkConnectorTest {
 

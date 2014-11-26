@@ -11,20 +11,20 @@ package org.mule.modules.splunk.util;
 
 import com.splunk.JobArgs;
 import com.splunk.SavedSearch;
+import org.apache.commons.lang.WordUtils;
 import org.modeshape.common.text.Inflector;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by conorcurlett on 13/11/14.
  */
 public class SplunkUtils {
+
+    private static final char[] delimiters = new char[]{'_', '.'};
 
     private static final Set<String> BOOLEAN_PARAMETERS = new HashSet<String>(Arrays.asList(
             new String[]{
@@ -49,7 +49,14 @@ public class SplunkUtils {
                     "is_visible",
                     "realtime_schedule",
                     "restart_on_searchpeer_add",
-                    "run_on_startup"
+                    "run_on_startup",
+                    "enable_lookups",
+                    "force_bundle_replication",
+                    "rt_blocking",
+                    "rt_indexfilter",
+                    "reload_macros",
+                    "spawn_process",
+                    "sync_bundle_replication"
             }
     ));
 
@@ -65,9 +72,33 @@ public class SplunkUtils {
                     "dispatch.max_count",
                     "dispatch.max_time",
                     "dispatch.reduce_freq",
-                    "max_concurrent"
+                    "max_concurrent",
+                    "auto_cancel",
+                    "auto_finalize_ec",
+                    "auto_pause",
+                    "max_count",
+                    "max_time",
+                    "rt_maxblocksecs",
+                    "rt_queue_size",
+                    "reduce_freq",
+                    "status_buckets",
+                    "timeout"
             }
     ));
+
+    private static final Map<String, String> SPECIAL_CASES = new HashMap<String, String>();
+
+    static {
+        SPECIAL_CASES.put("Maxresults", "MaxResults");
+        SPECIAL_CASES.put("Sendpdf", "SendPdf");
+        SPECIAL_CASES.put("Sendemail", "SendEmail");
+        SPECIAL_CASES.put("Rt", "Realtime");
+        SPECIAL_CASES.put("Indexfilter", "IndexFilter");
+        SPECIAL_CASES.put("Maxblocksecs", "MaximumBlockSeconds");
+        SPECIAL_CASES.put("ReduceFreq", "ReduceFrequency");
+        SPECIAL_CASES.put("SyncBundleReplication", "SynchronizeBundleReplication");
+
+    }
 
     private SplunkUtils() {
         super();
@@ -98,6 +129,7 @@ public class SplunkUtils {
                 } else {
                     value = (String) entry.getValue();
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
+
                 }
                 method.invoke(search, value);
             }
@@ -121,6 +153,7 @@ public class SplunkUtils {
      * @return the JobArgs with modified properties
      * @throws SplunkConnectorException
      */
+    @SuppressWarnings("unchecked")
     public static JobArgs setJobArgs(Map<String, Object> jobProperties) throws SplunkConnectorException {
         try {
             JobArgs jobArgs = new JobArgs();
@@ -161,7 +194,14 @@ public class SplunkUtils {
      * @return A string converted from javascript (naming_conventions) to Java namingConventions
      */
     private static String convertToIncompleteMethodString(String key) {
-        return Inflector.getInstance().upperCamelCase(key).replace("_", "");
+        String removedDelimiters = WordUtils.capitalizeFully(key, delimiters).replace("_", "").replace(".", "");
+        // cater for special cases
+        for (Map.Entry<String, String> entry : SPECIAL_CASES.entrySet()) {
+            if (removedDelimiters.indexOf(entry.getKey()) != -1) {
+                removedDelimiters = removedDelimiters.replaceAll(entry.getKey(), entry.getValue());
+            }
+        }
+        return Inflector.getInstance().upperCamelCase(removedDelimiters);
     }
 
 
