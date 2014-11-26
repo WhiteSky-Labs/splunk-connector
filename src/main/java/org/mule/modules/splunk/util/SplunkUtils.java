@@ -9,6 +9,7 @@
 
 package org.mule.modules.splunk.util;
 
+import com.splunk.JobArgs;
 import com.splunk.SavedSearch;
 import org.modeshape.common.text.Inflector;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
@@ -83,20 +84,29 @@ public class SplunkUtils {
     public static SavedSearch setSearchProperties(Map<String, Object> searchProperties, SavedSearch search) throws SplunkConnectorException {
         try {
             Class cls = Class.forName("com.splunk.SavedSearch");
-            Method method = null;
+            Method method;
 
             for (Map.Entry<String, Object> entry : searchProperties.entrySet()) {
                 if (BOOLEAN_PARAMETERS.contains(entry.getKey())) {
-                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
-
+                    if (entry.getValue() instanceof String) {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
+                        method.invoke(search, Boolean.parseBoolean((String) entry.getValue()));
+                    } else {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
+                        method.invoke(search, entry.getValue());
+                    }
                 } else if (INTEGER_PARAMETERS.contains(entry.getKey())) {
-                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
-
+                    if (entry.getValue() instanceof String) {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
+                        method.invoke(search, Integer.parseInt((String) entry.getValue()));
+                    } else {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
+                        method.invoke(search, entry.getValue());
+                    }
                 } else {
                     method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
-
+                    method.invoke(search, entry.getValue());
                 }
-                method.invoke(search, entry.getValue());
             }
             return search;
         } catch (IllegalAccessException iae) {
@@ -111,6 +121,53 @@ public class SplunkUtils {
 
     }
 
+    /**
+     * Set the JobArgs by reflection
+     *
+     * @param jobProperties The Properties to set
+     * @return the JobArgs with modified properties
+     * @throws SplunkConnectorException
+     */
+    public static JobArgs setJobArgs(Map<String, Object> jobProperties) throws SplunkConnectorException {
+        try {
+            JobArgs jobArgs = new JobArgs();
+            Class cls = Class.forName("com.splunk.JobArgs");
+            Method method;
+
+            for (Map.Entry<String, Object> entry : jobProperties.entrySet()) {
+                if (BOOLEAN_PARAMETERS.contains(entry.getKey())) {
+                    if (entry.getValue() instanceof String) {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
+                        method.invoke(jobArgs, Boolean.parseBoolean((String) entry.getValue()));
+                    } else {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), boolean.class);
+                        method.invoke(jobArgs, entry.getValue());
+                    }
+                } else if (INTEGER_PARAMETERS.contains(entry.getKey())) {
+                    if (entry.getValue() instanceof String) {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
+                        method.invoke(jobArgs, Integer.parseInt((String) entry.getValue()));
+                    } else {
+                        method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), int.class);
+                        method.invoke(jobArgs, entry.getValue());
+                    }
+                } else {
+                    method = cls.getDeclaredMethod("set" + convertToIncompleteMethodString(entry.getKey()), String.class);
+                    method.invoke(jobArgs, entry.getValue());
+                }
+            }
+            return jobArgs;
+        } catch (IllegalAccessException iae) {
+            throw new SplunkConnectorException("Error reflecting Job Properties", iae);
+        } catch (InvocationTargetException ite) {
+            throw new SplunkConnectorException("Error reflecting Job Properties", ite);
+        } catch (NoSuchMethodException nsme) {
+            throw new SplunkConnectorException("No matching method, check your properties are correct", nsme);
+        } catch (ClassNotFoundException e) {
+            throw new SplunkConnectorException("Class not found for com.splunk.JobArgs - check your build path", e);
+        }
+
+    }
 
     /**
      * Convert to Java naming standards for use in a reflection method call

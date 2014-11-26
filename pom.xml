@@ -21,9 +21,21 @@
         <category>Standard</category>
         <licensePath>LICENSE.md</licensePath>
         <devkit.studio.package.skip>false</devkit.studio.package.skip>
+        <connector.test.version>2.0.6</connector.test.version>
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-vm</artifactId>
+            <version>${mule.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-connector-test</artifactId>
+            <version>${connector.test.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>com.splunk</groupId>
             <artifactId>splunk</artifactId>
@@ -71,6 +83,7 @@
             <id>ext-release-local</id>
             <url>http://splunk.artifactoryonline.com/splunk/ext-releases-local</url>
         </repository>
+
     </repositories>
 
 </project>

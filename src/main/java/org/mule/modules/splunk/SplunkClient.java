@@ -286,7 +286,6 @@ public class SplunkClient {
      * @param searchName The name of query
      * @return List of Hashmaps
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue executing
-     * TODO switch to a sourcecallback
      */
     public List<Map<String, Object>> runSavedSearch(String searchName) throws SplunkConnectorException {
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
@@ -304,20 +303,18 @@ public class SplunkClient {
     /**
      * Run a Saved Search with arguments
      *
-     * @param searchName         The name of the search
-     * @param searchQuery        The query
+     * @param searchName         The name of the searh
      * @param customArgs         Custom Arguments, Optional list of custom arguments to supply
      * @param searchDispatchArgs Optional list of search dispatch arguments
      * @return The results as a List of Hashmaps
      * @throws SplunkConnectorException when there is an issue running the saved search
-     *                                  TODO switch to a sourcecallback
      */
 
-    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, String searchQuery,
+    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName,
                                                                  Map<String, Object> customArgs,
                                                                  SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
-        SavedSearch savedSearch = service.getSavedSearches().create(searchName, searchQuery);
+        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
         if (customArgs != null) {
             String queryParams = "";
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
@@ -432,9 +429,9 @@ public class SplunkClient {
     }
 
     /**
-     * List Jobs
+     * Get the current users Jobs
      *
-     * @return A List of the Job objects retrieved from the Splunk Server
+     * @return A List of the current user's Job objects retrieved from the Splunk Server
      */
     public List<Job> getJobs() {
         JobCollection jobs = service.getJobs();
@@ -449,23 +446,57 @@ public class SplunkClient {
      * Run a  search and wait for response
      *
      * @param searchQuery The search query
-     * @return the search response
+     * @param searchArgs The optional search arguments
+     * @param searchCallback The SourceCallback to return results to
      * @throws SplunkConnectorException when there is an error connecting to splunk
-     * TODO return as a sourcecallback
+     *
      */
-    public Map<String, Object> runNormalSearch(String searchQuery) throws SplunkConnectorException {
+    public void runNormalSearch(String searchQuery, Map<String, Object> searchArgs, final SourceCallback searchCallback) throws SplunkConnectorException {
         Validate.notEmpty(searchQuery, "Search Query is empty.");
-        JobArgs jobargs = new JobArgs();
-        jobargs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
-        Job job = service.getJobs().create(searchQuery, jobargs);
+        JobArgs jobArgs = new JobArgs();
+        if (searchArgs != null && !searchArgs.isEmpty()) {
+            jobArgs = SplunkUtils.setJobArgs(searchArgs);
+        }
+        jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
+        Job job = service.getJobs().create(searchQuery, jobArgs);
 
         while (!job.isDone()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                throw new SplunkConnectorException(e.getMessage(), e);
+                throw new SplunkConnectorException("Polling for Normal Search results was interrupted", e);
             }
         }
+
+        Map<String, Object> searchResponse = new HashMap<String, Object>();
+        searchResponse.put("job", job);
+        searchResponse.put("events", populateEventResponse(job));
+        try {
+            searchCallback.process(searchResponse);
+        } catch (Exception e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+
+    }
+
+
+    /**
+     * Run a blocking search, which returns synchronously after waiting for the search to complete (blocking the Splunk Server)
+     *
+     * @param searchQuery The query string
+     * @param searchArgs  An optional map of search arguments
+     * @return The results as a HashMap
+     * @throws SplunkConnectorException when the search cannot execute
+     */
+    public Map<String, Object> runBlockingSearch(String searchQuery, Map<String, Object> searchArgs) throws SplunkConnectorException {
+        Validate.notEmpty(searchQuery, "Search Query is empty.");
+        JobArgs jobArgs = new JobArgs();
+        if (searchArgs != null && !searchArgs.isEmpty()) {
+            jobArgs = SplunkUtils.setJobArgs(searchArgs);
+        }
+        jobArgs.setExecutionMode(JobArgs.ExecutionMode.BLOCKING);
+        Job job = service.getJobs().create(searchQuery, jobArgs);
+
         Map<String, Object> searchResponse = new HashMap<String, Object>();
         searchResponse.put("job", job);
         searchResponse.put("events", populateEventResponse(job));
@@ -478,14 +509,20 @@ public class SplunkClient {
      * @param searchQuery  The search query
      * @param earliestTime The earliest time
      * @param latestTime   The latest time
+     * @param args Optional map of arguments
      * @return A List of HashMaps (The results of the oneshot search)
      * @throws SplunkConnectorException when there is an error running the search on Splunk
      */
-    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime)
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime, Map<String, String> args)
             throws SplunkConnectorException {
         Args oneshotSearchArgs = new Args();
         oneshotSearchArgs.put("earliest_time", earliestTime);
         oneshotSearchArgs.put("latest_time", latestTime);
+        if (args != null) {
+            for (Map.Entry entry : args.entrySet()) {
+                oneshotSearchArgs.put((String) entry.getKey(), entry.getValue());
+            }
+        }
 
         InputStream resultsOneshot = service.oneshotSearch(searchQuery, oneshotSearchArgs);
         try {
@@ -501,6 +538,8 @@ public class SplunkClient {
      * returns via a sourcecallback
      *
      * @param searchQuery   The query to run in realtime
+     * @param earliestTime  The earliest time to search for, defaults to "rt"
+     * @param latestTime    The latest time to search for, defaults to "rt"
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount  the number of previews to retrieve - defaults to 100
      * @param callback The callback object to stream results
@@ -508,6 +547,8 @@ public class SplunkClient {
      * @
      */
     public void runRealTimeSearch(String searchQuery,
+                                  String earliestTime,
+                                  String latestTime,
                                   int statusBuckets,
                                   int previewCount,
                                   final SourceCallback callback)
@@ -516,8 +557,8 @@ public class SplunkClient {
         JobArgs jobArgs = new JobArgs();
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
         jobArgs.setSearchMode(JobArgs.SearchMode.REALTIME);
-        jobArgs.setEarliestTime("rt");
-        jobArgs.setLatestTime("rt");
+        jobArgs.setEarliestTime(earliestTime);
+        jobArgs.setLatestTime(latestTime);
         jobArgs.setStatusBuckets(statusBuckets);
 
         JobResultsPreviewArgs previewArgs = new JobResultsPreviewArgs();
@@ -557,25 +598,64 @@ public class SplunkClient {
      * Run an export search
      *
      * @param searchQuery the search query to run
+     * @param earliestTime the earliest time for the search, defaults for an hour before now
+     * @param latestTime the latest time, defaults to now
+     * @param searchMode the searchmode, realtime or normal
+     * @param outputMode the output mode, XML or JSON
      * @param exportArgs  The arguments to the search
+     * @param callback The sourcecallback to return results to
      * @return A list of the Search Results found from the export search.
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
-    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+    public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, JobExportArgs exportArgs, final SourceCallback callback) throws SplunkConnectorException {
+        System.out.println("Searchmode is " + searchMode);
+        System.out.println("OutputMode is " + outputMode);
+        System.out.println("Export args is " + exportArgs);
+        System.out.println("Earliest is " + earliestTime);
+        System.out.println("Latest is " + latestTime);
+        System.out.println("Search Query is " + searchQuery);
+        if (exportArgs == null) {
+            exportArgs = new JobExportArgs();
+        }
+        exportArgs.setEarliestTime(earliestTime);
+        exportArgs.setLatestTime(latestTime);
+        if (searchMode == SearchMode.NORMAL) {
+            exportArgs.setSearchMode(JobExportArgs.SearchMode.NORMAL);
+        } else {
+            exportArgs.setSearchMode(JobExportArgs.SearchMode.REALTIME);
+        }
+        if (outputMode == OutputMode.JSON) {
+            exportArgs.setOutputMode(JobExportArgs.OutputMode.JSON);
+        } else {
+            exportArgs.setOutputMode(JobExportArgs.OutputMode.XML);
+        }
         List<SearchResults> searchResultsList = new ArrayList<SearchResults>();
         InputStream exportSearch = service.export(searchQuery, exportArgs);
-        try {
-            MultiResultsReaderXml multiResultsReader = new MultiResultsReaderXml(exportSearch);
 
-            for (SearchResults searchResults : multiResultsReader) {
-                searchResultsList.add(searchResults);
+        try {
+            if (outputMode == OutputMode.JSON) {
+                MultiResultsReaderJson multiResultsReader = new MultiResultsReaderJson(exportSearch);
+
+                for (SearchResults searchResults : multiResultsReader) {
+                    searchResultsList.add(searchResults);
+                }
+                callback.process(searchResultsList);
+                multiResultsReader.close();
+            } else {
+                MultiResultsReaderXml multiResultsReader = new MultiResultsReaderXml(exportSearch);
+
+                for (SearchResults searchResults : multiResultsReader) {
+                    searchResultsList.add(searchResults);
+                }
+                callback.process(searchResultsList);
+                multiResultsReader.close();
             }
-            multiResultsReader.close();
 
         } catch (IOException e) {
             throw new SplunkConnectorException(e.getMessage(), e);
+        } catch (Exception ex) {
+            throw new SplunkConnectorException("Error processing callback", ex);
         }
-        return searchResultsList;
     }
 
     /**
