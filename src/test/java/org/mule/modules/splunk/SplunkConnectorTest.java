@@ -9,8 +9,7 @@
 
 package org.mule.modules.splunk;
 
-import com.splunk.Application;
-import com.splunk.Service;
+import com.splunk.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -52,6 +51,43 @@ public class SplunkConnectorTest {
         when(client.getApplications()).thenReturn(applist);
         assertEquals(applist, connector.getApplications());
     }
+
+    @Test
+    public void testCreateSavedSearch() throws Exception {
+        SavedSearch search = null;
+        when(client.createSavedSearch("Unit Testing", "Search * | head 100", null)).thenReturn(search);
+        assertEquals(search, connector.createSavedSearch("Unit Testing", "Search * | head 100", null));
+    }
+
+    @Test
+    public void testDeleteSavedSearch() throws Exception {
+        boolean result = true;
+        when(client.deleteSavedSearch("Test")).thenReturn(result);
+        assertEquals(result, connector.deleteSavedSearch("Test"));
+    }
+
+    @Test
+    public void testGetDataModel() throws Exception {
+        DataModel model = null;
+        when(client.getDataModel("Test")).thenReturn(model);
+        assertEquals(model, connector.getDataModel("Test"));
+    }
+
+    @Test
+    public void testGetJobs() throws Exception {
+        List<Job> jobs = new ArrayList<Job>();
+        when(client.getJobs()).thenReturn(jobs);
+        assertEquals(jobs, connector.getJobs());
+    }
+
+    @Test
+    public void testGetSavedSearches() throws Exception {
+        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        when(client.getSavedSearches("search", "admin")).thenReturn(savedSearches);
+        assertEquals(savedSearches, client.getSavedSearches("search", "admin"));
+    }
+
+    
 
 
 }
