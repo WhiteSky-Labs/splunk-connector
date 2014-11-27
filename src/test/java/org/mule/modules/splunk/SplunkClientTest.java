@@ -53,6 +53,12 @@ public class SplunkClientTest {
     Job job;
     @Mock
     InputStream stream;
+    @Mock
+    ResultsReaderXml xmlreader;
+    @Mock
+    ResultsReaderJson jsonreader;
+    @Mock
+    Event event;
 
     @Before
     public void setUp() throws Exception {
@@ -125,9 +131,17 @@ public class SplunkClientTest {
         namespace.setApp("search");
         namespace.setOwner("admin");
         when(service.getSavedSearches(namespace)).thenReturn(searchCollection);
+        when(service.getSavedSearches(new ServiceArgs())).thenReturn(searchCollection);
         when(searchCollection.get("Test")).thenReturn(search);
+
+        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        savedSearches.add(search);
+
+        when(searchCollection.values()).thenReturn(savedSearches);
+
         when(search.history()).thenReturn(history);
         assertEquals(jobs, client.getSavedSearchHistory("Test", "search", "admin"));
+        assertEquals(jobs, client.getSavedSearchHistory(null, null, null));
     }
 
     @Test
@@ -260,9 +274,32 @@ public class SplunkClientTest {
             client.connect("Test", "Test", "localhost", 8089);
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
-            ;
             assertEquals("Connection refused", ex.getMessage());
         }
+    }
+
+    @Test
+    public void testConvertToJavaConvention() {
+        String test = "hello_there";
+        assertEquals("helloThere", client.convertToJavaConvention(test));
+    }
+
+    @Test
+    public void testGetSavedSearch() {
+        ServiceArgs namespace = new ServiceArgs();
+        namespace.setApp("search");
+        namespace.setOwner("admin");
+        when(service.getSavedSearches(namespace)).thenReturn(searchCollection);
+        when(searchCollection.get("Test")).thenReturn(search);
+        assertEquals(search, client.getSavedSearch("Test", "search", "admin"));
+    }
+
+
+    @Test
+    public void testParseEvents() throws Exception {
+        List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
+        assertEquals(entries, client.parseEvents(this.jsonreader));
+        assertEquals(entries, client.parseEvents(this.xmlreader));
     }
 
 }

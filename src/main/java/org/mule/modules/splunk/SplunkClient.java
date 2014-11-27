@@ -626,7 +626,7 @@ public class SplunkClient {
      * @param key - the String key to convert to the java convention (camelCase)
      * @return A string converted from javascript (naming_conventions) to Java namingConventions
      */
-    private String convertToJavaConvention(String key) {
+    protected String convertToJavaConvention(String key) {
         return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
     }
 
