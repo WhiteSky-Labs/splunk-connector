@@ -13,8 +13,8 @@ import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.callback.SourceCallback;
-import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
+import org.mule.modules.splunk.util.SplunkUtils;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -93,46 +93,14 @@ public class SplunkClient {
                             splunkException.getMessage());
             }
 
+        } catch (RuntimeException e) {
+            throw new ConnectionException(
+                    ConnectionExceptionCode.CANNOT_REACH,
+                    "00",
+                    e.getMessage()
+            );
         }
 
-    }
-
-    /**
-     * This will return all the metadata
-     *
-     * @return List of MetaData
-     */
-    public List<MetaDataKey> getMetadata() {
-        List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
-        metaDataKeyList.add(createKey(Application.class));
-        metaDataKeyList.add(createKey(SavedSearch.class));
-        metaDataKeyList.add(createKey(SavedSearchDispatchArgs.class));
-        metaDataKeyList.add(createKey(Job.class));
-        metaDataKeyList.add(createKey(SearchResults.class));
-        metaDataKeyList.add(createKey(JobCollection.class));
-        return metaDataKeyList;
-    }
-
-    /**
-     * Get the MetaData
-     *
-     * @param key The metadata key
-     * @return The MetaData Key
-     */
-    public MetaData getMetaDataKey(MetaDataKey key) throws ClassNotFoundException {
-        final String entityPackage = "com.splunk";
-        Class<?> clazz = Class.forName(String.format("%s.%s", entityPackage, key.getId()));
-        return new DefaultMetaData(new DefaultPojoMetaDataModel(clazz));
-    }
-
-    /**
-     * Metadata Key creator, takes the ClassName as key
-     *
-     * @param cls classname for the key
-     * @return The MetaDataKey
-     */
-    private MetaDataKey createKey(Class<?> cls) {
-        return new DefaultMetaDataKey(cls.getSimpleName(), cls.getSimpleName());
     }
 
     /**
@@ -145,13 +113,26 @@ public class SplunkClient {
     }
 
     /**
-     * Get All the saved searches
+     * Get all the saved searches, optionally within a restricted namespace
      *
+     * @param app The Application namespace to restrict the list of searches to
+     * @param owner The user namespace to restrict the namespace to
      * @return List of Saved Searches
      */
-    public List<SavedSearch> getSavedSearches() {
+    public List<SavedSearch> getSavedSearches(String app, String owner) {
         List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
-        for (SavedSearch entity : service.getSavedSearches().values()) {
+        SavedSearchCollection savedSearches;
+
+        ServiceArgs namespace = new ServiceArgs();
+        if ((app != null) || (owner != null)) {
+            namespace.setApp(app);
+            namespace.setOwner(owner);
+            savedSearches = service.getSavedSearches(namespace);
+        } else {
+            savedSearches = service.getSavedSearches();
+        }
+
+        for (SavedSearch entity : savedSearches.values()) {
             savedSearchList.add(entity);
         }
         return savedSearchList;
@@ -162,46 +143,72 @@ public class SplunkClient {
      *
      * @param searchName  The name of query
      * @param searchQuery The query
+     * @param searchArgs Optional Map of Key-Value Pairs of Saved Search Arguments
      * @return SavedSearch the SavedSearch object that can then be executed
      */
-    public SavedSearch createSavedSearch(String searchName, String searchQuery){
+    public SavedSearch createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
-        service.getSavedSearches().create(searchName, searchQuery);
-
-        return service.getSavedSearches().get(searchName);
+        SavedSearch createdSearch;
+        if (searchArgs != null && !searchArgs.isEmpty()) {
+            createdSearch = service.getSavedSearches().create(searchName, searchQuery, searchArgs);
+        } else {
+            createdSearch = service.getSavedSearches().create(searchName, searchQuery);
+        }
+        return createdSearch;
     }
 
     /**
      * Get Saved Search
      *
      * @param searchName The name of query
+     * @param app The Optional app Namespace to restrict to
+     * @param owner The Optional owner namespace to restrict to
      * @return The Saved Search
      */
-    public SavedSearch getSavedSearch(String searchName) {
+    public SavedSearch getSavedSearch(String searchName, String app, String owner) {
+        ServiceArgs namespace = new ServiceArgs();
+        namespace.setOwner(owner);
+        namespace.setApp(app);
         Validate.notEmpty(searchName, "Search Name empty.");
-        return service.getSavedSearches().get(searchName);
+        return service.getSavedSearches(namespace).get(searchName);
     }
 
     /**
-     * Modify Properties
+     * View Saved Search Properties
+     *
+     * @param searchName The Saved Search's name
+     * @param app        The Optional app Namespace to restrict to
+     * @param owner      The Optional owner namespace to restrict to
+     * @return Map of the properties (the saved search's EntrySet)
+     */
+    public Set<Map.Entry<String, Object>> viewSavedSearchProperties(String searchName, String app, String owner) {
+        ServiceArgs namespace = new ServiceArgs();
+        if (owner != null) {
+            namespace.setOwner(owner);
+        }
+        if (app != null) {
+            namespace.setApp(app);
+        }
+        Validate.notEmpty(searchName, "Search Name empty.");
+        return service.getSavedSearches(namespace).get(searchName).entrySet();
+    }
+
+    /**
+     * Modify Saved Search Properties
      *
      * @param searchName The name of query
-     * @param description The description of the modification
-     * @param isSetScheduled Is the search to run on a schedule or not
-     * @param cronSchedule The Schedule to use
+     * @param searchProperties The map of search properties to modify
      * @return The Modified Saved Search
+     * @throws SplunkConnectorException when the properties aren't valid
      */
-    public SavedSearch modifySavedSearch(String searchName, String description,
-                                         boolean isSetScheduled, String cronSchedule) {
-        Validate.notEmpty(searchName, "Search Name empty.");
-        Validate.notEmpty(description, "Description empty.");
-        Validate.notNull(isSetScheduled, "Set schedule is null.");
-        Validate.notEmpty(cronSchedule, "Cron schedule is empty.");
+    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
+        Validate.notEmpty(searchName, "You must provide a search name to modify");
+        Validate.notNull(searchProperties, "You must provide some properties to modify");
+        Validate.notEmpty(searchProperties, "You must provide some properties to modify");
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-        savedSearch.setDescription(description);
-        savedSearch.setIsScheduled(isSetScheduled);
-        savedSearch.setCronSchedule(cronSchedule);
+
+        savedSearch = SplunkUtils.setSearchProperties(searchProperties, savedSearch);
         savedSearch.update();
         return savedSearch;
     }
@@ -209,14 +216,34 @@ public class SplunkClient {
     /**
      * List the past and current instances (jobs) of the search.
      *
-     * @param searchName The The name of query
+     * @param searchName The (Optional) name of query
+     * @param app The (Optional) application of the namespace
+     * @param owner The (Optional) owner of the namespace
      * @return List of Job
      */
-    public List<Job> getSavedSearchHistory(String searchName) {
+    public List<Job> getSavedSearchHistory(String searchName, String app, String owner) {
         List<Job> jobList = new ArrayList<Job>();
-        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-        Validate.notNull(savedSearch, "SavedSearch doesn't exist.");
-        Collections.addAll(jobList, savedSearch.history());
+        SavedSearchCollection savedSearches;
+
+        // Set up the namespace first
+        ServiceArgs namespace = new ServiceArgs();
+        if ((app != null) || (owner != null)) {
+            namespace.setApp(app);
+            namespace.setOwner(owner);
+
+        }
+        // If there is no name provided, get all saved searches
+        if (searchName == null || searchName.isEmpty()) {
+            savedSearches = service.getSavedSearches(namespace);
+            for (SavedSearch entity : savedSearches.values()) {
+                Collections.addAll(jobList, entity.history());
+            }
+        } else {
+            SavedSearch savedSearch = service.getSavedSearches(namespace).get(searchName);
+            Validate.notNull(savedSearch, "SavedSearch doesn't exist.");
+            Collections.addAll(jobList, savedSearch.history());
+        }
+
         return jobList;
     }
 
@@ -226,7 +253,6 @@ public class SplunkClient {
      * @param searchName The name of query
      * @return List of Hashmaps
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue executing
-     * TODO switch to a sourcecallback
      */
     public List<Map<String, Object>> runSavedSearch(String searchName) throws SplunkConnectorException {
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
@@ -244,20 +270,18 @@ public class SplunkClient {
     /**
      * Run a Saved Search with arguments
      *
-     * @param searchName         The name of the search
-     * @param searchQuery        The query
+     * @param searchName         The name of the searh
      * @param customArgs         Custom Arguments, Optional list of custom arguments to supply
      * @param searchDispatchArgs Optional list of search dispatch arguments
      * @return The results as a List of Hashmaps
      * @throws SplunkConnectorException when there is an issue running the saved search
-     *                                  TODO switch to a sourcecallback
      */
 
-    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, String searchQuery,
+    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName,
                                                                  Map<String, Object> customArgs,
                                                                  SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
-        SavedSearch savedSearch = service.getSavedSearches().create(searchName, searchQuery);
+        SavedSearch savedSearch = service.getSavedSearches().get(searchName);
         if (customArgs != null) {
             String queryParams = "";
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
@@ -287,7 +311,7 @@ public class SplunkClient {
      * @return A List of Hashmaps (the results)
      * @throws SplunkConnectorException
      */
-    private List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
+    protected List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
         JobResultsArgs resultsArgs = new JobResultsArgs();
         resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
         InputStream results = job.getResults(resultsArgs);
@@ -307,7 +331,7 @@ public class SplunkClient {
      * @return A List of HashMaps (the results)
      * @throws SplunkConnectorException
      */
-    private List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
+    protected List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
         List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
         try {
             Map<String, String> event;
@@ -367,14 +391,14 @@ public class SplunkClient {
      * Set the service
      *
      */
-    public void setService() {
-        this.service = null;
+    public void setService(Service service) {
+        this.service = service;
     }
 
     /**
-     * List Jobs
+     * Get the current users Jobs
      *
-     * @return A List of the Job objects retrieved from the Splunk Server
+     * @return A List of the current user's Job objects retrieved from the Splunk Server
      */
     public List<Job> getJobs() {
         JobCollection jobs = service.getJobs();
@@ -389,23 +413,57 @@ public class SplunkClient {
      * Run a  search and wait for response
      *
      * @param searchQuery The search query
-     * @return the search response
+     * @param searchArgs The optional search arguments
+     * @param searchCallback The SourceCallback to return results to
      * @throws SplunkConnectorException when there is an error connecting to splunk
-     * TODO return as a sourcecallback
+     *
      */
-    public Map<String, Object> runNormalSearch(String searchQuery) throws SplunkConnectorException {
+    public void runNormalSearch(String searchQuery, Map<String, Object> searchArgs, final SourceCallback searchCallback) throws SplunkConnectorException {
         Validate.notEmpty(searchQuery, "Search Query is empty.");
-        JobArgs jobargs = new JobArgs();
-        jobargs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
-        Job job = service.getJobs().create(searchQuery, jobargs);
+        JobArgs jobArgs = new JobArgs();
+        if (searchArgs != null && !searchArgs.isEmpty()) {
+            jobArgs = SplunkUtils.setJobArgs(searchArgs);
+        }
+        jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
+        Job job = service.getJobs().create(searchQuery, jobArgs);
 
         while (!job.isDone()) {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-                throw new SplunkConnectorException(e.getMessage(), e);
+                throw new SplunkConnectorException("Polling for Normal Search results was interrupted", e);
             }
         }
+
+        Map<String, Object> searchResponse = new HashMap<String, Object>();
+        searchResponse.put("job", job);
+        searchResponse.put("events", populateEventResponse(job));
+        try {
+            searchCallback.process(searchResponse);
+        } catch (Exception e) {
+            throw new SplunkConnectorException(e.getMessage(), e);
+        }
+
+    }
+
+
+    /**
+     * Run a blocking search, which returns synchronously after waiting for the search to complete (blocking the Splunk Server)
+     *
+     * @param searchQuery The query string
+     * @param searchArgs  An optional map of search arguments
+     * @return The results as a HashMap
+     * @throws SplunkConnectorException when the search cannot execute
+     */
+    public Map<String, Object> runBlockingSearch(String searchQuery, Map<String, Object> searchArgs) throws SplunkConnectorException {
+        Validate.notEmpty(searchQuery, "Search Query is empty.");
+        JobArgs jobArgs = new JobArgs();
+        if (searchArgs != null && !searchArgs.isEmpty()) {
+            jobArgs = SplunkUtils.setJobArgs(searchArgs);
+        }
+        jobArgs.setExecutionMode(JobArgs.ExecutionMode.BLOCKING);
+        Job job = service.getJobs().create(searchQuery, jobArgs);
+
         Map<String, Object> searchResponse = new HashMap<String, Object>();
         searchResponse.put("job", job);
         searchResponse.put("events", populateEventResponse(job));
@@ -418,14 +476,20 @@ public class SplunkClient {
      * @param searchQuery  The search query
      * @param earliestTime The earliest time
      * @param latestTime   The latest time
+     * @param args Optional map of arguments
      * @return A List of HashMaps (The results of the oneshot search)
      * @throws SplunkConnectorException when there is an error running the search on Splunk
      */
-    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime)
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime, Map<String, String> args)
             throws SplunkConnectorException {
         Args oneshotSearchArgs = new Args();
         oneshotSearchArgs.put("earliest_time", earliestTime);
         oneshotSearchArgs.put("latest_time", latestTime);
+        if (args != null) {
+            for (Map.Entry entry : args.entrySet()) {
+                oneshotSearchArgs.put((String) entry.getKey(), entry.getValue());
+            }
+        }
 
         InputStream resultsOneshot = service.oneshotSearch(searchQuery, oneshotSearchArgs);
         try {
@@ -441,6 +505,8 @@ public class SplunkClient {
      * returns via a sourcecallback
      *
      * @param searchQuery   The query to run in realtime
+     * @param earliestTime  The earliest time to search for, defaults to "rt"
+     * @param latestTime    The latest time to search for, defaults to "rt"
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount  the number of previews to retrieve - defaults to 100
      * @param callback The callback object to stream results
@@ -448,6 +514,8 @@ public class SplunkClient {
      * @
      */
     public void runRealTimeSearch(String searchQuery,
+                                  String earliestTime,
+                                  String latestTime,
                                   int statusBuckets,
                                   int previewCount,
                                   final SourceCallback callback)
@@ -456,8 +524,8 @@ public class SplunkClient {
         JobArgs jobArgs = new JobArgs();
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
         jobArgs.setSearchMode(JobArgs.SearchMode.REALTIME);
-        jobArgs.setEarliestTime("rt");
-        jobArgs.setLatestTime("rt");
+        jobArgs.setEarliestTime(earliestTime);
+        jobArgs.setLatestTime(latestTime);
         jobArgs.setStatusBuckets(statusBuckets);
 
         JobResultsPreviewArgs previewArgs = new JobResultsPreviewArgs();
@@ -497,25 +565,59 @@ public class SplunkClient {
      * Run an export search
      *
      * @param searchQuery the search query to run
+     * @param earliestTime the earliest time for the search, defaults for an hour before now
+     * @param latestTime the latest time, defaults to now
+     * @param searchMode the searchmode, realtime or normal
+     * @param outputMode the output mode, XML or JSON
      * @param exportArgs  The arguments to the search
+     * @param callback The sourcecallback to return results to
      * @return A list of the Search Results found from the export search.
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
-    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
+    public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, JobExportArgs exportArgs, final SourceCallback callback) throws SplunkConnectorException {
+        JobExportArgs newExportArgs = new JobExportArgs();
+        if (exportArgs != null) {
+            newExportArgs.putAll(exportArgs);
+        }
+        newExportArgs.setEarliestTime(earliestTime);
+        newExportArgs.setLatestTime(latestTime);
+        if (searchMode == SearchMode.NORMAL) {
+            newExportArgs.setSearchMode(JobExportArgs.SearchMode.NORMAL);
+        } else {
+            newExportArgs.setSearchMode(JobExportArgs.SearchMode.REALTIME);
+        }
+        if (outputMode == OutputMode.JSON) {
+            newExportArgs.setOutputMode(JobExportArgs.OutputMode.JSON);
+        } else {
+            newExportArgs.setOutputMode(JobExportArgs.OutputMode.XML);
+        }
         List<SearchResults> searchResultsList = new ArrayList<SearchResults>();
-        InputStream exportSearch = service.export(searchQuery, exportArgs);
-        try {
-            MultiResultsReaderXml multiResultsReader = new MultiResultsReaderXml(exportSearch);
+        InputStream exportSearch = service.export(searchQuery, newExportArgs);
 
-            for (SearchResults searchResults : multiResultsReader) {
-                searchResultsList.add(searchResults);
+        try {
+            if (outputMode == OutputMode.JSON) {
+                MultiResultsReaderJson multiResultsReader = new MultiResultsReaderJson(exportSearch);
+
+                for (SearchResults searchResults : multiResultsReader) {
+                    searchResultsList.add(searchResults);
+                }
+                callback.process(searchResultsList);
+                multiResultsReader.close();
+            } else {
+                MultiResultsReaderXml multiResultsReader = new MultiResultsReaderXml(exportSearch);
+
+                for (SearchResults searchResults : multiResultsReader) {
+                    searchResultsList.add(searchResults);
+                }
+                callback.process(searchResultsList);
+                multiResultsReader.close();
             }
-            multiResultsReader.close();
 
         } catch (IOException e) {
             throw new SplunkConnectorException(e.getMessage(), e);
+        } catch (Exception ex) {
+            throw new SplunkConnectorException("Error processing callback", ex);
         }
-        return searchResultsList;
     }
 
     /**
@@ -524,8 +626,9 @@ public class SplunkClient {
      * @param key - the String key to convert to the java convention (camelCase)
      * @return A string converted from javascript (naming_conventions) to Java namingConventions
      */
-    private String convertToJavaConvention(String key) {
+    protected String convertToJavaConvention(String key) {
         return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
     }
+
 
 }

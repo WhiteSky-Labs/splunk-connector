@@ -8,11 +8,7 @@
 package org.mule.modules.splunk;
 
 import com.splunk.*;
-import org.apache.commons.lang.UnhandledException;
 import org.mule.api.ConnectionException;
-import org.mule.api.MuleContext;
-import org.mule.api.MuleEvent;
-import org.mule.api.MuleException;
 import org.mule.api.annotations.*;
 import org.mule.api.annotations.display.Password;
 import org.mule.api.annotations.display.Placement;
@@ -20,58 +16,50 @@ import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.callback.SourceCallback;
-import org.mule.api.context.MuleContextAware;
-import org.mule.common.metadata.MetaData;
-import org.mule.common.metadata.MetaDataKey;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Cloud Connector
  *
  * @author MuleSoft, Inc.
  */
-@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk Connector", metaData = MetaDataSwitch.ON)
-public class SplunkConnector implements MuleContextAware {
-
-    private MuleContext muleContext;
+@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk Connector")
+public class SplunkConnector {
 
     /**
      * The Splunk Host
      */
     @Configurable
+    @Default("localhost")
     private String host;
 
     /**
      * The Splunk Host
      */
     @Configurable
+    @Default("8089")
     private int port;
 
     private SplunkClient splunkClient;
 
     /**
-     * Get list of metadata keys for datasense
-     *
-     * @return List<MetaDataKey> the list of metadata keys for datasense
+     * Public Constructor to support Unit Tests
      */
-    @MetaDataKeyRetriever
-    public List<MetaDataKey> getMetadataKeys() {
-        return splunkClient.getMetadata();
+    public SplunkConnector() {
+
     }
 
     /**
-     * Get an individual MetaData object by key
+     * Instantiate a Splunk Connector using a pre-created client
      *
-     * @param key The key to find the metadata for
-     * @return MetaData the item of metadata found for the key
-     * @throws ClassNotFoundException when the class is not recognized
+     * @param client The Splunk Client to use
      */
-    @MetaDataRetriever
-    public MetaData getMetadata(MetaDataKey key) throws ClassNotFoundException {
-        return splunkClient.getMetaDataKey(key);
+    public SplunkConnector(SplunkClient client) {
+        this.splunkClient = client;
     }
 
     /**
@@ -97,7 +85,7 @@ public class SplunkConnector implements MuleContextAware {
     public void disconnect() {
         if (splunkClient != null) {
             if (splunkClient.getService() != null) {
-                splunkClient.setService();
+                splunkClient.setService(null);
             }
             splunkClient = null;
         }
@@ -118,7 +106,7 @@ public class SplunkConnector implements MuleContextAware {
      * @return the token, or 001 if there is no token
      */
     @ConnectionIdentifier
-    public String connectionId() {
+    public String getConnectionIdentifier() {
         if (splunkClient.getService() != null) {
             return splunkClient.getService().getToken();
         }
@@ -138,7 +126,6 @@ public class SplunkConnector implements MuleContextAware {
     }
 
     /**
-     * <<<<<<< HEAD
      * Get Jobs
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-jobs}
@@ -152,34 +139,52 @@ public class SplunkConnector implements MuleContextAware {
 
 
     /**
-     * Run a normal search, which polls for completion. Needs a SourceCallback to return the results.
+     * Run a normal search, which polls for completion. Results will be streamed via a SourceCallback.
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-normal-search}
      *
      * @param searchQuery   The search Query
+     * @param searchArgs    The search properties
+     * @param searchCallback the {@link SourceCallback} used to dispatch messages when a response is received
      * @throws SplunkConnectorException when the search cannot execute
-     * @return SourceCallback of the results
+     */
+    @Source
+    public void runNormalSearch(String searchQuery, @Optional Map<String, Object> searchArgs, final SourceCallback searchCallback) throws SplunkConnectorException {
+        splunkClient.runNormalSearch(searchQuery, searchArgs, searchCallback);
+    }
+
+    /**
+     * Runs a blocking search, which will wait for completion on the splunk server and return synchronously.
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-blocking-search}
+     *
+     * @param searchQuery The search query
+     * @param searchArgs  The map of search arguments, described in the splunk documentation.
+     * @return the results as a list of hashmaps
+     * @throws SplunkConnectorException when the search cannot execute
      */
     @Processor
-    public Map<String, Object> runNormalSearch(String searchQuery) throws SplunkConnectorException {
-        return splunkClient.runNormalSearch(searchQuery);
+    public Map<String, Object> runBlockingSearch(String searchQuery, @Optional Map<String, Object> searchArgs) throws SplunkConnectorException {
+        return splunkClient.runBlockingSearch(searchQuery, searchArgs);
     }
 
 
     /**
      * Run a basic oneshot search and display results
+     * NOTE: XML output appears to be the only supported type right now.
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-one-shot-search}
      *
      * @param searchQuery  The search query
      * @param earliestTime The earliest time
      * @param latestTime   The latest time
+     * @param args Optional map of arguments to pass to the search.
      * @throws SplunkConnectorException when an error occurs communicating with Splunk
      * @return The XML results of the search, parsed into a List of Hashmaps
      */
     @Processor
-    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime) throws SplunkConnectorException {
-        return splunkClient.runOneShotSearch(searchQuery, earliestTime, latestTime);
+    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime, @Optional Map<String, String> args) throws SplunkConnectorException {
+        return splunkClient.runOneShotSearch(searchQuery, earliestTime, latestTime, args);
     }
 
     /**
@@ -187,11 +192,13 @@ public class SplunkConnector implements MuleContextAware {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-searches}
      *
+     * @param app Optional the name of the App to restrict the namespace of the list of saved searches to
+     * @param owner Optional the owner of the namespace to restrict the list of saved searches by
      * @return SavedSearchCollection
      */
     @Processor
-    public List<SavedSearch> getSavedSearches() {
-        return splunkClient.getSavedSearches();
+    public List<SavedSearch> getSavedSearches(@Optional String app, @Optional String owner) {
+        return splunkClient.getSavedSearches(app, owner);
     }
 
     /**
@@ -201,54 +208,57 @@ public class SplunkConnector implements MuleContextAware {
      *
      * @param searchName  The name of the search
      * @param searchQuery The query
+     * @param searchArgs A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
      * @return SavedSearch the SavedSearch object that can then be executed
      */
     @Processor
-    public SavedSearch createSavedSearch(String searchName, String searchQuery) {
-        return splunkClient.createSavedSearch(searchName, searchQuery);
+    public SavedSearch createSavedSearch(String searchName, String searchQuery, @Optional Map<String, Object> searchArgs) {
+        return splunkClient.createSavedSearch(searchName, searchQuery, searchArgs);
     }
 
     /**
      * View the properties of the  saved search
      * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search}
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search-properties}
      *
      * @param searchName The name of the search
-     * @return SavedSearch
+     * @param app The Optional App to restrict the namespace
+     * @param owner The Optional Owner to restrict the namespace
+     * @return EntrySet of the properties
      */
     @Processor
-    public SavedSearch viewSavedSearch(String searchName) {
-        return splunkClient.getSavedSearch(searchName);
+    public Set<Map.Entry<String, Object>> viewSavedSearchProperties(String searchName, @Optional String app, @Optional String owner) {
+        return splunkClient.viewSavedSearchProperties(searchName, app, owner);
     }
 
     /**
-     * View the properties of the  saved search
+     * Modify the properties of the  saved search
      * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search}
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-saved-search-properties}
      *
      * @param searchName     The name of the search
-     * @param description    The desired description
-     * @param isSetScheduled Set the Schedule to true
-     * @param cronSchedule   The Cron Expression
-     * @return SavedSearch
+     * @param searchProperties  The map of search properties to apply
+     * @throws SplunkConnectorException when the search properties are invalid
+     * @return The updated SavedSearch
      */
     @Processor
-    public SavedSearch modifySavedSearch(String searchName, String description,
-                                         boolean isSetScheduled, @Default("15 4 * * 6") String cronSchedule) {
-        return splunkClient.modifySavedSearch(searchName, description, isSetScheduled, cronSchedule);
+    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
+        return splunkClient.modifySavedSearchProperties(searchName, searchProperties);
     }
 
     /**
-     * List the saved search history
+     * Modify the Saved Search Properties
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-search-history}
      *
-     * @param searchName The name of the search
+     * @param searchName (Optional) The name of the search
+     * @param app (Optional) The application namespace for the saved search
+     * @param owner (Optional) The owner of the namespace for the saved search
      * @return List of Job History
      */
     @Processor
-    public List<Job> getSavedSearchHistory(String searchName) {
-        return splunkClient.getSavedSearchHistory(searchName);
+    public List<Job> getSavedSearchHistory(@Optional String searchName, @Optional String app, @Optional String owner) {
+        return splunkClient.getSavedSearchHistory(searchName, app, owner);
     }
 
     /**
@@ -256,7 +266,7 @@ public class SplunkConnector implements MuleContextAware {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-saved-search}
      *
-     * @param searchName The name of the search
+     * @param searchName The name of the searh
      * @return The search results as parsed XML, in the form of a list of HashMaps
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is a problem running the saved search
      */
@@ -271,18 +281,17 @@ public class SplunkConnector implements MuleContextAware {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-saved-search-with-arguments}
      *
      * @param searchName         The name of the search
-     * @param searchQuery        The query
      * @param customArgs         Custom Arguments, Optional list of custom arguments to supply
      * @param searchDispatchArgs Optional list of search dispatch arguments
      * @return The results as a List of Hashmaps
      * @throws SplunkConnectorException when there is an issue running the saved search
      */
     @Processor
-    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, String searchQuery,
+    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName,
                                                                  @Optional Map<String, Object> customArgs,
                                                                  @Optional SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
-        return splunkClient.runSavedSearchWithArguments(searchName, searchQuery, customArgs, searchDispatchArgs);
+        return splunkClient.runSavedSearchWithArguments(searchName, customArgs, searchDispatchArgs);
     }
 
     /**
@@ -317,6 +326,8 @@ public class SplunkConnector implements MuleContextAware {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-real-time-search}
      *
      * @param searchQuery The query to run in realtime
+     * @param earliestTime The start time for the realtime search
+     * @param latestTime The latest time for the realtime search
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount the number of previews to retrieve - defaults to 100
      * @param callback the SourceCallback to capture the response
@@ -324,27 +335,27 @@ public class SplunkConnector implements MuleContextAware {
      *
      */
     @Source
-    public void runRealTimeSearch(String searchQuery,
-                                  @Placement(group = "Job Properties") @Optional @Default("300") int statusBuckets,
-                                  @Placement(group = "Preview Properties") @Optional @Default("100") int previewCount,
+    public void runRealTimeSearch(String searchQuery, @Default("rt") String earliestTime, @Default("rt") String latestTime,
+                                  @Placement(group = "Job Properties") @Default("300") int statusBuckets,
+                                  @Placement(group = "Preview Properties") @Default("100") int previewCount,
                                   final SourceCallback callback) throws SplunkConnectorException {
-        final SoftCallback softCallback = new SoftCallback(callback);
-        splunkClient.runRealTimeSearch(searchQuery, statusBuckets, previewCount, softCallback);
+        splunkClient.runRealTimeSearch(searchQuery, earliestTime, latestTime, statusBuckets, previewCount, callback);
     }
 
     /**
-     * Run an export search
+     * Run an export search, which streams results
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-export-search}
      *
      * @param searchQuery the search query to run
-     * @param exportArgs The arguments to the search
-     * @return A list of the Search Results found from the export search.
+     * @param earliestTime The earliest time to search from, default is -1h
+     * @param latestTime The latest time to search to, default is now
+     * @param callback The SourceCallback to stream results to
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
-    @Processor
-    public List<SearchResults> runExportSearch(String searchQuery, JobExportArgs exportArgs) throws SplunkConnectorException {
-        return splunkClient.runExportSearch(searchQuery, exportArgs);
+    @Source
+    public void runExportSearch(String searchQuery, @Default("-1h") String earliestTime, @Default("now") String latestTime, final SourceCallback callback) throws SplunkConnectorException {
+        splunkClient.runExportSearch(searchQuery, earliestTime, latestTime, SearchMode.NORMAL, OutputMode.JSON, null, callback);
     }
 
     /**
@@ -382,65 +393,4 @@ public class SplunkConnector implements MuleContextAware {
         this.port = port;
     }
 
-    /**
-     * Set the MuleContext
-     *
-     * @param context to set
-     */
-    @Override
-    public void setMuleContext(MuleContext context) {
-        this.muleContext = context;
-    }
-
-    static final class SoftCallback implements SourceCallback {
-        private final SourceCallback callback;
-
-        /**
-         * Create a SoftCallback
-         * @param callback The SourceCallback from which to create
-         */
-        public SoftCallback(SourceCallback callback) {
-            this.callback = callback;
-        }
-
-        @Override
-        public Object process() throws Exception {
-            try {
-                return callback.process();
-            } catch (Exception e) {
-                throw new UnhandledException(e);
-            }
-        }
-
-        @Override
-        public Object process(Object payload) {
-            try {
-                return callback.process(payload);
-            } catch (Exception e) {
-                throw new UnhandledException(e);
-            }
-        }
-
-        @Override
-        public Object process(Object payload, Map<String, Object> properties) throws Exception {
-            try {
-                return callback.process(payload);
-            } catch (Exception e) {
-                throw new UnhandledException(e);
-            }
-        }
-
-        @Override
-        public MuleEvent processEvent(MuleEvent event) throws MuleException {
-            try {
-                return callback.processEvent(event);
-            } catch (Exception e) {
-                throw new UnhandledException(e);
-            }
-        }
-    }
-
-    public MuleContext getMuleContext() {
-        return muleContext;
-    }
 }

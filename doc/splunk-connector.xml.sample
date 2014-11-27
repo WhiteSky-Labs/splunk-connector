@@ -5,47 +5,63 @@
     <splunk:get-jobs />
 <!-- END_INCLUDE(splunk:get-jobs) -->
 <!-- BEGIN_INCLUDE(splunk:run-normal-search) -->
-    <splunk:run-normal-search searchQuery="#[payload.searchQuery]"/>
+    <splunk:run-normal-search searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:run-normal-search>
 <!-- END_INCLUDE(splunk:run-normal-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-blocking-search) -->
+    <splunk:run-blocking-search searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:run-blocking-search>
+<!-- END_INCLUDE(splunk:run-blocking-search) -->
 <!-- BEGIN_INCLUDE(splunk:get-saved-searches) -->
-    <splunk:get-saved-searches />
+    <splunk:get-saved-searches app="#[payload.app]" owner="#[payload.owner]"/>
 <!-- END_INCLUDE(splunk:get-saved-searches) -->
 <!-- BEGIN_INCLUDE(splunk:create-saved-search) -->
-    <splunk:create-saved-search searchName="#[payload:searchName]" searchQuery="#[payload:searchQuery]" />
+    <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:create-saved-search>
 <!-- END_INCLUDE(splunk:create-saved-search) -->
-<!-- BEGIN_INCLUDE(splunk:view-saved-search) -->
-    <splunk:view-saved-search searchName="#[payload:searchName]" />
-<!-- END_INCLUDE(splunk:view-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:view-saved-search-properties) -->
+    <splunk:view-saved-search-properties searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]"/>
+<!-- END_INCLUDE(splunk:view-saved-search-properties) -->
 <!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
-    <splunk:get-saved-search-history searchName="#[payload:searchName]" />
+    <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]" />
 <!-- END_INCLUDE(splunk:get-saved-search-history) -->
 <!-- BEGIN_INCLUDE(splunk:run-job) -->
-    <splunk:run-job searchName="#[payload:searchName]" />
+    <splunk:run-job searchName="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:run-job) -->
 <!-- BEGIN_INCLUDE(splunk:run-saved-search) -->
-    <splunk:run-saved-search searchName="#[payload:searchName]" />
+    <splunk:run-saved-search searchName="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:run-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:run-saved-search-with-arguments) -->
-    <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+    <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]">
             <splunk:custom-args ref="#[payload.customArgs]" />
             <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
     </splunk:run-saved-search-with-arguments>
 <!-- END_INCLUDE(splunk:run-saved-search-with-arguments) -->
 <!-- BEGIN_INCLUDE(splunk:run-one-shot-search) -->
     <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
-                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]" />
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]">
+            <splunk:args ref="#[payload.args]"/>
+    </splunk:run-one-shot-search>
 <!-- END_INCLUDE(splunk:run-one-shot-search) -->
 <!-- BEGIN_INCLUDE(splunk:run-real-time-search) -->
-    <splunk:run-real-time-search searchQuery="#[payload.searchQuery]" statusBuckets="#[payload.statusBuckets]" previewCount="#[payload.previewCount]" />
+    <splunk:run-real-time-search searchQuery="#[payload.searchQuery]" earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]" statusBuckets="#[payload.statusBuckets]" previewCount="#[payload.previewCount]" />
 <!-- END_INCLUDE(splunk:run-real-time-search) -->
 <!-- BEGIN_INCLUDE(splunk:run-export-search) -->
-     <splunk:run-export-search searchQuery="#[payload.searchQuery]">
-            <splunk:export-args ref="#[payload.exportArgs]" />
+     <splunk:run-export-search searchQuery="#[payload.searchQuery]" earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]">
+            
      </splunk:run-export-search>
 <!-- END_INCLUDE(splunk:run-export-search) -->
 <!-- BEGIN_INCLUDE(splunk:delete-saved-search) -->
-    <splunk:delete-saved-search searchName ="#[payload:searchName]" />
+    <splunk:delete-saved-search searchName ="#[payload.searchName]" />
 <!-- END_INCLUDE(splunk:delete-saved-search) -->
 <!-- BEGIN_INCLUDE(splunk:get-data-model) -->
-    <splunk:get-data-model dataModelName="#[payload:dataModelName]" />
+    <splunk:get-data-model dataModelName="#[payload.dataModelName]" />
 <!-- END_INCLUDE(splunk:get-data-model) -->
+<!-- BEGIN_INCLUDE(splunk:modify-saved-search-properties) -->
+    <splunk:modify-saved-search-properties searchName="#[payload.searchName]">
+        <splunk:search-properties ref="#[payload.searchProperties]" />
+    </splunk:modify-saved-search-properties>
+<!-- END_INCLUDE(splunk:modify-saved-search-properties) -->
