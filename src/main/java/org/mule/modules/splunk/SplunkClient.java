@@ -132,7 +132,7 @@ public class SplunkClient {
      * @param cls classname for the key
      * @return The MetaDataKey
      */
-    private MetaDataKey createKey(Class<?> cls) {
+    protected MetaDataKey createKey(Class<?> cls) {
         return new DefaultMetaDataKey(cls.getSimpleName(), cls.getSimpleName());
     }
 
@@ -344,7 +344,7 @@ public class SplunkClient {
      * @return A List of Hashmaps (the results)
      * @throws SplunkConnectorException
      */
-    private List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
+    protected List<Map<String, Object>> populateEventResponse(Job job) throws SplunkConnectorException {
         JobResultsArgs resultsArgs = new JobResultsArgs();
         resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
         InputStream results = job.getResults(resultsArgs);
@@ -364,7 +364,7 @@ public class SplunkClient {
      * @return A List of HashMaps (the results)
      * @throws SplunkConnectorException
      */
-    private List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
+    protected List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws SplunkConnectorException {
         List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
         try {
             Map<String, String> event;

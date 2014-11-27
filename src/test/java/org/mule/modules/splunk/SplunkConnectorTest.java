@@ -150,8 +150,8 @@ public class SplunkConnectorTest {
         searchResult.add(results);
 
         Map<String, Object> customArgs = new HashMap<String, Object>();
-        results.put("alert.email", "Yes");
-        results.put("output_mode", "JSON");
+        customArgs.put("alert.email", "Yes");
+        customArgs.put("output_mode", "JSON");
 
         SavedSearchDispatchArgs searchArgs = new SavedSearchDispatchArgs();
         searchArgs.setDispatchLatestTime("now");
