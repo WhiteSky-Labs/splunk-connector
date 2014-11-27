@@ -14,8 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mule.common.metadata.MetaData;
-import org.mule.common.metadata.MetaDataKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -174,16 +172,6 @@ public class SplunkConnectorTest {
     public void testConstructor() throws Exception {
         SplunkConnector testConnector = new SplunkConnector();
         assertNotNull(testConnector);
-    }
-
-    @Test
-    public void testMetaDataKeys() throws Exception {
-        when(client.getMetadata()).thenReturn(new ArrayList<MetaDataKey>());
-        assertEquals(new ArrayList<MetaDataKey>(), connector.getMetadataKeys());
-        MetaDataKey key = null;
-        MetaData value = null;
-        when(client.getMetaDataKey(key)).thenReturn(value);
-        assertEquals(value, connector.getMetadata(key));
     }
 
     @Test

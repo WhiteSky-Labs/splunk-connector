@@ -15,7 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mule.common.metadata.MetaDataKey;
+import org.mule.api.ConnectionException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -23,8 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -57,8 +56,11 @@ public class SplunkClientTest {
 
     @Before
     public void setUp() throws Exception {
-        this.client = spy(new SplunkClient(connector));
         MockitoAnnotations.initMocks(this);
+        this.client = spy(new SplunkClient(connector));
+
+        connector.setHost("localhost");
+        connector.setPort(8089);
         client.setService(service);
 
     }
@@ -251,17 +253,16 @@ public class SplunkClientTest {
     }
 
     @Test
-    public void testMetaDataKeys() throws Exception {
-
-        List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
-        metaDataKeyList.add(client.createKey(Application.class));
-        metaDataKeyList.add(client.createKey(SavedSearch.class));
-        metaDataKeyList.add(client.createKey(SavedSearchDispatchArgs.class));
-        metaDataKeyList.add(client.createKey(Job.class));
-        metaDataKeyList.add(client.createKey(SearchResults.class));
-        metaDataKeyList.add(client.createKey(JobCollection.class));
-        
-        assertEquals(metaDataKeyList, client.getMetadata());
+    public void testConnect() throws Exception {
+        when(connector.getPort()).thenReturn(8089);
+        when(connector.getHost()).thenReturn("localhost");
+        try {
+            client.connect("Test", "Test", "localhost", 8089);
+            fail("Exception should be thrown");
+        } catch (ConnectionException ex) {
+            ;
+            assertEquals("Connection refused", ex.getMessage());
+        }
     }
 
 }

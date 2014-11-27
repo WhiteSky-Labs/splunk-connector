@@ -16,8 +16,6 @@ import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.callback.SourceCallback;
-import org.mule.common.metadata.MetaData;
-import org.mule.common.metadata.MetaDataKey;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.Set;
  *
  * @author MuleSoft, Inc.
  */
-@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk Connector", metaData = MetaDataSwitch.ON)
+@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk Connector")
 public class SplunkConnector {
 
     /**
@@ -62,28 +60,6 @@ public class SplunkConnector {
      */
     public SplunkConnector(SplunkClient client) {
         this.splunkClient = client;
-    }
-
-    /**
-     * Get list of metadata keys for datasense
-     *
-     * @return List<MetaDataKey> the list of metadata keys for datasense
-     */
-    @MetaDataKeyRetriever
-    public List<MetaDataKey> getMetadataKeys() {
-        return splunkClient.getMetadata();
-    }
-
-    /**
-     * Get an individual MetaData object by key
-     *
-     * @param key The key to find the metadata for
-     * @return MetaData the item of metadata found for the key
-     * @throws ClassNotFoundException when the class is not recognized
-     */
-    @MetaDataRetriever
-    public MetaData getMetadata(MetaDataKey key) throws ClassNotFoundException {
-        return splunkClient.getMetaDataKey(key);
     }
 
     /**

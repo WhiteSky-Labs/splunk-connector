@@ -13,7 +13,6 @@ import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.callback.SourceCallback;
-import org.mule.common.metadata.*;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 import org.mule.modules.splunk.util.SplunkUtils;
 import org.slf4j.LoggerFactory;
@@ -94,46 +93,14 @@ public class SplunkClient {
                             splunkException.getMessage());
             }
 
+        } catch (RuntimeException e) {
+            throw new ConnectionException(
+                    ConnectionExceptionCode.CANNOT_REACH,
+                    "00",
+                    e.getMessage()
+            );
         }
 
-    }
-
-    /**
-     * This will return all the metadata
-     *
-     * @return List of MetaData
-     */
-    public List<MetaDataKey> getMetadata() {
-        List<MetaDataKey> metaDataKeyList = new ArrayList<MetaDataKey>();
-        metaDataKeyList.add(createKey(Application.class));
-        metaDataKeyList.add(createKey(SavedSearch.class));
-        metaDataKeyList.add(createKey(SavedSearchDispatchArgs.class));
-        metaDataKeyList.add(createKey(Job.class));
-        metaDataKeyList.add(createKey(SearchResults.class));
-        metaDataKeyList.add(createKey(JobCollection.class));
-        return metaDataKeyList;
-    }
-
-    /**
-     * Get the MetaData
-     *
-     * @param key The metadata key
-     * @return The MetaData Key
-     */
-    public MetaData getMetaDataKey(MetaDataKey key) throws ClassNotFoundException {
-        final String entityPackage = "com.splunk";
-        Class<?> clazz = Class.forName(String.format("%s.%s", entityPackage, key.getId()));
-        return new DefaultMetaData(new DefaultPojoMetaDataModel(clazz));
-    }
-
-    /**
-     * Metadata Key creator, takes the ClassName as key
-     *
-     * @param cls classname for the key
-     * @return The MetaDataKey
-     */
-    protected MetaDataKey createKey(Class<?> cls) {
-        return new DefaultMetaDataKey(cls.getSimpleName(), cls.getSimpleName());
     }
 
     /**
@@ -608,23 +575,24 @@ public class SplunkClient {
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
     public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, JobExportArgs exportArgs, final SourceCallback callback) throws SplunkConnectorException {
-        if (exportArgs == null) {
-            exportArgs = new JobExportArgs();
+        JobExportArgs newExportArgs = new JobExportArgs();
+        if (exportArgs != null) {
+            newExportArgs.putAll(exportArgs);
         }
-        exportArgs.setEarliestTime(earliestTime);
-        exportArgs.setLatestTime(latestTime);
+        newExportArgs.setEarliestTime(earliestTime);
+        newExportArgs.setLatestTime(latestTime);
         if (searchMode == SearchMode.NORMAL) {
-            exportArgs.setSearchMode(JobExportArgs.SearchMode.NORMAL);
+            newExportArgs.setSearchMode(JobExportArgs.SearchMode.NORMAL);
         } else {
-            exportArgs.setSearchMode(JobExportArgs.SearchMode.REALTIME);
+            newExportArgs.setSearchMode(JobExportArgs.SearchMode.REALTIME);
         }
         if (outputMode == OutputMode.JSON) {
-            exportArgs.setOutputMode(JobExportArgs.OutputMode.JSON);
+            newExportArgs.setOutputMode(JobExportArgs.OutputMode.JSON);
         } else {
-            exportArgs.setOutputMode(JobExportArgs.OutputMode.XML);
+            newExportArgs.setOutputMode(JobExportArgs.OutputMode.XML);
         }
         List<SearchResults> searchResultsList = new ArrayList<SearchResults>();
-        InputStream exportSearch = service.export(searchQuery, exportArgs);
+        InputStream exportSearch = service.export(searchQuery, newExportArgs);
 
         try {
             if (outputMode == OutputMode.JSON) {

@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class SplunkUtils {
 
-    private static final char[] delimiters = new char[]{'_', '.'};
+    private static final char[] DELIMITERS = new char[]{'_', '.'};
 
     private static final Set<String> BOOLEAN_PARAMETERS = new HashSet<String>(Arrays.asList(
             new String[]{
@@ -194,7 +194,7 @@ public class SplunkUtils {
      * @return A string converted from javascript (naming_conventions) to Java namingConventions
      */
     private static String convertToIncompleteMethodString(String key) {
-        String removedDelimiters = WordUtils.capitalizeFully(key, delimiters).replace("_", "").replace(".", "");
+        String removedDelimiters = WordUtils.capitalizeFully(key, DELIMITERS).replace("_", "").replace(".", "");
         // cater for special cases
         for (Map.Entry<String, String> entry : SPECIAL_CASES.entrySet()) {
             if (removedDelimiters.indexOf(entry.getKey()) != -1) {
