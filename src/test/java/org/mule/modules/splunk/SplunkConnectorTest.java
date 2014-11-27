@@ -14,6 +14,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mule.common.metadata.MetaData;
+import org.mule.common.metadata.MetaDataKey;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 /**
@@ -35,6 +38,7 @@ public class SplunkConnectorTest {
 
     @Mock
     SplunkClient client;
+
     @Mock
     Service service;
 
@@ -43,8 +47,9 @@ public class SplunkConnectorTest {
         MockitoAnnotations.initMocks(this);
 
         this.connector = new SplunkConnector(client);
-        this.connector.setHost("dummyhost");
+        this.connector.setHost("localhost");
         this.connector.setPort(8089);
+        this.client.setService(service);
     }
 
     @Test
@@ -86,7 +91,7 @@ public class SplunkConnectorTest {
     public void testGetSavedSearches() throws Exception {
         List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
         when(client.getSavedSearches("search", "admin")).thenReturn(savedSearches);
-        assertEquals(savedSearches, client.getSavedSearches("search", "admin"));
+        assertEquals(savedSearches, connector.getSavedSearches("search", "admin"));
     }
 
     @Test
@@ -165,5 +170,33 @@ public class SplunkConnectorTest {
         assertEquals(results.entrySet(), connector.viewSavedSearchProperties("Test", "search", "admin"));
     }
 
+    @Test
+    public void testConstructor() throws Exception {
+        SplunkConnector testConnector = new SplunkConnector();
+        assertNotNull(testConnector);
+    }
+
+    @Test
+    public void testMetaDataKeys() throws Exception {
+        when(client.getMetadata()).thenReturn(new ArrayList<MetaDataKey>());
+        assertEquals(new ArrayList<MetaDataKey>(), connector.getMetadataKeys());
+        MetaDataKey key = null;
+        MetaData value = null;
+        when(client.getMetaDataKey(key)).thenReturn(value);
+        assertEquals(value, connector.getMetadata(key));
+    }
+
+    @Test
+    public void testConnectionIdentifier() throws Exception {
+        assertEquals("001", connector.getConnectionIdentifier());
+    }
+
+    @Test
+    public void testGetPort() throws Exception {
+        assertEquals(8089, connector.getPort());
+    }
+
 
 }
+
+

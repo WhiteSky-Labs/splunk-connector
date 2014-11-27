@@ -424,8 +424,8 @@ public class SplunkClient {
      * Set the service
      *
      */
-    public void setService() {
-        this.service = null;
+    public void setService(Service service) {
+        this.service = service;
     }
 
     /**

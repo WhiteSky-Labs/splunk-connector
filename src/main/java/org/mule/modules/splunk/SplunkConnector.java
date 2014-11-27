@@ -109,7 +109,7 @@ public class SplunkConnector {
     public void disconnect() {
         if (splunkClient != null) {
             if (splunkClient.getService() != null) {
-                splunkClient.setService();
+                splunkClient.setService(null);
             }
             splunkClient = null;
         }
@@ -130,7 +130,7 @@ public class SplunkConnector {
      * @return the token, or 001 if there is no token
      */
     @ConnectionIdentifier
-    public String connectionId() {
+    public String getConnectionIdentifier() {
         if (splunkClient.getService() != null) {
             return splunkClient.getService().getToken();
         }
