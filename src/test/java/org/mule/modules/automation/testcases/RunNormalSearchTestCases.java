@@ -7,30 +7,26 @@
  * place, you may not use the software.
  */
 
-
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Application;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.construct.Flow;
 import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
-import java.util.List;
+import java.util.HashMap;
 
-import static com.yourkit.util.Asserts.assertTrue;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
-public class GetApplicationsTestCases
-        extends SplunkTestParent {
+public class RunNormalSearchTestCases extends SplunkTestParent {
 
     @Before
     public void setup() {
-        initializeTestRunMessage("getApplicationsTestData");
+        initializeTestRunMessage("runNormalSearchTestData");
     }
 
     @Category({
@@ -38,16 +34,21 @@ public class GetApplicationsTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetApplications() {
+    public void testRunExportSearch() {
         try {
-            Object result = runFlowAndGetPayload("get-applications");
-            assertNotNull(result);
-            List<Application> applications = (List<Application>) result;
-            assertTrue(applications.size() > 0);
+            Flow flow = muleContext.getRegistry().get("run-normal-search");
+            flow.start();
+
+            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
+
+            assertNotNull(payload);
+            HashMap<String, Object> results = (HashMap<String, Object>) payload;
+            assertTrue(results.size() > 0);
+            assertNotNull(results.get("events"));
+            assertNotNull(results.get("job"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
-
 
 }

@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.modules</groupId>
-    <artifactId>splunk-connector</artifactId>
+    <artifactId>mule-module-splunk</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>mule-module</packaging>
-    <name>splunk Connector</name>
+    <name>Mule Splunk Connector</name>
 
     <parent>
         <groupId>org.mule.tools.devkit</groupId>
@@ -15,26 +15,41 @@
     </parent>
 
     <properties>
-        <junit.version>4.9</junit.version>
         <mockito.version>1.8.2</mockito.version>
-        <jdk.version>1.6</jdk.version>
         <category>Standard</category>
         <licensePath>LICENSE.md</licensePath>
         <devkit.studio.package.skip>false</devkit.studio.package.skip>
         <connector.test.version>2.0.6</connector.test.version>
+        <licm.version>1.1.4</licm.version>
     </properties>
 
     <dependencies>
         <dependency>
+            <groupId>de.schlichtherle.truelicense</groupId>
+            <artifactId>truelicense-core</artifactId>
+            <version>1.32</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.mulesoft.licm</groupId>
+            <artifactId>licm</artifactId>
+            <version>${licm.version}</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>de.schlichtherle</groupId>
+                    <artifactId>truelicense</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>de.schlichtherle</groupId>
+                    <artifactId>truexml</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-vm</artifactId>
             <version>${mule.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-connector-test</artifactId>
-            <version>${connector.test.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.splunk</groupId>

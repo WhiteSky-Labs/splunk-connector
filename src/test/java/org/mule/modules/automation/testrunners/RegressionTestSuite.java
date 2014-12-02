@@ -8,9 +8,10 @@
  */
 
 
-package org.mule.modules.automation;
+package org.mule.modules.automation.testrunners;
 
 import org.junit.runner.RunWith;
+import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.testcases.*;
 
 @RunWith(org.junit.experimental.categories.Categories.class)
@@ -29,7 +30,8 @@ import org.mule.modules.automation.testcases.*;
         RunSavedSearchWithArgumentsTestCases.class,
         DeleteSavedSearchTestCases.class,
         GetDataModelTestCases.class,
-        RunExportSearchTestCases.class
+        RunExportSearchTestCases.class,
+        RunRealTimeSearchTestCases.class
 })
 public class RegressionTestSuite {
 

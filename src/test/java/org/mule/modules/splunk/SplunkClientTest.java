@@ -16,6 +16,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mule.api.ConnectionException;
+import org.mule.api.callback.SourceCallback;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -59,6 +60,8 @@ public class SplunkClientTest {
     ResultsReaderJson jsonreader;
     @Mock
     Event event;
+    @Mock
+    SourceCallback cb;
 
     @Before
     public void setUp() throws Exception {
@@ -302,4 +305,58 @@ public class SplunkClientTest {
         assertEquals(entries, client.parseEvents(this.xmlreader));
     }
 
+
+    /*
+    * Currently disabled since there is no obvious way to test an infinite loop.
+    @Test
+    public void testRunRealTimeSearch() throws Exception {
+        when(job.isReady()).thenReturn(true);
+        when(service.search(anyString(), any(JobArgs.class))).thenReturn(job);
+
+        InputStream stubInputStream =
+                IOUtils.toInputStream("['test':'test']");
+        when(job.getResultsPreview(any(JobResultsPreviewArgs.class))).thenReturn(stubInputStream);
+        when(cb.process(any())).thenReturn(new Object());
+        doReturn(null).when(client).parseEvents(any(ResultsReaderJson.class));
+
+        try{
+            client.runRealTimeSearch("Test", "rt-10m", "rt", 0, 0, cb);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }*/
+
+    @Test
+    public void testRunExportSearch() throws Exception {
+
+        InputStream stubInputStream =
+                IOUtils.toInputStream("<xml><Test>Bob</Test></xml>");
+        when(service.export(anyString(), any(JobExportArgs.class))).thenReturn(stubInputStream);
+        when(cb.process(any())).thenReturn(new Object());
+
+        client.runExportSearch("Test", "rt-10m", "rt", SearchMode.NORMAL, OutputMode.XML, new JobExportArgs(), cb);
+
+    }
+
+    @Test
+    public void testRunNormalSearch() throws Exception {
+        when(service.getJobs()).thenReturn(jobs);
+        when(jobs.create(anyString(), any(JobArgs.class))).thenReturn(job);
+        when(job.isDone()).thenReturn(true);
+
+        Map<String, Object> searchResponse = new HashMap<String, Object>();
+        List<Map<String, Object>> eventResponse = new ArrayList<Map<String, Object>>();
+        searchResponse.put("job", job);
+        searchResponse.put("events", eventResponse);
+
+        doReturn(eventResponse).when(client).populateEventResponse(job);
+
+        InputStream stubInputStream =
+                IOUtils.toInputStream("<xml><Test>Bob</Test></xml>");
+        when(cb.process(any())).thenReturn(new Object());
+
+        client.runNormalSearch("Test", new HashMap<String, Object>(), cb);
+
+    }
 }

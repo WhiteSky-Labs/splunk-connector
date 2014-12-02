@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mule.api.callback.SourceCallback;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,23 +23,21 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 /**
  * Test {@link org.mule.modules.splunk.SplunkConnector} internals
  * <p/>
- *
  */
 public class SplunkConnectorTest {
 
-    private SplunkConnector connector;
-
-
     @Mock
     SplunkClient client;
-
     @Mock
     Service service;
+    private SplunkConnector connector;
 
     @Before
     public void setUp() throws Exception {
@@ -184,7 +183,30 @@ public class SplunkConnectorTest {
         assertEquals(8089, connector.getPort());
     }
 
+    @Test
+    public void testRunRealTimeSearch() throws Exception {
+        SourceCallback cb = null;
+        doNothing().when(client).runRealTimeSearch(anyString(), anyString(), anyString(), anyInt(), anyInt(), eq(cb));
+        connector.runRealTimeSearch("Test", "rt-10m", "rt", 0, 0, cb);
+    }
 
+    @Test
+    public void testRunNormalSearch() throws Exception {
+        SourceCallback cb = null;
+        doNothing().when(client).runNormalSearch(anyString(), anyMap(), eq(cb));
+        Map<String, Object> customArgs = new HashMap<String, Object>();
+        customArgs.put("alert.email", "Yes");
+        customArgs.put("output_mode", "JSON");
+
+        connector.runNormalSearch("Test", customArgs, cb);
+    }
+
+    @Test
+    public void testRunExportSearch() throws Exception {
+        SourceCallback cb = null;
+        doNothing().when(client).runExportSearch(anyString(), anyString(), anyString(), any(SearchMode.class), any(OutputMode.class), any(JobExportArgs.class), eq(cb));
+        connector.runExportSearch("Test", "rt-10m", "rt", cb);
+    }
 }
 
 

@@ -1,94 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk" xmlns="http://www.mulesoft.org/schema/mule/core"
-	  xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	  version="EE-3.5.0"
-	  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	  xmlns:context="http://www.springframework.org/schema/context"
-	  xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
-	  xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      version="EE-3.5.0"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
         http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
-	    http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/3.5/mule-vm.xsd"
-		>
+	    http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd"
+        >
 
 
-	<context:property-placeholder location="${SPLUNK_CREDENTIALS}"/>
+    <context:property-placeholder location="${SPLUNK_CREDENTIALS}"/>
 
-	<splunk:config port="${splunk.port}" username="${splunk.username}" host="${splunk.host}"
-				   password="${splunk.password}" name="Splunk" doc:name="Splunk"></splunk:config>
+    <splunk:config port="${splunk.port}" username="${splunk.username}" host="${splunk.host}"
+                   password="${splunk.password}" name="Splunk" doc:name="Splunk"></splunk:config>
 
-	<flow name="get-applications" doc:name="GetApplications">
-		<splunk:get-applications config-ref="Splunk"/>
-	</flow>
+    <flow name="get-applications" doc:name="get-applications">
+        <splunk:get-applications config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="get-jobs" doc:name="GetJobs">
-		<splunk:get-jobs config-ref="Splunk"/>
-	</flow>
+    <flow name="get-jobs" doc:name="get-jobs">
+        <splunk:get-jobs config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="run-blocking-search" doc:name="RunBlockingSearch">
-		<splunk:run-blocking-search config-ref="Splunk" searchQuery="#[flowVars.searchQuery]">
-			<splunk:search-args ref="#[flowVars.SearchArgsRef]"/>
-		</splunk:run-blocking-search>
-	</flow>
+    <flow name="run-blocking-search" doc:name="run-blocking-search">
+        <splunk:run-blocking-search config-ref="Splunk" searchQuery="#[flowVars.searchQuery]" doc:name="Splunk">
+            <splunk:search-args ref="#[flowVars.searchArgs]"/>
+        </splunk:run-blocking-search>
+    </flow>
 
-	<flow name="run-one-shot-search" doc:name="RunOneShotSearch">
-		<splunk:run-one-shot-search config-ref="Splunk" searchQuery="#[flowVars.searchQuery]"
-									earliestTime="#[flowVars.earliestTime]" latestTime="#[flowVars.latestTime]">
-			<splunk:args ref="#[flowVars.args]"/>
-		</splunk:run-one-shot-search>
-	</flow>
+    <flow name="run-one-shot-search" doc:name="run-one-shot-search">
+        <splunk:run-one-shot-search config-ref="Splunk" searchQuery="#[flowVars.searchQuery]"
+                                    earliestTime="#[flowVars.earliestTime]" latestTime="#[flowVars.latestTime]"
+                                    doc:name="Splunk">
+            <splunk:args ref="#[flowVars.args]"/>
+        </splunk:run-one-shot-search>
+    </flow>
 
-	<flow name="get-saved-searches" doc:name="GetSavedSearches">
-		<splunk:get-saved-searches config-ref="Splunk"/>
-	</flow>
+    <flow name="get-saved-searches" doc:name="get-saved-searches">
+        <splunk:get-saved-searches config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="create-saved-search" doc:name="CreateSavedSearch">
-		<splunk:create-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]"
-									searchQuery="#[flowVars.searchQuery]">
-			<splunk:search-args ref="#[flowVars.SearchArgsRef]"/>
-		</splunk:create-saved-search>
-	</flow>
+    <flow name="create-saved-search" doc:name="create-saved-search">
+        <splunk:create-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]"
+                                    searchQuery="#[flowVars.searchQuery]" doc:name="Splunk">
+            <splunk:search-args ref="#[flowVars.SearchArgsRef]"/>
+        </splunk:create-saved-search>
+    </flow>
 
-	<flow name="view-saved-search-properties" doc:name="ViewSavedSearchProperties">
-		<splunk:view-saved-search-properties config-ref="Splunk" searchName="#[flowVars.searchName]"/>
-	</flow>
+    <flow name="view-saved-search-properties" doc:name="view-saved-search-properties">
+        <splunk:view-saved-search-properties config-ref="Splunk" searchName="#[flowVars.searchName]" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="modify-saved-search-properties" doc:name="ModifySavedSearchProperties">
-		<splunk:modify-saved-search-properties config-ref="Splunk" searchName="#[flowVars.searchName]">
-			<splunk:search-properties ref="#[flowVars.SearchPropertiesRef]"/>
-		</splunk:modify-saved-search-properties>
-	</flow>
+    <flow name="modify-saved-search-properties" doc:name="modify-saved-search-properties">
+        <splunk:modify-saved-search-properties config-ref="Splunk" searchName="#[flowVars.searchName]"
+                                               doc:name="Splunk">
+            <splunk:search-properties ref="#[flowVars.SearchPropertiesRef]"/>
+        </splunk:modify-saved-search-properties>
+    </flow>
 
-	<flow name="get-saved-search-history" doc:name="GetSavedSearchHistory">
-		<splunk:get-saved-search-history config-ref="Splunk"/>
-	</flow>
+    <flow name="get-saved-search-history" doc:name="get-saved-search-history">
+        <splunk:get-saved-search-history config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="run-saved-search" doc:name="RunSavedSearch">
-		<splunk:run-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]"/>
-	</flow>
+    <flow name="run-saved-search" doc:name="run-saved-search">
+        <splunk:run-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="run-saved-search-with-arguments" doc:name="RunSavedSearchWithArguments">
-		<splunk:run-saved-search-with-arguments config-ref="Splunk" searchName="#[flowVars.searchName]">
-			<splunk:custom-args ref="#[flowVars.CustomArgsRef]"/>
-			<splunk:search-dispatch-args ref="#[flowVars.SearchDispatchArgsRef]"/>
-		</splunk:run-saved-search-with-arguments>
-	</flow>
+    <flow name="run-saved-search-with-arguments" doc:name="run-saved-search-with-arguments">
+        <splunk:run-saved-search-with-arguments config-ref="Splunk" searchName="#[flowVars.searchName]"
+                                                doc:name="Splunk">
+            <splunk:custom-args ref="#[flowVars.CustomArgsRef]"/>
+            <splunk:search-dispatch-args ref="#[flowVars.SearchDispatchArgsRef]"/>
+        </splunk:run-saved-search-with-arguments>
+    </flow>
 
-	<flow name="delete-saved-search" doc:name="DeleteSavedSearch">
-		<splunk:delete-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]"/>
-	</flow>
+    <flow name="delete-saved-search" doc:name="delete-saved-search">
+        <splunk:delete-saved-search config-ref="Splunk" searchName="#[flowVars.searchName]" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="get-data-model" doc:name="GetDataModel">
-		<splunk:get-data-model config-ref="Splunk" dataModelName="#[flowVars.dataModelName]"/>
-	</flow>
+    <flow name="get-data-model" doc:name="get-data-model">
+        <splunk:get-data-model config-ref="Splunk" dataModelName="#[flowVars.dataModelName]" doc:name="Splunk"/>
+    </flow>
 
-	<flow name="run-export-search" doc:name="RunExportSearch" initialState="stopped">
-		<splunk:run-export-search config-ref="Splunk" searchQuery="search * | head 10" earliestTime="-20d"
-								  latestTime="now"/>
+    <flow name="run-export-search" doc:name="run-export-search" initialState="stopped">
+        <splunk:run-export-search config-ref="Splunk" searchQuery="search * | head 10" earliestTime="-20d"
+                                  latestTime="now" doc:name="Splunk"/>
 
-		<vm:outbound-endpoint path="receive"/>
-	</flow>
+        <vm:outbound-endpoint path="receive"/>
+    </flow>
 
+    <flow name="run-real-time-search" doc:name="run-real-time-search" initialState="stopped">
+        <splunk:run-real-time-search searchQuery="search * | head 10" earliestTime="rt-1m" latestTime="rt"
+                                     doc:name="Splunk"/>
+        <vm:outbound-endpoint path="receive"/>
+    </flow>
 
+    <flow name="run-normal-search" doc:name="run-normal-search" initialState="stopped">
+        <splunk:run-normal-search searchQuery="search * | head 100" doc:name="Splunk">
+            <splunk:search-args>
+                <splunk:search-arg key="auto_pause">0</splunk:search-arg>
+            </splunk:search-args>
+        </splunk:run-normal-search>
+        <vm:outbound-endpoint path="receive"/>
+    </flow>
 </mule>

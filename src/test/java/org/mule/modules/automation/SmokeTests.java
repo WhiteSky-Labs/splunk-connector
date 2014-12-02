@@ -8,7 +8,7 @@
  */
 
 
-package org.mule.modules.automation.testcases;
+package org.mule.modules.automation;
 
 
 public interface SmokeTests {

@@ -14,9 +14,12 @@ import com.splunk.DataModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.modules.automation.RegressionTests;
+import org.mule.modules.automation.SmokeTests;
+import org.mule.modules.automation.SplunkTestParent;
+import org.mule.modules.tests.ConnectorTestUtils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class GetDataModelTestCases
         extends SplunkTestParent {
@@ -32,12 +35,45 @@ public class GetDataModelTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetDataModel()
-            throws Exception {
-        Object result = runFlowAndGetPayload("get-data-model");
-        assertNotNull(result);
-        DataModel dataModel = (DataModel) result;
-        assertEquals(getTestRunMessageValue("dataModelName"), dataModel.getName());
+    public void testGetDataModel() {
+        try {
+            Object result = runFlowAndGetPayload("get-data-model");
+            assertNotNull(result);
+            DataModel dataModel = (DataModel) result;
+            assertEquals(getTestRunMessageValue("dataModelName"), dataModel.getName());
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
+    }
+
+    @Category({
+            RegressionTests.class
+    })
+    @Test
+    public void testGetDataModelWithEmptyName() {
+        try {
+            upsertOnTestRunMessage("dataModelName", "");
+            Object result = runFlowAndGetPayload("get-data-model");
+            // expected result is a null payload.
+            assertEquals("{NullPayload}", result.toString());
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
+    }
+
+    @Category({
+            RegressionTests.class
+    })
+    @Test
+    public void testGetDataModelWithNullName() {
+        try {
+            upsertOnTestRunMessage("dataModelName", null);
+            Object result = runFlowAndGetPayload("get-data-model");
+            // expected result is a null payload.
+            assertEquals("{NullPayload}", result.toString());
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
 }
