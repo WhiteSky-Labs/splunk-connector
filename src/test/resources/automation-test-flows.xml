@@ -100,5 +100,12 @@
         <vm:outbound-endpoint path="receive"/>
     </flow>
 
-
+    <flow name="run-normal-search" doc:name="run-normal-search" initialState="stopped">
+        <splunk:run-normal-search searchQuery="search * | head 100" doc:name="Splunk">
+            <splunk:search-args>
+                <splunk:search-arg key="auto_pause">0</splunk:search-arg>
+            </splunk:search-args>
+        </splunk:run-normal-search>
+        <vm:outbound-endpoint path="receive"/>
+    </flow>
 </mule>
