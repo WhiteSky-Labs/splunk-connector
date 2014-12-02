@@ -46,8 +46,8 @@ public class SplunkClient {
      *
      * @param username The username to connect to
      * @param password The password to use for connection
-     * @param host The host of the splunk server
-     * @param port The port of the splunk server
+     * @param host     The host of the splunk server
+     * @param port     The port of the splunk server
      */
     public void connect(String username, String password, String host, int port) throws ConnectionException {
         try {
@@ -94,7 +94,7 @@ public class SplunkClient {
             }
 
         } catch (RuntimeException e) {
-            LOGGER.debug("Error connecting to Splunk", e);
+            LOGGER.info("Error connecting to Splunk", e);
             throw new ConnectionException(
                     ConnectionExceptionCode.CANNOT_REACH,
                     "00",
@@ -116,7 +116,7 @@ public class SplunkClient {
     /**
      * Get all the saved searches, optionally within a restricted namespace
      *
-     * @param app The Application namespace to restrict the list of searches to
+     * @param app   The Application namespace to restrict the list of searches to
      * @param owner The user namespace to restrict the namespace to
      * @return List of Saved Searches
      */
@@ -144,7 +144,7 @@ public class SplunkClient {
      *
      * @param searchName  The name of query
      * @param searchQuery The query
-     * @param searchArgs Optional Map of Key-Value Pairs of Saved Search Arguments
+     * @param searchArgs  Optional Map of Key-Value Pairs of Saved Search Arguments
      * @return SavedSearch the SavedSearch object that can then be executed
      */
     public SavedSearch createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
@@ -163,8 +163,8 @@ public class SplunkClient {
      * Get Saved Search
      *
      * @param searchName The name of query
-     * @param app The Optional app Namespace to restrict to
-     * @param owner The Optional owner namespace to restrict to
+     * @param app        The Optional app Namespace to restrict to
+     * @param owner      The Optional owner namespace to restrict to
      * @return The Saved Search
      */
     public SavedSearch getSavedSearch(String searchName, String app, String owner) {
@@ -198,7 +198,7 @@ public class SplunkClient {
     /**
      * Modify Saved Search Properties
      *
-     * @param searchName The name of query
+     * @param searchName       The name of query
      * @param searchProperties The map of search properties to modify
      * @return The Modified Saved Search
      * @throws SplunkConnectorException when the properties aren't valid
@@ -218,8 +218,8 @@ public class SplunkClient {
      * List the past and current instances (jobs) of the search.
      *
      * @param searchName The (Optional) name of query
-     * @param app The (Optional) application of the namespace
-     * @param owner The (Optional) owner of the namespace
+     * @param app        The (Optional) application of the namespace
+     * @param owner      The (Optional) owner of the namespace
      * @return List of Job
      */
     public List<Job> getSavedSearchHistory(String searchName, String app, String owner) {
@@ -390,7 +390,6 @@ public class SplunkClient {
 
     /**
      * Set the service
-     *
      */
     public void setService(Service service) {
         this.service = service;
@@ -413,11 +412,10 @@ public class SplunkClient {
     /**
      * Run a  search and wait for response
      *
-     * @param searchQuery The search query
-     * @param searchArgs The optional search arguments
+     * @param searchQuery    The search query
+     * @param searchArgs     The optional search arguments
      * @param searchCallback The SourceCallback to return results to
      * @throws SplunkConnectorException when there is an error connecting to splunk
-     *
      */
     public void runNormalSearch(String searchQuery, Map<String, Object> searchArgs, final SourceCallback searchCallback) throws SplunkConnectorException {
         Validate.notEmpty(searchQuery, "Search Query is empty.");
@@ -477,7 +475,7 @@ public class SplunkClient {
      * @param searchQuery  The search query
      * @param earliestTime The earliest time
      * @param latestTime   The latest time
-     * @param args Optional map of arguments
+     * @param args         Optional map of arguments
      * @return A List of HashMaps (The results of the oneshot search)
      * @throws SplunkConnectorException when there is an error running the search on Splunk
      */
@@ -510,7 +508,7 @@ public class SplunkClient {
      * @param latestTime    The latest time to search for, defaults to "rt"
      * @param statusBuckets the status buckets to use - defaults to 300
      * @param previewCount  the number of previews to retrieve - defaults to 100
-     * @param callback The callback object to stream results
+     * @param callback      The callback object to stream results
      * @throws SplunkConnectorException when there is a problem setting up the runtime search
      * @
      */
@@ -568,13 +566,13 @@ public class SplunkClient {
     /**
      * Run an export search
      *
-     * @param searchQuery the search query to run
+     * @param searchQuery  the search query to run
      * @param earliestTime the earliest time for the search, defaults for an hour before now
-     * @param latestTime the latest time, defaults to now
-     * @param searchMode the searchmode, realtime or normal
-     * @param outputMode the output mode, XML or JSON
-     * @param exportArgs  The arguments to the search
-     * @param callback The sourcecallback to return results to
+     * @param latestTime   the latest time, defaults to now
+     * @param searchMode   the searchmode, realtime or normal
+     * @param outputMode   the output mode, XML or JSON
+     * @param exportArgs   The arguments to the search
+     * @param callback     The sourcecallback to return results to
      * @return A list of the Search Results found from the export search.
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */

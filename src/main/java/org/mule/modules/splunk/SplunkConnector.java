@@ -35,14 +35,12 @@ public class SplunkConnector {
      * The Splunk Host
      */
     @Configurable
-    @Default("localhost")
     private String host;
 
     /**
      * The Splunk Host
      */
     @Configurable
-    @Default("8089")
     private int port;
 
     private SplunkClient splunkClient;
@@ -80,7 +78,6 @@ public class SplunkConnector {
 
     /**
      * Disconnect the connector
-     *
      */
     @Disconnect
     public void disconnect() {
@@ -94,6 +91,7 @@ public class SplunkConnector {
 
     /**
      * Validate the connection
+     *
      * @return true/false if the Connection is valid
      */
     @ValidateConnection
@@ -104,6 +102,7 @@ public class SplunkConnector {
 
     /**
      * Get the Connection Identifier (the token)
+     *
      * @return the token, or 001 if there is no token
      */
     @ConnectionIdentifier
@@ -144,8 +143,8 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-normal-search}
      *
-     * @param searchQuery   The search Query
-     * @param searchArgs    The search properties
+     * @param searchQuery    The search Query
+     * @param searchArgs     The search properties
      * @param searchCallback the {@link SourceCallback} used to dispatch messages when a response is received
      * @throws SplunkConnectorException when the search cannot execute
      */
@@ -179,9 +178,9 @@ public class SplunkConnector {
      * @param searchQuery  The search query
      * @param earliestTime The earliest time
      * @param latestTime   The latest time
-     * @param args Optional map of arguments to pass to the search.
-     * @throws SplunkConnectorException when an error occurs communicating with Splunk
+     * @param args         Optional map of arguments to pass to the search.
      * @return The XML results of the search, parsed into a List of Hashmaps
+     * @throws SplunkConnectorException when an error occurs communicating with Splunk
      */
     @Processor
     public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime, @Optional Map<String, String> args) throws SplunkConnectorException {
@@ -193,7 +192,7 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-searches}
      *
-     * @param app Optional the name of the App to restrict the namespace of the list of saved searches to
+     * @param app   Optional the name of the App to restrict the namespace of the list of saved searches to
      * @param owner Optional the owner of the namespace to restrict the list of saved searches by
      * @return SavedSearchCollection
      */
@@ -209,7 +208,7 @@ public class SplunkConnector {
      *
      * @param searchName  The name of the search
      * @param searchQuery The query
-     * @param searchArgs A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
+     * @param searchArgs  A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
      * @return SavedSearch the SavedSearch object that can then be executed
      */
     @Processor
@@ -223,8 +222,8 @@ public class SplunkConnector {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:view-saved-search-properties}
      *
      * @param searchName The name of the search
-     * @param app The Optional App to restrict the namespace
-     * @param owner The Optional Owner to restrict the namespace
+     * @param app        The Optional App to restrict the namespace
+     * @param owner      The Optional Owner to restrict the namespace
      * @return EntrySet of the properties
      */
     @Processor
@@ -237,10 +236,10 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-saved-search-properties}
      *
-     * @param searchName     The name of the search
-     * @param searchProperties  The map of search properties to apply
-     * @throws SplunkConnectorException when the search properties are invalid
+     * @param searchName       The name of the search
+     * @param searchProperties The map of search properties to apply
      * @return The updated SavedSearch
+     * @throws SplunkConnectorException when the search properties are invalid
      */
     @Processor
     public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
@@ -253,8 +252,8 @@ public class SplunkConnector {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-saved-search-history}
      *
      * @param searchName (Optional) The name of the search
-     * @param app (Optional) The application namespace for the saved search
-     * @param owner (Optional) The owner of the namespace for the saved search
+     * @param app        (Optional) The application namespace for the saved search
+     * @param owner      (Optional) The owner of the namespace for the saved search
      * @return List of Job History
      */
     @Processor
@@ -321,19 +320,19 @@ public class SplunkConnector {
         return splunkClient.getDataModel(dataModelName);
     }
 
-    /** Run a realtime search and process the response
+    /**
+     * Run a realtime search and process the response
      * returns via a sourcecallback
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-real-time-search}
      *
-     * @param searchQuery The query to run in realtime
-     * @param earliestTime The start time for the realtime search
-     * @param latestTime The latest time for the realtime search
+     * @param searchQuery   The query to run in realtime
+     * @param earliestTime  The start time for the realtime search
+     * @param latestTime    The latest time for the realtime search
      * @param statusBuckets the status buckets to use - defaults to 300
-     * @param previewCount the number of previews to retrieve - defaults to 100
-     * @param callback the SourceCallback to capture the response
+     * @param previewCount  the number of previews to retrieve - defaults to 100
+     * @param callback      the SourceCallback to capture the response
      * @throws SplunkConnectorException when there is a problem setting up the runtime search
-     *
      */
     @Source
     public void runRealTimeSearch(String searchQuery, @Default("rt") String earliestTime, @Default("rt") String latestTime,
@@ -348,10 +347,10 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-export-search}
      *
-     * @param searchQuery the search query to run
+     * @param searchQuery  the search query to run
      * @param earliestTime The earliest time to search from, default is -1h
-     * @param latestTime The latest time to search to, default is now
-     * @param callback The SourceCallback to stream results to
+     * @param latestTime   The latest time to search to, default is now
+     * @param callback     The SourceCallback to stream results to
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
     @Source
@@ -361,6 +360,7 @@ public class SplunkConnector {
 
     /**
      * Get the Hostname
+     *
      * @return the Splunk Server hostname
      */
     public String getHost() {
