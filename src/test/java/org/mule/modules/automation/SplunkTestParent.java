@@ -8,10 +8,11 @@
  */
 
 
-package org.mule.modules.automation.testcases;
+package org.mule.modules.automation;
 
+import org.mule.modules.tests.ConnectorTestCase;
 
-public interface RegressionTests {
-
+public class SplunkTestParent
+        extends ConnectorTestCase {
 
 }

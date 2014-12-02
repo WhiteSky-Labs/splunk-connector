@@ -10,7 +10,7 @@
 package org.mule.modules.splunk;
 
 /**
- * Created by conorcurlett on 25/11/14.
+ * Enum that defines the supported output modes for the Connector.
  */
 public enum OutputMode {
     XML, JSON

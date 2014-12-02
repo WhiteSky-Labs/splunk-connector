@@ -20,7 +20,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * Created by conorcurlett on 13/11/14.
+ * SplunkUtils provides some helper classes to parse properties that apply to searches and jobs.
+ * All methods are static so there is no constructor.
  */
 public class SplunkUtils {
 

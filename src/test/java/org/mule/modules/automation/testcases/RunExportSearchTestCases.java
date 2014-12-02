@@ -10,15 +10,20 @@
 
 package org.mule.modules.automation.testcases;
 
+import com.splunk.ResultsReaderJson;
 import com.splunk.SearchResults;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.construct.Flow;
+import org.mule.modules.automation.RegressionTests;
+import org.mule.modules.automation.SmokeTests;
+import org.mule.modules.automation.SplunkTestParent;
+import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 public class RunExportSearchTestCases
         extends SplunkTestParent {
@@ -34,27 +39,21 @@ public class RunExportSearchTestCases
             SmokeTests.class
     })
     @Test
-    public void testRunExportSearch()
-            throws Exception {
+    public void testRunExportSearch() {
+        try {
+            Flow flow = muleContext.getRegistry().get("run-export-search");
+            flow.start();
 
-        Flow flow = muleContext.getRegistry().get("run-export-search");
-        flow.start();
+            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
 
-        Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
-
-
-        /*Object result = runFlowAndWaitForResponseVM("run-export-search", "receive", 100000);
-
-
-        */
-        System.out.println(payload);
-        assertNotNull(payload);
-        List<SearchResults> results = (List<SearchResults>) payload;
-        System.out.println(results);
-
-
-        //List<Map<String, Object>> eventResponse = (List<Map<String, Object>>) result;
-        //assertNotNull(eventResponse);
+            assertNotNull(payload);
+            List<SearchResults> results = (List<SearchResults>) payload;
+            assertTrue(results.size() > 0);
+            ResultsReaderJson resultsReader = (com.splunk.ResultsReaderJson) results.get(0);
+            assertFalse(resultsReader.isPreview());
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
 }

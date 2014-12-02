@@ -23,11 +23,12 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Cloud Connector
+ * Splunk Mule Connector
  *
- * @author MuleSoft, Inc.
+ * @author WhiteSky Labs
  */
-@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk Connector")
+@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk")
+//@RequiresEnterpriseLicense
 public class SplunkConnector {
 
     /**
@@ -266,7 +267,7 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:run-saved-search}
      *
-     * @param searchName The name of the searh
+     * @param searchName The name of the search
      * @return The search results as parsed XML, in the form of a list of HashMaps
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is a problem running the saved search
      */
@@ -367,7 +368,7 @@ public class SplunkConnector {
     }
 
     /**
-     * Set splunk hostnmae
+     * Set splunk hostname
      *
      * @param host The splunk host
      */

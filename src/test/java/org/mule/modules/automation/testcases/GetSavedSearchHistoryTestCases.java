@@ -15,11 +15,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.modules.automation.RegressionTests;
+import org.mule.modules.automation.SmokeTests;
+import org.mule.modules.automation.SplunkTestParent;
+import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class GetSavedSearchHistoryTestCases
         extends SplunkTestParent {
@@ -27,22 +30,30 @@ public class GetSavedSearchHistoryTestCases
     private final String searchQuery = "search " + searchName + " | head 100";
 
     @Before
-    public void setup() throws Exception {
+    public void setup() {
         // create and run a saved search
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        upsertOnTestRunMessage("searchQuery", searchQuery);
-        Object result = runFlowAndGetPayload("create-saved-search");
-        initializeTestRunMessage("runSavedSearchTestData");
-        upsertOnTestRunMessage("searchName", searchName);
-        result = runFlowAndGetPayload("run-saved-search");
-        initializeTestRunMessage("getSavedSearchHistoryTestData");
+        try {
+            initializeTestRunMessage("createSavedSearchTestData");
+            searchName = getTestRunMessageValue("searchName");
+            upsertOnTestRunMessage("searchQuery", searchQuery);
+            Object result = runFlowAndGetPayload("create-saved-search");
+            initializeTestRunMessage("runSavedSearchTestData");
+            upsertOnTestRunMessage("searchName", searchName);
+            result = runFlowAndGetPayload("run-saved-search");
+            initializeTestRunMessage("getSavedSearchHistoryTestData");
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
     @After
-    public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
-        runFlowAndGetPayload("delete-saved-search");
+    public void tearDown() {
+        try {
+            upsertOnTestRunMessage("searchName", searchName);
+            runFlowAndGetPayload("delete-saved-search");
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
     @Category({
@@ -50,20 +61,23 @@ public class GetSavedSearchHistoryTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetSavedSearchHistory()
-            throws Exception {
-        Object result = runFlowAndGetPayload("get-saved-search-history");
-        List<Job> jobs = (List<Job>) result;
-        assertNotNull(jobs);
-        assertTrue(jobs.size() > 0);
-        boolean foundTestSearch = false;
-        for (Job job : jobs) {
-            assertTrue(job.getName().length() > 0);
-            if (job.getSearch().contains(searchQuery)) {
-                foundTestSearch = true;
+    public void testGetSavedSearchHistory() {
+        try {
+            Object result = runFlowAndGetPayload("get-saved-search-history");
+            List<Job> jobs = (List<Job>) result;
+            assertNotNull(jobs);
+            assertTrue(jobs.size() > 0);
+            boolean foundTestSearch = false;
+            for (Job job : jobs) {
+                assertTrue(job.getName().length() > 0);
+                if (job.getSearch().contains(searchQuery)) {
+                    foundTestSearch = true;
+                }
             }
+            assertTrue("Must be able to detect recently run test Saved Search", foundTestSearch);
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
-        assertTrue("Must be able to detect recently run test Saved Search", foundTestSearch);
     }
 
 }

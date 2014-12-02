@@ -94,6 +94,7 @@ public class SplunkClient {
             }
 
         } catch (RuntimeException e) {
+            LOGGER.debug("Error connecting to Splunk", e);
             throw new ConnectionException(
                     ConnectionExceptionCode.CANNOT_REACH,
                     "00",
@@ -537,6 +538,7 @@ public class SplunkClient {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
+                job.finish();
                 throw new SplunkConnectorException(e.getMessage(), e);
             }
         }
@@ -550,12 +552,14 @@ public class SplunkClient {
                 results.close();
                 resultsReader.close();
             } catch (Exception e) {
+                job.cancel();
                 throw new SplunkConnectorException(e.getMessage(), e);
             }
 
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
+                job.finish();
                 throw new SplunkConnectorException(e.getMessage(), e);
             }
         }

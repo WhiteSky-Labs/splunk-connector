@@ -14,12 +14,15 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.modules.automation.RegressionTests;
+import org.mule.modules.automation.SmokeTests;
+import org.mule.modules.automation.SplunkTestParent;
+import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class RunSavedSearchWithArgumentsTestCases
         extends SplunkTestParent {
@@ -27,17 +30,25 @@ public class RunSavedSearchWithArgumentsTestCases
     private String searchName;
 
     @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        runFlowAndGetPayload("create-saved-search");
-        initializeTestRunMessage("runSavedSearchWithArgumentsTestData");
+    public void setup() {
+        try {
+            initializeTestRunMessage("createSavedSearchTestData");
+            searchName = getTestRunMessageValue("searchName");
+            runFlowAndGetPayload("create-saved-search");
+            initializeTestRunMessage("runSavedSearchWithArgumentsTestData");
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
     @After
-    public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
-        runFlowAndGetPayload("delete-saved-search");
+    public void tearDown() {
+        try {
+            upsertOnTestRunMessage("searchName", searchName);
+            runFlowAndGetPayload("delete-saved-search");
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
     @Category({
@@ -45,13 +56,34 @@ public class RunSavedSearchWithArgumentsTestCases
             SmokeTests.class
     })
     @Test
-    public void testRunSavedSearchWithArguments()
-            throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
-        Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
-        assertNotNull(result);
-        List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
-        assertTrue(listResponse.size() > 0);
+    public void testRunSavedSearchWithArguments() {
+        try {
+            upsertOnTestRunMessage("searchName", searchName);
+            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
+            assertNotNull(result);
+            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
+            assertTrue(listResponse.size() > 0);
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
+    }
+
+    @Category({
+            RegressionTests.class
+    })
+    @Test
+    public void testRunSavedSearchWithInvalidArguments() {
+        try {
+            initializeTestRunMessage("runSavedSearchWithInvalidArgumentsTestData");
+            upsertOnTestRunMessage("searchName", searchName);
+            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
+            // invalid arguments are ignored by saved searches, should be successful
+            assertNotNull(result);
+            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
+            assertTrue(listResponse.size() > 0);
+        } catch (Exception e) {
+            fail(ConnectorTestUtils.getStackTrace(e));
+        }
     }
 
 }
