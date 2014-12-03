@@ -398,6 +398,18 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testCreateActiveDirectoryInputWithEmptyProperties() throws Exception {
+        WindowsActiveDirectoryInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+
+        when(coll.create(anyString(), eq(InputKind.WindowsActiveDirectory), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createActiveDirectoryInput("Test", props));
+    }
+
+
+    @Test
     public void testCreateMonitorInputWithoutProperties() throws Exception {
         MonitorInput input = null;
         when(service.getInputs()).thenReturn(coll);
@@ -412,6 +424,17 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
+
+        when(coll.create(anyString(), eq(InputKind.Monitor), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createMonitorInput("Test", props));
+    }
+
+    @Test
+    public void testCreateMonitorInputWithEmptyProperties() throws Exception {
+        MonitorInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
 
         when(coll.create(anyString(), eq(InputKind.Monitor), eq(props))).thenReturn(input);
 
@@ -440,6 +463,17 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testCreateScriptInputWithEmptyProperties() throws Exception {
+        ScriptInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+
+        when(coll.create(anyString(), eq(InputKind.Script), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createScriptInput("Test", props));
+    }
+
+    @Test
     public void testCreateTcpCookedInputWithoutProperties() throws Exception {
         TcpSplunkInput input = null;
         when(service.getInputs()).thenReturn(coll);
@@ -454,6 +488,17 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
+
+        when(coll.create(anyString(), eq(InputKind.TcpSplunk), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createTcpCookedInput("Test", props));
+    }
+
+    @Test
+    public void testCreateTcpCookedInputWithEmptyProperties() throws Exception {
+        TcpSplunkInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
 
         when(coll.create(anyString(), eq(InputKind.TcpSplunk), eq(props))).thenReturn(input);
 
@@ -482,6 +527,17 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testCreateTcpRawInputWithEmptyProperties() throws Exception {
+        TcpInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+
+        when(coll.create(anyString(), eq(InputKind.Tcp), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createTcpRawInput("Test", props));
+    }
+
+    @Test
     public void testCreateUdpInputWithoutProperties() throws Exception {
         UdpInput input = null;
         when(service.getInputs()).thenReturn(coll);
@@ -503,6 +559,18 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testCreateUdpInputWithEmptyProperties() throws Exception {
+        UdpInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+
+        when(coll.create(anyString(), eq(InputKind.Udp), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createUdpInput("Test", props));
+    }
+
+
+    @Test
     public void testCreateWindowsEventLogInputWithoutProperties() throws Exception {
         WindowsEventLogInput input = null;
         when(service.getInputs()).thenReturn(coll);
@@ -517,6 +585,17 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
+
+        when(coll.create(anyString(), eq(InputKind.WindowsEventLog), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createWindowsEventLogInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsEventLogWithEmptyProperties() throws Exception {
+        WindowsEventLogInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
 
         when(coll.create(anyString(), eq(InputKind.WindowsEventLog), eq(props))).thenReturn(input);
 
@@ -545,6 +624,17 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testCreateWindowsPerfmonInputWithEmptyProperties() throws Exception {
+        WindowsPerfmonInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+
+        when(coll.create(anyString(), eq(InputKind.WindowsPerfmon), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createWindowsPerfmonInput("Test", props));
+    }
+
+    @Test
     public void testCreateWindowsWmiInputWithoutProperties() throws Exception {
         WindowsWmiInput input = null;
         when(service.getInputs()).thenReturn(coll);
@@ -559,6 +649,17 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
+
+        when(coll.create(anyString(), eq(InputKind.WindowsWmi), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createWindowsWmiInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsWmiInputWithEmptyProperties() throws Exception {
+        WindowsWmiInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
 
         when(coll.create(anyString(), eq(InputKind.WindowsWmi), eq(props))).thenReturn(input);
 
@@ -581,6 +682,17 @@ public class SplunkClientTest {
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
 
+        when(coll.create(anyString(), eq(InputKind.WindowsRegistry), eq(props))).thenReturn(input);
+
+        assertEquals(input, client.createWindowsRegistryInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsRegistryInputWithEmptyProperties() throws Exception {
+        WindowsRegistryInput input = null;
+        when(service.getInputs()).thenReturn(coll);
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        
         when(coll.create(anyString(), eq(InputKind.WindowsRegistry), eq(props))).thenReturn(input);
 
         assertEquals(input, client.createWindowsRegistryInput("Test", props));
@@ -624,6 +736,27 @@ public class SplunkClientTest {
         when(coll.get("Test")).thenReturn(input);
 
         assertEquals(input, client.getInput("Test"));
+    }
+
+    @Test
+    public void testGetIndexes() throws Exception {
+        IndexCollection indexes = null;
+        when(service.getIndexes()).thenReturn(indexes);
+        assertEquals(indexes, client.getIndexes(null, null, null));
+    }
+
+    @Test
+    public void testGetIndexesWithParameters() throws Exception {
+        IndexCollection indexes = null;
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("assureUTF8", "true");
+        IndexCollectionArgs args = new IndexCollectionArgs();
+        args.setSortDirection(CollectionArgs.SortDirection.DESC);
+        args.setSortKey("test");
+        args.putAll(params);
+
+        when(service.getIndexes(args)).thenReturn(indexes);
+        assertEquals(indexes, client.getIndexes("test", CollectionArgs.SortDirection.DESC, params));
     }
 
 

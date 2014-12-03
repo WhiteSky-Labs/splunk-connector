@@ -176,4 +176,9 @@
     <flow name="get-input" doc:name="get-input">
         <splunk:get-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
     </flow>
+    <flow name="get-indexes" doc:name="get-indexes">
+        <splunk:get-indexes sortKey="#[flowVars.sortKey]" sortDirection="#[flowVars.sortDirection]">
+            <splunk:collection-parameters ref="#[flowVars.collectionParameters]"/>
+        </splunk:get-indexes>
+    </flow>
 </mule>

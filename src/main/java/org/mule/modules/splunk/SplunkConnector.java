@@ -551,6 +551,22 @@ public class SplunkConnector {
     }
 
     /**
+     * Retrieves a collection of indexes based on the criteria provided
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-indexes}
+     *
+     * @param sortKey              The Key to sort by
+     * @param sortDirection        The SortDirection to sort by
+     * @param collectionParameters Optional Map of additional arguments to pass to the call
+     * @return IndexCollection of indexes
+     */
+    @Processor
+    public IndexCollection getIndexes(@Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection, @Optional Map<String, Object> collectionParameters) {
+        return splunkClient.getIndexes(sortKey, sortDirection, collectionParameters);
+    }
+
+
+    /**
      * Get the Hostname
      *
      * @return the Splunk Server hostname

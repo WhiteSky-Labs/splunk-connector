@@ -363,4 +363,43 @@
               value-type="java.lang.Object">
         <entry key="inputIdentifier" value="/var/syslog"/>
     </util:map>
+    <!--getIndexes-->
+    <util:map id="validCollectionParameters" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="assureUTF8" value="true"/>
+    </util:map>
+    <util:map id="invalidCollectionParameters" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="invalidparameter" value="true"/>
+    </util:map>
+
+    <util:map id="getIndexesTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+    </util:map>
+    <util:map id="getIndexesWithParametersTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="sortKey" value="totalEventCount"/>
+        <entry key="sortDirection" value="DESC"/>
+        <entry key="collectionParameters" value-ref="validCollectionParameters"/>
+    </util:map>
+    <util:map id="getIndexesWithInvalidParametersTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="sortKey" value="totalEventCount"/>
+        <entry key="sortDirection" value="DESC"/>
+        <entry key="collectionParameters" value-ref="invalidCollectionParameters"/>
+    </util:map>
+    <util:map id="getIndexesWithInvalidSortDirectionTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="sortKey" value="totalEventCount"/>
+        <entry key="sortDirection" value="NOTHING"/>
+    </util:map>
+    <util:map id="getIndexesWithInvalidSortKeyTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="sortKey" value="Invalid"/>
+    </util:map>
 </beans>

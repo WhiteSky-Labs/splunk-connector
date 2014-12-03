@@ -837,4 +837,30 @@ public class SplunkClient {
         return service.getInputs().get(inputIdentifier);
     }
 
+    /**
+     * Retrieves a collection of indexes based on the criteria provided
+     *
+     * @param sortKey              The Key to sort by
+     * @param sortDirection        The SortDirection to sort by
+     * @param collectionParameters Optional Map of additional arguments to pass to the call
+     * @return IndexCollection of indexes
+     */
+    public IndexCollection getIndexes(String sortKey, CollectionArgs.SortDirection sortDirection, Map<String, Object> collectionParameters) {
+        IndexCollectionArgs args = new IndexCollectionArgs();
+        if ((sortKey != null) && !sortKey.isEmpty()) {
+            args.setSortKey(sortKey);
+        }
+        if (sortDirection != null) {
+            args.setSortDirection(sortDirection);
+        }
+        if ((collectionParameters != null) && (!collectionParameters.isEmpty())) {
+            args.putAll(collectionParameters);
+        }
+        if (args.size() == 0) {
+            return service.getIndexes();
+        } else {
+            return service.getIndexes(args);
+        }
+    }
+
 }

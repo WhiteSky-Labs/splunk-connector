@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -183,6 +182,10 @@ public class SplunkConnectorTest {
     @Test
     public void testConnectionIdentifier() throws Exception {
         assertEquals("001", connector.getConnectionIdentifier());
+
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn("token");
+        assertEquals("token", connector.getConnectionIdentifier());
     }
 
     @Test
@@ -404,6 +407,48 @@ public class SplunkConnectorTest {
         Input input = null;
         when(client.modifyInput(eq(input), anyMap())).thenReturn(input);
         assertEquals(input, client.modifyInput(input, new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void testDisconnect() throws Exception {
+        when(client.getService()).thenReturn(service);
+        doNothing().when(client).setService(null);
+        connector.disconnect();
+    }
+
+    @Test
+    public void testIsConnectedWhenConnected() throws Exception {
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn("Token");
+        assertTrue(connector.isConnected());
+    }
+
+    @Test
+    public void testIsConnectedWhenNotConnected() throws Exception {
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn(null);
+        assertFalse(connector.isConnected());
+
+        client.setService(null);
+        assertFalse(connector.isConnected());
+
+    }
+
+    @Test
+    public void testGetIndexes() throws Exception {
+        IndexCollection indexes = null;
+        when(client.getIndexes(null, null, null)).thenReturn(indexes);
+        assertEquals(indexes, connector.getIndexes(null, null, null));
+    }
+
+    @Test
+    public void testGetIndexesWithParameters() throws Exception {
+        IndexCollection indexes = null;
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("assureUTF8", "true");
+
+        when(client.getIndexes(anyString(), any(CollectionArgs.SortDirection.class), eq(params))).thenReturn(indexes);
+        assertEquals(indexes, connector.getIndexes("Test", CollectionArgs.SortDirection.DESC, params));
     }
 
 }

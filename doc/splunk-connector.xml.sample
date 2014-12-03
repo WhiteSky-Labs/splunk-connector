@@ -130,3 +130,8 @@
 <!-- BEGIN_INCLUDE(splunk:get-input) -->
     <splunk:get-input inputIdentifier="#[payload.inputIdentifier]"/>
 <!-- END_INCLUDE(splunk:get-input) -->
+<!-- BEGIN_INCLUDE(splunk:get-indexes) -->
+    <splunk:get-indexes sortKey="#[payload.sortKey]" sortDirection="#[payload.sortDirection]">
+        <splunk:collection-parameters ref="#[payload.collectionParameters]"/>
+    </splunk:get-indexes>
+<!-- END_INCLUDE(splunk:get-indexes) -->
