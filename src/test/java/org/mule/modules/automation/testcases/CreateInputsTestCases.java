@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 
 public class CreateInputsTestCases extends SplunkTestParent {
 
-    private String tcpRawPort = "9196";
+    private String tcpRawPort = "9292";
     private String tcpCookedPort = "9112";
     private String udpPort = "9113";
     private String monitor = "/tmp";
@@ -40,9 +40,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             TcpInput input = (TcpInput) result;
             assertTrue(input instanceof TcpInput);
-            initializeTestRunMessage("removeInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", tcpRawPort);
-
+            tearDown(tcpRawPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -61,9 +59,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             TcpInput input = (TcpInput) result;
             assertTrue(input instanceof TcpInput);
-            initializeTestRunMessage("removeInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", tcpRawPort);
-
+            tearDown(tcpRawPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -83,9 +79,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             TcpSplunkInput input = (TcpSplunkInput) result;
             assertTrue(input instanceof TcpSplunkInput);
-            runFlowAndGetPayload("remove-input");
-            upsertOnTestRunMessage("inputIdentifier", tcpCookedPort);
-
+            tearDown(tcpCookedPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -105,8 +99,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             UdpInput input = (UdpInput) result;
             assertTrue(input instanceof UdpInput);
-            runFlowAndGetPayload("remove-input");
-            upsertOnTestRunMessage("inputIdentifier", udpPort);
+            tearDown(udpPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -125,8 +118,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             UdpInput input = (UdpInput) result;
             assertTrue(input instanceof UdpInput);
-            runFlowAndGetPayload("remove-input");
-            upsertOnTestRunMessage("inputIdentifier", udpPort);
+            tearDown(udpPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -146,8 +138,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             MonitorInput input = (MonitorInput) result;
             assertTrue(input instanceof MonitorInput);
-            runFlowAndGetPayload("remove-input");
-            upsertOnTestRunMessage("inputIdentifier", monitor);
+            tearDown(monitor);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -166,11 +157,21 @@ public class CreateInputsTestCases extends SplunkTestParent {
             assertNotNull(result);
             MonitorInput input = (MonitorInput) result;
             assertTrue(input instanceof MonitorInput);
-            runFlowAndGetPayload("remove-input");
-            upsertOnTestRunMessage("inputIdentifier", monitor);
+            tearDown(monitor);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
+    }
+
+    /**
+     * Teardown values depend on input type so are invoked manually.
+     *
+     * @param inputIdentifier the Input Identifier
+     * @throws Exception When there is a problem running the flow.
+     */
+    private void tearDown(String inputIdentifier) throws Exception {
+        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        Object removedResult = runFlowAndGetPayload("remove-input");
     }
 
 }

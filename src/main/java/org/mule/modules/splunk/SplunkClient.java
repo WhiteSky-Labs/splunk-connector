@@ -828,6 +828,12 @@ public class SplunkClient {
         return input;
     }
 
+    /**
+     * Remove an Input
+     *
+     * @param inputIdentifier the identifier of the input to remove, for example a port number or filename
+     * @return the Input that was removed
+     */
     public Input removeInput(String inputIdentifier) {
         Input input = service.getInputs().get(inputIdentifier);
         input.remove();
