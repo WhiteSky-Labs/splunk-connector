@@ -960,7 +960,7 @@ public class SplunkClient {
      * @param data       The data string to add
      * @return The UdpInput
      */
-    public UdpInput addDataToUdp(String portNumber, String data) throws SplunkConnectorException {
+    public UdpInput addDataToUdpInput(String portNumber, String data) throws SplunkConnectorException {
         UdpInput input = (UdpInput) service.getInputs().get(portNumber);
         try {
             input.submit(data);

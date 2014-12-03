@@ -485,21 +485,23 @@ public class SplunkConnectorTest {
         when(client.addDataToIndex(anyString(), anyString(), anyMap())).thenReturn(index);
         assertEquals(index, connector.addDataToIndex("Test", "Test", new HashMap<String, Object>()));
     }
-/**
- @Test public void testAddDataToTcpInput() throws Exception {
- TcpInput input = null;
- when(client.addDataToTcpInput(anyString(), anyString())).thenReturn(input);
 
- assertEquals(input, connector.addDataToTcpInput("Test", "Test"));
- }
+    @Test
+    public void testAddDataToTcpInput() throws Exception {
+        TcpInput input = null;
+        when(client.addDataToTcpInput(anyString(), anyString())).thenReturn(input);
 
- @Test public void testAddDataToUdpInput() throws Exception {
- UdpInput input = null;
- when(client.addDataToUdpInput(anyString(), anyString())).thenReturn(input);
+        assertEquals(input, connector.addDataToTcpInput("Test", "Test"));
+    }
 
- assertEquals(input, connector.addDataToUdpInput("Test", "Test"));
- }
- */
+    @Test
+    public void testAddDataToUdpInput() throws Exception {
+        UdpInput input = null;
+        when(client.addDataToUdpInput(anyString(), anyString())).thenReturn(input);
+
+        assertEquals(input, connector.addDataToUdpInput("Test", "Test"));
+    }
+
 }
 
 

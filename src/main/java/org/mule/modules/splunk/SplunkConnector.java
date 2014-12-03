@@ -637,6 +637,36 @@ public class SplunkConnector {
     }
 
     /**
+     * Add data to a Tcp Input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-tcp-input}
+     *
+     * @param portNumber The port number to send data on
+     * @param stringData The data to send
+     * @return The TcpInput that was used
+     * @throws SplunkConnectorException when cannot connect to the port
+     */
+    @Processor
+    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        return splunkClient.addDataToTcpInput(portNumber, stringData);
+    }
+
+    /**
+     * Add data to a Udp Input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-udp-input}
+     *
+     * @param portNumber The port number to send data on
+     * @param stringData The data to send
+     * @return The UdpInput that was used
+     * @throws SplunkConnectorException when cannot connect to the port
+     */
+    @Processor
+    public UdpInput addDataToUdpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        return splunkClient.addDataToUdpInput(portNumber, stringData);
+    }
+
+    /**
      * Get the Hostname
      *
      * @return the Splunk Server hostname

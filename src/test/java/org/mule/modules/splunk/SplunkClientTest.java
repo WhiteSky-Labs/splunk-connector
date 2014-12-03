@@ -17,7 +17,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mule.api.ConnectionException;
 import org.mule.api.callback.SourceCallback;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,6 +72,12 @@ public class SplunkClientTest {
     IndexCollection indexCollection;
     @Mock
     Index index;
+    @Mock
+    IOException ioe;
+    @Mock
+    TcpInput tcpInput;
+    @Mock
+    UdpInput udpInput;
 
     @Before
     public void setUp() throws Exception {
@@ -896,5 +904,49 @@ public class SplunkClientTest {
 
         doNothing().when(index).submit(eq(eventArgs), anyString());
         assertEquals(index, client.addDataToIndex("Test", "test", args));
+    }
+
+    @Test
+    public void testAddDataToTcpInput() throws Exception {
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(tcpInput);
+        doNothing().when(tcpInput).submit(anyString());
+
+        assertEquals(tcpInput, client.addDataToTcpInput("Test", "Test"));
+    }
+
+    @Test
+    public void testAddDataToTcpInputWithError() throws Exception {
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(tcpInput);
+        doThrow(ioe).when(tcpInput).submit(anyString());
+        try {
+            client.addDataToTcpInput("Test", "Test");
+            fail("Should throw exception");
+        } catch (SplunkConnectorException e) {
+            assertEquals(ioe, e.getCause());
+        }
+    }
+
+    @Test
+    public void testAddDataToUdpInput() throws Exception {
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(udpInput);
+        doNothing().when(udpInput).submit(anyString());
+
+        assertEquals(udpInput, client.addDataToUdpInput("Test", "Test"));
+    }
+
+    @Test
+    public void testAddDataToUdpInputWithError() throws Exception {
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(udpInput);
+        doThrow(ioe).when(udpInput).submit(anyString());
+        try {
+            client.addDataToUdpInput("Test", "Test");
+            fail("Should throw exception");
+        } catch (SplunkConnectorException e) {
+            assertEquals(ioe, e.getCause());
+        }
     }
 }
