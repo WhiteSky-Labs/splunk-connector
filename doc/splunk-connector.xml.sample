@@ -71,11 +71,6 @@
         <splunk:search-properties ref="#[payload.searchProperties]" />
     </splunk:modify-saved-search-properties>
 <!-- END_INCLUDE(splunk:modify-saved-search-properties) -->
-<!-- BEGIN_INCLUDE(splunk:create-input) -->
-    <splunk:create-input inputIdentifier="#[payload.inputIdentifier]" kind="#[payload.kind]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-input>
-<!-- END_INCLUDE(splunk:create-windows-registry-input) -->
 <!-- BEGIN_INCLUDE(splunk:modify-input) -->
     <splunk:modify-input>
         <splunk:input ref="#[payload.input]"/>
@@ -118,3 +113,11 @@
 <!-- BEGIN_INCLUDE(splunk:add-data-to-udp-input) -->
     <splunk:add-data-to-tcp-input portNumber="#[payload.portNumber]" stringData="#[payload.stringData]"/>
 <!-- END_INCLUDE(splunk:add-data-to-udp-input) -->
+<!-- BEGIN_INCLUDE(splunk:create-input) -->
+    <splunk:create-input inputIdentifier="#payload.inputIdentifier]" kind-ref="#[payload.kind]">
+        <splunk:properties ref="#[payload.properties]"/>
+    </splunk:create-input>
+<!-- END_INCLUDE(splunk:create-input) -->
+<!-- BEGIN_INCLUDE(splunk:remove-input) -->
+    <splunk:remove-input inputIdentifier="#[payload.inputIdentifier]"/>
+<!-- END_INCLUDE(splunk:remove-input) -->
