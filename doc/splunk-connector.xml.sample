@@ -71,55 +71,10 @@
         <splunk:search-properties ref="#[payload.searchProperties]" />
     </splunk:modify-saved-search-properties>
 <!-- END_INCLUDE(splunk:modify-saved-search-properties) -->
-<!-- BEGIN_INCLUDE(splunk:create-active-directory-input) -->
-    <splunk:create-active-directory-input domainControllerName="#[payload.domainControllerName]">
+<!-- BEGIN_INCLUDE(splunk:create-input) -->
+    <splunk:create-input inputIdentifier="#[payload.inputIdentifier]" kind="#[payload.kind]">
         <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-active-directory-input>
-<!-- END_INCLUDE(splunk:create-active-directory-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-monitor-input) -->
-    <splunk:create-monitor-input monitorPath="#[payload.monitorPath]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-monitor-input>
-<!-- END_INCLUDE(splunk:create-monitor-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-script-input) -->
-    <splunk:create-script-input scriptName="#[payload.scriptName]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-script-input>
-<!-- END_INCLUDE(splunk:create-script-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-tcp-cooked-input) -->
-    <splunk:create-tcp-cooked-input portNumber="#[payload.portNumber]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-tcp-cooked-input>
-<!-- END_INCLUDE(splunk:create-tcp-cooked-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-tcp-raw-input) -->
-    <splunk:create-tcp-raw-input portNumber="#[payload.portNumber]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-tcp-raw-input>
-<!-- END_INCLUDE(splunk:create-tcp-raw-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-udp-input) -->
-    <splunk:create-udp-input portNumber="#[payload.portNumber]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-udp-input>
-<!-- END_INCLUDE(splunk:create-udp-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-windows-event-log-input) -->
-    <splunk:create-windows-event-log-input collectionName="#[payload.collectionName]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-windows-event-log-input>
-<!-- END_INCLUDE(splunk:create-windows-event-log-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-windows-perfmon-input) -->
-    <splunk:create-windows-perfmon-input collectionName="#[payload.collectionName]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-windows-perfmon-input>
-<!-- END_INCLUDE(splunk:create-windows-perfmon-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-windows-wmi-input) -->
-    <splunk:create-windows-wmi-input collectionName="#[payload.collectionName]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-windows-wmi-input>
-<!-- END_INCLUDE(splunk:create-windows-wmi-input) -->
-<!-- BEGIN_INCLUDE(splunk:create-windows-registry-input) -->
-    <splunk:create-windows-registry-input configurationStanza="#[payload.configurationStanza]">
-        <splunk:properties ref="#[payload.properties]"/>
-    </splunk:create-windows-registry-input>
+    </splunk:create-input>
 <!-- END_INCLUDE(splunk:create-windows-registry-input) -->
 <!-- BEGIN_INCLUDE(splunk:modify-input) -->
     <splunk:modify-input>

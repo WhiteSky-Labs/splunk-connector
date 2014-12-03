@@ -117,56 +117,12 @@
         <splunk:get-inputs doc:name="Splunk"/>
     </flow>
 
-    <flow name="create-active-directory-input" doc:name="create-active-directory-input">
-        <splunk:create-active-directory-input domainControllerName="#[flowVars.domainControllerName]" doc:name="Splunk">
+    <flow name="create-input" doc:name="create-input">
+        <splunk:create-input inputIdentifier="#[flowVars.inputIdentifier]" kind-ref="#[flowVars.kind]">
             <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-active-directory-input>
+        </splunk:create-input>
     </flow>
-    <flow name="create-monitor-input" doc:name="create-monitor-input">
-        <splunk:create-monitor-input monitorPath="#[flowVars.monitorPath]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-monitor-input>
-    </flow>
-    <flow name="create-script-input" doc:name="create-script-input">
-        <splunk:create-script-input scriptName="#[flowVars.scriptName]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-script-input>
-    </flow>
-    <flow name="create-tcp-cooked-input" doc:name="create-tcp-cooked-input">
-        <splunk:create-tcp-cooked-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-tcp-cooked-input>
-    </flow>
-    <flow name="create-tcp-raw-input" doc:name="create-tcp-raw-input">
-        <splunk:create-tcp-raw-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-tcp-raw-input>
-    </flow>
-    <flow name="create-udp-input" doc:name="create-udp-input">
-        <splunk:create-udp-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-udp-input>
-    </flow>
-    <flow name="create-windows-event-log-input" doc:name="create-windows-event-log-input">
-        <splunk:create-windows-event-log-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-windows-event-log-input>
-    </flow>
-    <flow name="create-windows-perfmon-input" doc:name="create-windows-perfmon-input">
-        <splunk:create-windows-perfmon-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-windows-perfmon-input>
-    </flow>
-    <flow name="create-windows-wmi-input" doc:name="create-windows-wmi-input">
-        <splunk:create-windows-wmi-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-windows-wmi-input>
-    </flow>
-    <flow name="create-windows-registry-input" doc:name="create-windows-registry-input">
-        <splunk:create-windows-registry-input configurationStanza="#[flowVars.configurationStanza]" doc:name="Splunk">
-            <splunk:properties ref="#[flowVars.properties]"/>
-        </splunk:create-windows-registry-input>
-    </flow>
+
     <flow name="modify-input" doc:name="modify-input">
         <splunk:modify-input doc:name="Splunk">
             <splunk:input ref="#[flowVars.input]"/>
@@ -177,8 +133,12 @@
         <splunk:get-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
     </flow>
     <flow name="get-indexes" doc:name="get-indexes">
-        <splunk:get-indexes sortKey="#[flowVars.sortKey]" sortDirection="#[flowVars.sortDirection]">
+        <splunk:get-indexes sortKey="#[flowVars.sortKey]" sortDirection="#[flowVars.sortDirection]" doc:name="Splunk">
             <splunk:collection-parameters ref="#[flowVars.collectionParameters]"/>
         </splunk:get-indexes>
     </flow>
+    <flow name="remove-input" doc:name="remove-input">
+        <splunk:remove-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
+    </flow>
 </mule>
+

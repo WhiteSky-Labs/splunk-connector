@@ -384,143 +384,18 @@ public class SplunkConnector {
     }
 
     /**
-     * Creates a Windows Active Directory Input with a given AD Domain Controller Name
+     * Creates an Input with a given identifier and kind
      * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-active-directory-input}
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-input}
      *
-     * @param domainControllerName The name of the domain controller
+     * @param inputIdentifier The name of the domain controller
+     * @param kind The InputKind
      * @param properties           An Optional Key-Value Map of Properties to set
-     * @return A Windows Active Directory Input
+     * @return An Input of that Kind
      */
     @Processor
-    public WindowsActiveDirectoryInput createActiveDirectoryInput(String domainControllerName, @Optional Map<String, Object> properties) {
-        return splunkClient.createActiveDirectoryInput(domainControllerName, properties);
-    }
-
-    /**
-     * Creates a Monitor Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-monitor-input}
-     *
-     * @param monitorPath The filename or path to monitor
-     * @param properties  An optional Key-Value Map of Properties to set
-     * @return A Monitor Input
-     */
-    @Processor
-    public MonitorInput createMonitorInput(String monitorPath, @Optional Map<String, Object> properties) {
-        return splunkClient.createMonitorInput(monitorPath, properties);
-    }
-
-    /**
-     * Creates a Script Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-script-input}
-     *
-     * @param scriptName The name of the script
-     * @param properties An optional Key-Value Map of Properties to set
-     * @return A Script Input
-     */
-    @Processor
-    public ScriptInput createScriptInput(String scriptName, @Optional Map<String, Object> properties) {
-        return splunkClient.createScriptInput(scriptName, properties);
-    }
-
-    /**
-     * Creates a TCP Cooked Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-tcp-cooked-input}
-     *
-     * @param portNumber The port number
-     * @param properties An optional Key-Value Map of Properties to set
-     * @return A TCP Cooked Input
-     */
-    @Processor
-    public TcpSplunkInput createTcpCookedInput(String portNumber, @Optional Map<String, Object> properties) {
-        return splunkClient.createTcpCookedInput(portNumber, properties);
-    }
-
-    /**
-     * Creates a TCP Raw Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-tcp-raw-input}
-     *
-     * @param portNumber The port number
-     * @param properties An optional Key-Value Map of Properties to set
-     * @return A TCP Raw Input
-     */
-    @Processor
-    public TcpInput createTcpRawInput(String portNumber, @Optional Map<String, Object> properties) {
-        return splunkClient.createTcpRawInput(portNumber, properties);
-    }
-
-    /**
-     * Creates a UDP Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-udp-input}
-     *
-     * @param portNumber The port number
-     * @param properties An optional Key-Value Map of Properties to set
-     * @return A UDP Input
-     */
-    @Processor
-    public UdpInput createUdpInput(String portNumber, @Optional Map<String, Object> properties) {
-        return splunkClient.createUdpInput(portNumber, properties);
-    }
-
-    /**
-     * Creates a Windows Event Log Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-windows-event-log-input}
-     *
-     * @param collectionName the Collection Name
-     * @param properties     An optional Key-Value Map of Properties to set
-     * @return A Windows Event Log Input
-     */
-    @Processor
-    public WindowsEventLogInput createWindowsEventLogInput(String collectionName, @Optional Map<String, Object> properties) {
-        return splunkClient.createWindowsEventLogInput(collectionName, properties);
-    }
-
-    /**
-     * Creates a Windows Perfmon Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-windows-perfmon-input}
-     *
-     * @param collectionName The Collection Name
-     * @param properties     An optional Key-Value Map of Properties to set
-     * @return A Windows Perfmon Input
-     */
-    @Processor
-    public WindowsPerfmonInput createWindowsPerfmonInput(String collectionName, @Optional Map<String, Object> properties) {
-        return splunkClient.createWindowsPerfmonInput(collectionName, properties);
-    }
-
-    /**
-     * Creates a Windows WMI Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-windows-wmi-input}
-     *
-     * @param collectionName The Collection Name
-     * @param properties     An optional Key-Value Map of Properties to set
-     * @return A WMI Input
-     */
-    @Processor
-    public WindowsWmiInput createWindowsWmiInput(String collectionName, @Optional Map<String, Object> properties) {
-        return splunkClient.createWindowsWmiInput(collectionName, properties);
-    }
-
-    /**
-     * Creates a Windows Registry Input
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-windows-registry-input}
-     *
-     * @param configurationStanza The Name of the Configuration Stanza
-     * @param properties          An optional Key-Value Map of Properties to set
-     * @return A Windows Registry Input
-     */
-    @Processor
-    public WindowsRegistryInput createWindowsRegistryInput(String configurationStanza, @Optional Map<String, Object> properties) {
-        return splunkClient.createWindowsRegistryInput(configurationStanza, properties);
+    public Input createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> properties) {
+        return splunkClient.createInput(inputIdentifier, kind, properties);
     }
 
     /**
@@ -664,6 +539,19 @@ public class SplunkConnector {
     @Processor
     public UdpInput addDataToUdpInput(String portNumber, String stringData) throws SplunkConnectorException {
         return splunkClient.addDataToUdpInput(portNumber, stringData);
+    }
+
+    /**
+     * Remove an input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-input}
+     *
+     * @param inputIdentifier the identifier, for example the port number
+     * @return The Input Object that was removed for verification
+     */
+    @Processor
+    public Input removeInput(String inputIdentifier) {
+        return splunkClient.removeInput(inputIdentifier);
     }
 
     /**

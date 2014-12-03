@@ -17,21 +17,25 @@ import org.mule.modules.automation.testcases.*;
 @RunWith(org.junit.experimental.categories.Categories.class)
 @org.junit.experimental.categories.Categories.IncludeCategory(SmokeTests.class)
 @org.junit.runners.Suite.SuiteClasses({
-        GetApplicationsTestCases.class,
-        GetJobsTestCases.class,
-        RunBlockingSearchTestCases.class,
-        RunOneShotSearchTestCases.class,
-        GetSavedSearchesTestCases.class,
+        CreateInputsTestCases.class,
         CreateSavedSearchTestCases.class,
-        ViewSavedSearchPropertiesTestCases.class,
-        ModifySavedSearchPropertiesTestCases.class,
+        DeleteSavedSearchTestCases.class,
+        GetApplicationsTestCases.class,
+        GetDataModelsTestCases.class,
+        GetDataModelTestCases.class,
+        GetInputsTestCases.class,
+        GetJobsTestCases.class,
+        GetSavedSearchesTestCases.class,
         GetSavedSearchHistoryTestCases.class,
+        ModifySavedSearchPropertiesTestCases.class,
+        RunBlockingSearchTestCases.class,
+        RunExportSearchTestCases.class,
+        RunNormalSearchTestCases.class,
+        RunOneShotSearchTestCases.class,
+        RunRealTimeSearchTestCases.class,
         RunSavedSearchTestCases.class,
         RunSavedSearchWithArgumentsTestCases.class,
-        DeleteSavedSearchTestCases.class,
-        GetDataModelTestCases.class,
-        RunExportSearchTestCases.class,
-        RunRealTimeSearchTestCases.class
+        ViewSavedSearchPropertiesTestCases.class
 })
 public class SmokeTestSuite {
 
