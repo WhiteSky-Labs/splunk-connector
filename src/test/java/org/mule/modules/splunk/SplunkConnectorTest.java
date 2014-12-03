@@ -451,6 +451,55 @@ public class SplunkConnectorTest {
         assertEquals(indexes, connector.getIndexes("Test", CollectionArgs.SortDirection.DESC, params));
     }
 
+    @Test
+    public void testCreateIndex() throws Exception {
+        Index index = null;
+        when(client.createIndex("Test", null)).thenReturn(index);
+        assertEquals(index, connector.createIndex("Test", null));
+    }
+
+    @Test
+    public void testGetIndex() throws Exception {
+        Index index = null;
+        when(client.getIndex(anyString())).thenReturn(index);
+        assertEquals(index, connector.getIndex("Test"));
+    }
+
+    @Test
+    public void testModifyIndex() throws Exception {
+        Index index = null;
+        when(client.modifyIndex(eq(index), anyMap())).thenReturn(index);
+        assertEquals(index, connector.modifyIndex(index, new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void testCleanIndex() throws Exception {
+        Index index = null;
+        when(client.cleanIndex("Test", 120)).thenReturn(index);
+        assertEquals(index, connector.cleanIndex("Test", 120));
+    }
+
+    @Test
+    public void testAddDataToIndex() throws Exception {
+        Index index = null;
+        when(client.addDataToIndex(anyString(), anyString(), anyMap())).thenReturn(index);
+        assertEquals(index, connector.addDataToIndex("Test", "Test", new HashMap<String, Object>()));
+    }
+/**
+ @Test public void testAddDataToTcpInput() throws Exception {
+ TcpInput input = null;
+ when(client.addDataToTcpInput(anyString(), anyString())).thenReturn(input);
+
+ assertEquals(input, connector.addDataToTcpInput("Test", "Test"));
+ }
+
+ @Test public void testAddDataToUdpInput() throws Exception {
+ UdpInput input = null;
+ when(client.addDataToUdpInput(anyString(), anyString())).thenReturn(input);
+
+ assertEquals(input, connector.addDataToUdpInput("Test", "Test"));
+ }
+ */
 }
 
 

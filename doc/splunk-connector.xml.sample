@@ -135,3 +135,28 @@
         <splunk:collection-parameters ref="#[payload.collectionParameters]"/>
     </splunk:get-indexes>
 <!-- END_INCLUDE(splunk:get-indexes) -->
+<!-- BEGIN_INCLUDE(splunk:create-index) -->
+    <splunk:create-index indexName="#[payload.indexName]">
+        <splunk:args ref="#[payload.args]"/>
+    </splunk:create-index>
+<!-- END_INCLUDE(splunk:create-index) -->
+<!-- BEGIN_INCLUDE(splunk:modify-index) -->
+    <splunk:modify-index>
+        <splunk:index ref="#[payload.index]"/>
+        <splunk:properties ref="#[payload.properties]"/>
+    </splunk:modify-index>
+<!-- END_INCLUDE(splunk:modify-index) -->
+<!-- BEGIN_INCLUDE(splunk:get-index) -->
+    <splunk:get-index indexIdentifier="#[payload.indexIdentifier]"/>
+<!-- END_INCLUDE(splunk:get-index) -->
+<!-- BEGIN_INCLUDE(splunk:clean-index) -->
+    <splunk:clean-index indexName="#[payload.indexName]" maxSeconds="#[payload.maxSeconds]"/>
+<!-- END_INCLUDE(splunk:clean-index) -->
+<!-- BEGIN_INCLUDE(splunk:add-data-to-index) -->
+    <splunk:add-data-to-index indexName="#[payload.indexName]" stringData="#[payload.stringData]">
+        <splunk:args ref="#[payload.args]"/>
+    </splunk:add-data-to-index>
+<!-- END_INCLUDE(splunk:add-data-to-index) -->
+<!-- BEGIN_INCLUDE(splunk:add-data-to-tcp-input) -->
+    <splunk:add-data-to-tcp-input portNumber="#[payload.portNumber]" stringData="#[payload.stringData]"/>
+<!-- END_INCLUDE(spunk:add-data-to-tcp-input) -->

@@ -827,8 +827,6 @@ public class SplunkClient {
 
     /**
      * Retrieves an Input with the given identifier
-     * <p/>
-     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-input}
      *
      * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
      * @return The Input specified.
@@ -856,11 +854,120 @@ public class SplunkClient {
         if ((collectionParameters != null) && (!collectionParameters.isEmpty())) {
             args.putAll(collectionParameters);
         }
-        if (args.size() == 0) {
+        if (args.isEmpty()) {
             return service.getIndexes();
         } else {
             return service.getIndexes(args);
         }
     }
 
+    /**
+     * Creates an Index with optional arguments
+     *
+     * @param indexName The name of the index to create
+     * @param args      Optional key-value pairs of arguments to apply on creation
+     * @return the new Index
+     */
+    public Index createIndex(String indexName, Map<String, Object> args) {
+        if ((args != null) && !args.isEmpty()) {
+            return service.getIndexes().create(indexName, args);
+        } else {
+            return service.getIndexes().create(indexName);
+        }
+    }
+
+    /**
+     * Modifies an index with the properties supplied.
+     *
+     * @param index      A Splunk Index to modify.
+     * @param properties The map of properties to update
+     * @return Returns the modified index.
+     */
+    public Index modifyIndex(Index index, Map<String, Object> properties) {
+        Validate.notNull(properties, "You must provide some properties to modify");
+        Validate.notEmpty(properties, "You must provide some properties to modify");
+        index.putAll(properties);
+        index.update();
+        return index;
+    }
+
+    /**
+     * Retrieves an Index with the given identifier
+     *
+     * @param indexIdentifier The identifier
+     * @return The Index specified.
+     */
+    public Index getIndex(String indexIdentifier) {
+        return service.getIndexes().get(indexIdentifier);
+    }
+
+    /**
+     * Clean the index, which removes all events from it
+     *
+     * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
+     * @return the cleaned index
+     */
+    public Index cleanIndex(String indexName, int maxSeconds) {
+        Validate.notNull(indexName, "You must provide an index name");
+        Validate.notEmpty(indexName, "You must provide an index name");
+        Index index = service.getIndexes().get(indexName);
+        return index.clean(maxSeconds);
+    }
+
+    /**
+     * Add data to an index without an input, using HTTP to submit a string
+     *
+     * @param indexName  The name of the index to update
+     * @param stringData The data string to send
+     * @param args       Optional map of arguments to apply to the update
+     * @return The index that has been updated
+     */
+    public Index addDataToIndex(String indexName, String stringData, Map<String, Object> args) {
+        Index index = service.getIndexes().get(indexName);
+        if (args != null && !args.isEmpty()) {
+            Args eventArgs = new Args();
+            eventArgs.putAll(args);
+            index.submit(eventArgs, stringData);
+        } else {
+            index.submit(stringData);
+        }
+        return index;
+    }
+
+
+    /**
+     * Add data to a tcp input on a given port
+     *
+     * @param portNumber The TCP Port Number to use
+     * @param stringData The data string to add
+     * @return The TcpInput
+     */
+    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        TcpInput input = (TcpInput) service.getInputs().get(portNumber);
+        try {
+            input.submit(stringData);
+        } catch (IOException e) {
+            LOGGER.info("Unable to submit to that TCP Port", e);
+            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+        }
+        return input;
+    }
+
+    /**
+     * Add data to a udp input on a given port
+     *
+     * @param portNumber The UDP Port Number to use
+     * @param data       The data string to add
+     * @return The UdpInput
+     */
+    public UdpInput addDataToUdp(String portNumber, String data) throws SplunkConnectorException {
+        UdpInput input = (UdpInput) service.getInputs().get(portNumber);
+        try {
+            input.submit(data);
+        } catch (IOException e) {
+            LOGGER.info("Unable to submit to that TCP Port", e);
+            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+        }
+        return input;
+    }
 }

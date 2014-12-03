@@ -66,6 +66,10 @@ public class SplunkClientTest {
     InputCollection coll;
     @Mock
     Input input;
+    @Mock
+    IndexCollection indexCollection;
+    @Mock
+    Index index;
 
     @Before
     public void setUp() throws Exception {
@@ -692,7 +696,7 @@ public class SplunkClientTest {
         WindowsRegistryInput input = null;
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
-        
+
         when(coll.create(anyString(), eq(InputKind.WindowsRegistry), eq(props))).thenReturn(input);
 
         assertEquals(input, client.createWindowsRegistryInput("Test", props));
@@ -759,5 +763,138 @@ public class SplunkClientTest {
         assertEquals(indexes, client.getIndexes("test", CollectionArgs.SortDirection.DESC, params));
     }
 
+    @Test
+    public void testCreateIndex() throws Exception {
+        Index index = null;
 
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.create("Test")).thenReturn(index);
+        assertEquals(index, client.createIndex("Test", null));
+    }
+
+    @Test
+    public void testCreateIndexWithArgs() throws Exception {
+        Index index = null;
+        HashMap<String, Object> args = new HashMap<String, Object>();
+        args.put("assureUTF8", "true");
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.create("Test", args)).thenReturn(index);
+        assertEquals(index, client.createIndex("Test", args));
+    }
+
+    @Test
+    public void testCreateIndexWithEmptyArgs() throws Exception {
+        Index index = null;
+        HashMap<String, Object> args = new HashMap<String, Object>();
+
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.create("Test", args)).thenReturn(index);
+        assertEquals(index, client.createIndex("Test", args));
+    }
+
+
+    @Test
+    public void testModifyIndexWithValidProperties() throws Exception {
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("assureUTF8", "true");
+        doNothing().when(index).putAll(props);
+        doNothing().when(index).update();
+
+        assertEquals(index, client.modifyIndex(index, props));
+    }
+
+    @Test
+    public void testModifyIndexWithEmptyProperties() throws Exception {
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        try {
+            index = client.modifyIndex(index, props);
+            fail("Should throw an error when modifying an index with empty properties");
+        } catch (Exception e) {
+            assertEquals("You must provide some properties to modify", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testModifyIndexWithNullProperties() throws Exception {
+        HashMap<String, Object> props = null;
+        try {
+            index = client.modifyIndex(index, props);
+            fail("Should throw an error when modifying an index with null properties");
+        } catch (Exception e) {
+            assertEquals("You must provide some properties to modify", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetIndex() throws Exception {
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get("Test")).thenReturn(index);
+
+        assertEquals(index, client.getIndex("Test"));
+    }
+
+    @Test
+    public void testCleanIndex() throws Exception {
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get("Test")).thenReturn(index);
+        when(index.clean(120)).thenReturn(index);
+        assertEquals(index, client.cleanIndex("Test", 120));
+    }
+
+    @Test
+    public void testCleanIndexNegativeCases() throws Exception {
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get("Test")).thenReturn(index);
+        when(index.clean(120)).thenReturn(index);
+        try {
+            assertEquals(index, client.cleanIndex(null, 120));
+            fail("Cleaning an index without a name should return an error");
+        } catch (Exception e) {
+            assertEquals("You must provide an index name", e.getMessage());
+        }
+        try {
+            assertEquals(index, client.cleanIndex("", 120));
+            fail("Cleaning an index without a name should return an error");
+        } catch (Exception e) {
+            assertEquals("You must provide an index name", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testAddDataToIndex() throws Exception {
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
+
+        doNothing().when(index).submit(anyString());
+        assertEquals(index, client.addDataToIndex("Test", "Test", null));
+    }
+
+    @Test
+    public void testAddDataToIndexWithProperties() throws Exception {
+
+        HashMap<String, Object> args = new HashMap<String, Object>();
+        args.put("Test", "test");
+        Args eventArgs = new Args();
+        eventArgs.putAll(args);
+
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
+
+        doNothing().when(index).submit(eq(eventArgs), anyString());
+        assertEquals(index, client.addDataToIndex("Test", "test", args));
+    }
+
+    @Test
+    public void testAddDataToIndexWithEmptyProperties() throws Exception {
+
+        HashMap<String, Object> args = new HashMap<String, Object>();
+        Args eventArgs = new Args();
+        eventArgs.putAll(args);
+
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
+
+        doNothing().when(index).submit(eq(eventArgs), anyString());
+        assertEquals(index, client.addDataToIndex("Test", "test", args));
+    }
 }

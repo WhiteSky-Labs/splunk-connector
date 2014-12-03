@@ -565,6 +565,76 @@ public class SplunkConnector {
         return splunkClient.getIndexes(sortKey, sortDirection, collectionParameters);
     }
 
+    /**
+     * Creates an Index with optional arguments
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-index}
+     *
+     * @param indexName The name of the index to create
+     * @param args      Optional key-value pairs of arguments to apply on creation
+     * @return the new Index
+     */
+    @Processor
+    public Index createIndex(String indexName, @Optional Map<String, Object> args) {
+        return splunkClient.createIndex(indexName, args);
+    }
+
+    /**
+     * Modifies an index with the properties supplied.
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-index}
+     *
+     * @param index      A Splunk Index to modify.
+     * @param properties The map of properties to update
+     * @return Returns the modified index.
+     */
+    @Processor
+    public Index modifyIndex(Index index, Map<String, Object> properties) {
+        return splunkClient.modifyIndex(index, properties);
+    }
+
+    /**
+     * Retrieves an Index with the given identifier
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-index}
+     *
+     * @param indexIdentifier The identifier of the index
+     * @return The Index specified.
+     */
+    @Processor
+    public Index getIndex(String indexIdentifier) {
+        return splunkClient.getIndex(indexIdentifier);
+    }
+
+    /**
+     * Clean the index, which removes all events from it
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:clean-index}
+     *
+     * @param indexName  The name of the index to clean
+     * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
+     * @return the cleaned index
+     */
+    @Processor
+    public Index cleanIndex(String indexName, @Default("180") int maxSeconds) {
+        return splunkClient.cleanIndex(indexName, maxSeconds);
+    }
+
+
+    /**
+     * Add data to an index without an input, using HTTP to submit a string
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-index}
+     *
+     * @param indexName  The name of the index to update
+     * @param stringData The data string to send
+     * @param args       Optional map of arguments to apply to the update
+     * @return The index that has been updated
+     */
+    @Processor
+    public Index addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> args) {
+        return splunkClient.addDataToIndex(indexName, stringData, args);
+    }
 
     /**
      * Get the Hostname
