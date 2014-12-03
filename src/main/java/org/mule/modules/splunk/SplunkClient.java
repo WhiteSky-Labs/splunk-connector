@@ -810,6 +810,31 @@ public class SplunkClient {
         }
     }
 
+    /**
+     * Modifies an input with the properties supplied.
+     *
+     * @param input      A Splunk Input to modify.
+     * @param properties The map of properties to update
+     * @return Returns the modified input.
+     */
+    public Input modifyInput(Input input, Map<String, Object> properties) {
+        Validate.notNull(properties, "You must provide some properties to modify");
+        Validate.notEmpty(properties, "You must provide some properties to modify");
+        input.putAll(properties);
+        input.update();
+        return input;
+    }
 
+    /**
+     * Retrieves an Input with the given identifier
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-input}
+     *
+     * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
+     * @return The Input specified.
+     */
+    public Input getInput(String inputIdentifier) {
+        return service.getInputs().get(inputIdentifier);
+    }
 
 }

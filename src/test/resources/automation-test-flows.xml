@@ -167,4 +167,13 @@
             <splunk:properties ref="#[flowVars.properties]"/>
         </splunk:create-windows-registry-input>
     </flow>
+    <flow name="modify-input" doc:name="modify-input">
+        <splunk:modify-input doc:name="Splunk">
+            <splunk:input ref="#[flowVars.input]"/>
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:modify-input>
+    </flow>
+    <flow name="get-input" doc:name="get-input">
+        <splunk:get-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
+    </flow>
 </mule>

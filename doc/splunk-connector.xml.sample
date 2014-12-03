@@ -121,3 +121,12 @@
         <splunk:properties ref="#[payload.properties]"/>
     </splunk:create-windows-registry-input>
 <!-- END_INCLUDE(splunk:create-windows-registry-input) -->
+<!-- BEGIN_INCLUDE(splunk:modify-input) -->
+    <splunk:modify-input>
+        <splunk:input ref="#[payload.input]"/>
+        <splunk:properties ref="#[payload.properties]"/>
+    </splunk:modify-input>
+<!-- END_INCLUDE(splunk:modify-input) -->
+<!-- BEGIN_INCLUDE(splunk:get-input) -->
+    <splunk:get-input inputIdentifier="#[payload.inputIdentifier]"/>
+<!-- END_INCLUDE(splunk:get-input) -->

@@ -392,6 +392,20 @@ public class SplunkConnectorTest {
         assertEquals(input, client.createWindowsRegistryInput("Test", props));
     }
 
+    @Test
+    public void testGetInput() throws Exception {
+        Input input = null;
+        when(client.getInput(anyString())).thenReturn(input);
+        assertEquals(input, client.getInput("Test"));
+    }
+
+    @Test
+    public void testModifyInput() throws Exception {
+        Input input = null;
+        when(client.modifyInput(eq(input), anyMap())).thenReturn(input);
+        assertEquals(input, client.modifyInput(input, new HashMap<String, Object>()));
+    }
+
 }
 
 

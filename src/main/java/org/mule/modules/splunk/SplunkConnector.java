@@ -524,6 +524,33 @@ public class SplunkConnector {
     }
 
     /**
+     * Modifies an input with the properties supplied.
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-input}
+     *
+     * @param input      A Splunk Input to modify.
+     * @param properties The map of properties to update
+     * @return Returns the modified input.
+     */
+    @Processor
+    public Input modifyInput(Input input, Map<String, Object> properties) {
+        return splunkClient.modifyInput(input, properties);
+    }
+
+    /**
+     * Retrieves an Input with the given identifier
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-input}
+     *
+     * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
+     * @return The Input specified.
+     */
+    @Processor
+    public Input getInput(String inputIdentifier) {
+        return splunkClient.getInput(inputIdentifier);
+    }
+
+    /**
      * Get the Hostname
      *
      * @return the Splunk Server hostname

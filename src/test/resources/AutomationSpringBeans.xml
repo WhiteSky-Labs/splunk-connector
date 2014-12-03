@@ -350,4 +350,17 @@
         <entry key="configurationStanza" value="Test"/>
         <entry key="properties" value-ref="createInputArgs"/>
     </util:map>
+    <!--modifyInput-->
+    <util:map id="modifyInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="input" value="Placeholder"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--getInput-->
+    <util:map id="getInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="inputIdentifier" value="/var/syslog"/>
+    </util:map>
 </beans>

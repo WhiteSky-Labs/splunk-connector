@@ -64,6 +64,8 @@ public class SplunkClientTest {
     SourceCallback cb;
     @Mock
     InputCollection coll;
+    @Mock
+    Input input;
 
     @Before
     public void setUp() throws Exception {
@@ -583,4 +585,46 @@ public class SplunkClientTest {
 
         assertEquals(input, client.createWindowsRegistryInput("Test", props));
     }
+
+    @Test
+    public void testModifyInputWithValidProperties() throws Exception {
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        doNothing().when(input).putAll(props);
+        doNothing().when(input).update();
+
+        assertEquals(input, client.modifyInput(input, props));
+    }
+
+    @Test
+    public void testModifyInputWithEmptyProperties() throws Exception {
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        try {
+            input = client.modifyInput(input, props);
+            fail("Should throw an error when modifying an input with empty properties");
+        } catch (Exception e) {
+            assertEquals("You must provide some properties to modify", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testModifyInputWithNullProperties() throws Exception {
+        HashMap<String, Object> props = null;
+        try {
+            input = client.modifyInput(input, props);
+            fail("Should throw an error when modifying an input with null properties");
+        } catch (Exception e) {
+            assertEquals("You must provide some properties to modify", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetInput() throws Exception {
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get("Test")).thenReturn(input);
+
+        assertEquals(input, client.getInput("Test"));
+    }
+
+
 }
