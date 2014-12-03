@@ -78,6 +78,13 @@ public class SplunkConnectorTest {
     }
 
     @Test
+    public void testGetDataModels() throws Exception {
+        DataModelCollection models = null;
+        when(client.getDataModels()).thenReturn(models);
+        assertEquals(models, connector.getDataModels());
+    }
+
+    @Test
     public void testGetJobs() throws Exception {
         List<Job> jobs = new ArrayList<Job>();
         when(client.getJobs()).thenReturn(jobs);
@@ -207,6 +214,184 @@ public class SplunkConnectorTest {
         doNothing().when(client).runExportSearch(anyString(), anyString(), anyString(), any(SearchMode.class), any(OutputMode.class), any(JobExportArgs.class), eq(cb));
         connector.runExportSearch("Test", "rt-10m", "rt", cb);
     }
+
+    @Test
+    public void testGetInputs() throws Exception {
+        InputCollection coll = null;
+        when(client.getInputs()).thenReturn(coll);
+        assertEquals(coll, connector.getInputs());
+    }
+
+    @Test
+    public void testCreateActiveDirectoryInputWithoutProperties() throws Exception {
+        WindowsActiveDirectoryInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createActiveDirectoryInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createActiveDirectoryInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateActiveDirectoryInputWithProperties() throws Exception {
+        WindowsActiveDirectoryInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createActiveDirectoryInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createActiveDirectoryInput("Test", props));
+    }
+
+    @Test
+    public void testCreateMonitorInputWithoutProperties() throws Exception {
+        MonitorInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createMonitorInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createMonitorInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateMonitorInputWithProperties() throws Exception {
+        MonitorInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createMonitorInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createMonitorInput("Test", props));
+    }
+
+    @Test
+    public void testCreateScriptInputWithoutProperties() throws Exception {
+        ScriptInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createScriptInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createScriptInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateScriptInputWithProperties() throws Exception {
+        ScriptInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createScriptInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createScriptInput("Test", props));
+    }
+
+    @Test
+    public void testCreateTcpCookedInputWithoutProperties() throws Exception {
+        TcpSplunkInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createTcpCookedInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createTcpCookedInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateTcpCookedInputWithProperties() throws Exception {
+        TcpSplunkInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createTcpCookedInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createTcpCookedInput("Test", props));
+    }
+
+    @Test
+    public void testCreateTcpRawInputWithoutProperties() throws Exception {
+        TcpInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createTcpRawInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createTcpRawInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateTcpRawInputWithProperties() throws Exception {
+        TcpInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createTcpRawInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createTcpRawInput("Test", props));
+    }
+
+    @Test
+    public void testCreateUdpInputWithoutProperties() throws Exception {
+        UdpInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createUdpInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createUdpInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateUdpInputWithProperties() throws Exception {
+        UdpInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createUdpInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createUdpInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsEventLogInputWithoutProperties() throws Exception {
+        WindowsEventLogInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createWindowsEventLogInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createWindowsEventLogInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateWindowsEventLogInputWithProperties() throws Exception {
+        WindowsEventLogInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createWindowsEventLogInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createWindowsEventLogInput("Test", props));
+    }
+
+    @Test
+    public void testCreatewindowsPerfmonInputWithoutProperties() throws Exception {
+        WindowsPerfmonInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createWindowsPerfmonInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createWindowsPerfmonInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateWindowsPerfmonInputWithProperties() throws Exception {
+        WindowsPerfmonInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createWindowsPerfmonInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createWindowsPerfmonInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsWmiInputWithoutProperties() throws Exception {
+        WindowsWmiInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createWindowsWmiInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createWindowsWmiInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateWindowsWmiInputWithProperties() throws Exception {
+        WindowsWmiInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createWindowsWmiInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createWindowsWmiInput("Test", props));
+    }
+
+    @Test
+    public void testCreateWindowsRegistryInputWithoutProperties() throws Exception {
+        WindowsRegistryInput input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createWindowsRegistryInput(anyString(), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, client.createWindowsRegistryInput("Test", nullProperties));
+    }
+
+    @Test
+    public void testCreateWindowsRegistryInputWithProperties() throws Exception {
+        WindowsRegistryInput input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createWindowsRegistryInput(anyString(), eq(props))).thenReturn(input);
+        assertEquals(input, client.createWindowsRegistryInput("Test", props));
+    }
+
 }
 
 

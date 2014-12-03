@@ -87,6 +87,10 @@
         <splunk:get-data-model config-ref="Splunk" dataModelName="#[flowVars.dataModelName]" doc:name="Splunk"/>
     </flow>
 
+    <flow name="get-data-models" doc:name="get-data-models">
+        <splunk:get-data-models config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
+
     <flow name="run-export-search" doc:name="run-export-search" initialState="stopped">
         <splunk:run-export-search config-ref="Splunk" searchQuery="search * | head 10" earliestTime="-20d"
                                   latestTime="now" doc:name="Splunk"/>
@@ -107,5 +111,60 @@
             </splunk:search-args>
         </splunk:run-normal-search>
         <vm:outbound-endpoint path="receive"/>
+    </flow>
+
+    <flow name="get-inputs" doc:name="get-inputs">
+        <splunk:get-inputs doc:name="Splunk"/>
+    </flow>
+
+    <flow name="create-active-directory-input" doc:name="create-active-directory-input">
+        <splunk:create-active-directory-input domainControllerName="#[flowVars.domainControllerName]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-active-directory-input>
+    </flow>
+    <flow name="create-monitor-input" doc:name="create-monitor-input">
+        <splunk:create-monitor-input monitorPath="#[flowVars.monitorPath]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-monitor-input>
+    </flow>
+    <flow name="create-script-input" doc:name="create-script-input">
+        <splunk:create-script-input scriptName="#[flowVars.scriptName]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-script-input>
+    </flow>
+    <flow name="create-tcp-cooked-input" doc:name="create-tcp-cooked-input">
+        <splunk:create-tcp-cooked-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-tcp-cooked-input>
+    </flow>
+    <flow name="create-tcp-raw-input" doc:name="create-tcp-raw-input">
+        <splunk:create-tcp-raw-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-tcp-raw-input>
+    </flow>
+    <flow name="create-udp-input" doc:name="create-udp-input">
+        <splunk:create-udp-input portNumber="#[flowVars.portNumber]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-udp-input>
+    </flow>
+    <flow name="create-windows-event-log-input" doc:name="create-windows-event-log-input">
+        <splunk:create-windows-event-log-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-windows-event-log-input>
+    </flow>
+    <flow name="create-windows-perfmon-input" doc:name="create-windows-perfmon-input">
+        <splunk:create-windows-perfmon-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-windows-perfmon-input>
+    </flow>
+    <flow name="create-windows-wmi-input" doc:name="create-windows-wmi-input">
+        <splunk:create-windows-wmi-input collectionName="#[flowVars.collectionName]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-windows-wmi-input>
+    </flow>
+    <flow name="create-windows-registry-input" doc:name="create-windows-registry-input">
+        <splunk:create-windows-registry-input configurationStanza="#[flowVars.configurationStanza]" doc:name="Splunk">
+            <splunk:properties ref="#[flowVars.properties]"/>
+        </splunk:create-windows-registry-input>
     </flow>
 </mule>

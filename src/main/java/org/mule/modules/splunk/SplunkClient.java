@@ -378,6 +378,14 @@ public class SplunkClient {
         return dataModelCollection.get(dataModelName);
     }
 
+    /**
+     * Retrieve all data models available to the user
+     *
+     * @return All Data Models available
+     */
+    public DataModelCollection getDataModels() {
+        return service.getDataModels();
+    }
 
     /**
      * Get the Service
@@ -623,6 +631,16 @@ public class SplunkClient {
     }
 
     /**
+     * Get the Collection of Inputs
+     *
+     * @return InputCollection of all inputs available to the user
+     */
+    public InputCollection getInputs() {
+        return service.getInputs();
+    }
+
+
+    /**
      * Convert the java key
      *
      * @param key - the String key to convert to the java convention (camelCase)
@@ -631,6 +649,167 @@ public class SplunkClient {
     protected String convertToJavaConvention(String key) {
         return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
     }
+
+    /**
+     * Creates a Windows Active Directory Input with a given AD Domain Controller Name
+     *
+     * @param domainControllerName The name of the domain controller
+     * @param properties           An Optional Key-Value Map of Properties to set
+     * @return A Windows Active Directory Input
+     */
+    public WindowsActiveDirectoryInput createActiveDirectoryInput(String domainControllerName, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(domainControllerName, InputKind.WindowsActiveDirectory, properties);
+        } else {
+            return myInputs.create(domainControllerName, InputKind.WindowsActiveDirectory);
+        }
+    }
+
+    /**
+     * Creates a Monitor Input
+     *
+     * @param monitorPath The filename or path to monitor
+     * @param properties  An optional Key-Value Map of Properties to set
+     * @return A Monitor Input
+     */
+    public MonitorInput createMonitorInput(String monitorPath, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(monitorPath, InputKind.Monitor, properties);
+        } else {
+            return myInputs.create(monitorPath, InputKind.Monitor);
+        }
+    }
+
+    /**
+     * Creates a Script Input
+     *
+     * @param scriptName The name of the script
+     * @param properties An optional Key-Value Map of Properties to set
+     * @return A Script Input
+     */
+    public ScriptInput createScriptInput(String scriptName, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(scriptName, InputKind.Script, properties);
+        } else {
+            return myInputs.create(scriptName, InputKind.Script);
+        }
+    }
+
+    /**
+     * Creates a TCP Cooked Input
+     *
+     * @param portNumber The port number
+     * @param properties An optional Key-Value Map of Properties to set
+     * @return A TCP Cooked Input
+     */
+    public TcpSplunkInput createTcpCookedInput(String portNumber, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(portNumber, InputKind.TcpSplunk, properties);
+        } else {
+            return myInputs.create(portNumber, InputKind.TcpSplunk);
+        }
+    }
+
+    /**
+     * Creates a TCP Raw Input
+     *
+     * @param portNumber The port number
+     * @param properties An optional Key-Value Map of Properties to set
+     * @return A TCP Raw Input
+     */
+    public TcpInput createTcpRawInput(String portNumber, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(portNumber, InputKind.Tcp, properties);
+        } else {
+            return myInputs.create(portNumber, InputKind.Tcp);
+        }
+    }
+
+    /**
+     * Creates a UDP Input
+     *
+     * @param portNumber The port number
+     * @param properties An optional Key-Value Map of Properties to set
+     * @return A UDP Input
+     */
+    public UdpInput createUdpInput(String portNumber, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(portNumber, InputKind.Udp, properties);
+        } else {
+            return myInputs.create(portNumber, InputKind.Udp);
+        }
+    }
+
+    /**
+     * Creates a Windows Event Log Input
+     *
+     * @param collectionName the Collection Name
+     * @param properties     An optional Key-Value Map of Properties to set
+     * @return A Windows Event Log Input
+     */
+    public WindowsEventLogInput createWindowsEventLogInput(String collectionName, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(collectionName, InputKind.WindowsEventLog, properties);
+        } else {
+            return myInputs.create(collectionName, InputKind.WindowsEventLog);
+        }
+    }
+
+    /**
+     * Creates a Windows Perfmon Input
+     *
+     * @param collectionName The Collection Name
+     * @param properties     An optional Key-Value Map of Properties to set
+     * @return A Windows Perfmon Input
+     */
+    public WindowsPerfmonInput createWindowsPerfmonInput(String collectionName, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(collectionName, InputKind.WindowsPerfmon, properties);
+        } else {
+            return myInputs.create(collectionName, InputKind.WindowsPerfmon);
+        }
+    }
+
+    /**
+     * Creates a Windows WMI Input
+     *
+     * @param collectionName The Collection Name
+     * @param properties     An optional Key-Value Map of Properties to set
+     * @return A WMI Input
+     */
+    public WindowsWmiInput createWindowsWmiInput(String collectionName, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(collectionName, InputKind.WindowsWmi, properties);
+        } else {
+            return myInputs.create(collectionName, InputKind.WindowsWmi);
+        }
+    }
+
+    /**
+     * Creates a Windows Registry Input
+     *
+     * @param configurationStanza The Name of the Configuration Stanza
+     * @param properties          An optional Key-Value Map of Properties to set
+     * @return A Windows Registry Input
+     */
+    public WindowsRegistryInput createWindowsRegistryInput(String configurationStanza, Map<String, Object> properties) {
+        InputCollection myInputs = service.getInputs();
+        if ((properties != null) && (!properties.isEmpty())) {
+            return myInputs.create(configurationStanza, InputKind.WindowsRegistry, properties);
+        } else {
+            return myInputs.create(configurationStanza, InputKind.WindowsRegistry);
+        }
+    }
+
 
 
 }

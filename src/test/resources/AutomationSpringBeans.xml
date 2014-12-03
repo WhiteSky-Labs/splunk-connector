@@ -192,6 +192,10 @@
               value-type="java.lang.Object">
         <entry key="dataModelName" value="internal_audit_logs"/>
     </util:map>
+    <!--getDataModels-->
+    <util:map id="getDataModelsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
+              value-type="java.lang.Object">
+    </util:map>
     <!--runExportSearch-->
     <util:map id="exportSearchArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
@@ -220,5 +224,130 @@
         <entry key="searchQuery" value="search index=_internal | head 10"/>
         <entry key="searchArgs" value-ref="normalSearchArgs"/>
     </util:map>
-
+    <!--getInputs-->
+    <util:map id="getInputsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
+              value-type="java.lang.Object">
+    </util:map>
+    <!-- createInputs -->
+    <util:map id="createInputArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="index" value="test_index"/>
+    </util:map>
+    <!--createActiveDirectoryInput-->
+    <util:map id="createActiveDirectoryInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="domainControllerName" value="Test-Domain-Controller"/>
+    </util:map>
+    <util:map id="createActiveDirectoryInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="domainControllerName" value="Test-Domain-Controller"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createMonitorInput-->
+    <util:map id="createMonitorInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="monitorPath" value="/var/syslog"/>
+    </util:map>
+    <util:map id="createMonitorInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="monitorPath" value="/var/syslog"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createScriptInput-->
+    <util:map id="createScriptInputTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="scriptName" value="test.sh"/>
+    </util:map>
+    <util:map id="createScriptInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="scriptName" value="test.sh"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createTcpCookedInput-->
+    <util:map id="createTcpCookedInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+    </util:map>
+    <util:map id="createTcpCookedInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createTcpRawInput-->
+    <util:map id="createTcpRawInputTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+    </util:map>
+    <util:map id="createTcpRawInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createUdpInput-->
+    <util:map id="createUdpInputTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+    </util:map>
+    <util:map id="createUdpInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="9191"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createWindowsEventLogInput-->
+    <util:map id="createWindowsEventLogInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+    </util:map>
+    <util:map id="createWindowsEventLogInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createWindowsPerfmonInput-->
+    <util:map id="createWindowsPerfmonInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+    </util:map>
+    <util:map id="createWindowsPerfmonInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createWindowsWmiInput-->
+    <util:map id="createWindowsWmiInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+    </util:map>
+    <util:map id="createWindowsWmiInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="collectionName" value="TestCollection"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
+    <!--createWindowsRegistryInput-->
+    <util:map id="createWindowsRegistryInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="configurationStanza" value="Test"/>
+    </util:map>
+    <util:map id="createWindowsRegistryInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="configurationStanza" value="Test"/>
+        <entry key="properties" value-ref="createInputArgs"/>
+    </util:map>
 </beans>
