@@ -72,9 +72,8 @@
     </splunk:modify-saved-search-properties>
 <!-- END_INCLUDE(splunk:modify-saved-search-properties) -->
 <!-- BEGIN_INCLUDE(splunk:modify-input) -->
-    <splunk:modify-input>
-        <splunk:input ref="#[payload.input]"/>
-        <splunk:properties ref="#[payload.properties]"/>
+    <splunk:modify-input inputIdentifier="#[payload.inputIdentifier]">
+        <splunk:input-args ref="#[payload.inputArgs]"/>
     </splunk:modify-input>
 <!-- END_INCLUDE(splunk:modify-input) -->
 <!-- BEGIN_INCLUDE(splunk:get-input) -->
@@ -91,9 +90,8 @@
     </splunk:create-index>
 <!-- END_INCLUDE(splunk:create-index) -->
 <!-- BEGIN_INCLUDE(splunk:modify-index) -->
-    <splunk:modify-index>
-        <splunk:index ref="#[payload.index]"/>
-        <splunk:properties ref="#[payload.properties]"/>
+    <splunk:modify-index indexName="#[payload.indexName]">
+        <splunk:index-args ref="#[payload.indexArgs]"/>
     </splunk:modify-index>
 <!-- END_INCLUDE(splunk:modify-index) -->
 <!-- BEGIN_INCLUDE(splunk:get-index) -->
@@ -104,7 +102,7 @@
 <!-- END_INCLUDE(splunk:clean-index) -->
 <!-- BEGIN_INCLUDE(splunk:add-data-to-index) -->
     <splunk:add-data-to-index indexName="#[payload.indexName]" stringData="#[payload.stringData]">
-        <splunk:args ref="#[payload.args]"/>
+        <splunk:index-args ref="#[payload.index-args]"/>
     </splunk:add-data-to-index>
 <!-- END_INCLUDE(splunk:add-data-to-index) -->
 <!-- BEGIN_INCLUDE(splunk:add-data-to-tcp-input) -->
@@ -115,9 +113,12 @@
 <!-- END_INCLUDE(splunk:add-data-to-udp-input) -->
 <!-- BEGIN_INCLUDE(splunk:create-input) -->
     <splunk:create-input inputIdentifier="#payload.inputIdentifier]" kind-ref="#[payload.kind]">
-        <splunk:properties ref="#[payload.properties]"/>
+        <splunk:args ref="#[payload.args]"/>
     </splunk:create-input>
 <!-- END_INCLUDE(splunk:create-input) -->
 <!-- BEGIN_INCLUDE(splunk:remove-input) -->
     <splunk:remove-input inputIdentifier="#[payload.inputIdentifier]"/>
 <!-- END_INCLUDE(splunk:remove-input) -->
+<!-- BEGIN_INCLUDE(splunk:remove-index) -->
+    <splunk:remove-index indexName="#[payload.indexName]"/>
+<!-- END_INCLUDE(splunk:remove-index) -->

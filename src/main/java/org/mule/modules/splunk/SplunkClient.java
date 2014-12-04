@@ -655,13 +655,13 @@ public class SplunkClient {
      *
      * @param inputIdentifier The name of the domain controller
      * @param kind The InputKind
-     * @param properties           An Optional Key-Value Map of Properties to set
+     * @param args An Optional Key-Value Map of Properties to set
      * @return An Input of that Kind
      */
-    public Input createInput(String inputIdentifier, InputKind kind, Map<String, Object> properties) {
+    public Input createInput(String inputIdentifier, InputKind kind, Map<String, Object> args) {
         InputCollection myInputs = service.getInputs();
-        if ((properties != null) && (!properties.isEmpty())) {
-            return myInputs.create(inputIdentifier, kind, properties);
+        if ((args != null) && (!args.isEmpty())) {
+            return myInputs.create(inputIdentifier, kind, args);
         } else {
             return myInputs.create(inputIdentifier, kind);
         }
@@ -670,15 +670,15 @@ public class SplunkClient {
     /**
      * Modifies an input with the properties supplied.
      *
-     * @param input      A Splunk Input to modify.
-     * @param properties The map of properties to update
+     * @param inputIdentifier      The identifier of the Input to modify
+     * @param inputArgs The map of properties to update
      * @return Returns the modified input.
      */
-    public Input modifyInput(Input input, Map<String, Object> properties) {
-        Validate.notNull(properties, "You must provide some properties to modify");
-        Validate.notEmpty(properties, "You must provide some properties to modify");
-        input.putAll(properties);
-        input.update();
+    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+        Validate.notNull(inputArgs, "You must provide some properties to modify");
+        Validate.notEmpty(inputArgs, "You must provide some properties to modify");
+        Input input = service.getInputs().get(inputIdentifier);
+        input.update(inputArgs);
         return input;
     }
 
@@ -736,15 +736,15 @@ public class SplunkClient {
     /**
      * Modifies an index with the properties supplied.
      *
-     * @param index      A Splunk Index to modify.
-     * @param properties The map of properties to update
+     * @param indexName  A Splunk Index to modify.
+     * @param indexArgs The map of arguments to update
      * @return Returns the modified index.
      */
-    public Index modifyIndex(Index index, Map<String, Object> properties) {
-        Validate.notNull(properties, "You must provide some properties to modify");
-        Validate.notEmpty(properties, "You must provide some properties to modify");
-        index.putAll(properties);
-        index.update();
+    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+        Validate.notNull(indexArgs, "You must provide some properties to modify");
+        Validate.notEmpty(indexArgs, "You must provide some properties to modify");
+        Index index = service.getIndexes().get(indexName);
+        index.update(indexArgs);
         return index;
     }
 
@@ -755,12 +755,16 @@ public class SplunkClient {
      * @return The Index specified.
      */
     public Index getIndex(String indexIdentifier) {
-        return service.getIndexes().get(indexIdentifier);
+        IndexCollection coll = service.getIndexes();
+
+        Index index = coll.get(indexIdentifier);
+        return index;
     }
 
     /**
      * Clean the index, which removes all events from it
      *
+     * @param indexName The name of the index to clean
      * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
      * @return the cleaned index
      */
@@ -776,14 +780,14 @@ public class SplunkClient {
      *
      * @param indexName  The name of the index to update
      * @param stringData The data string to send
-     * @param args       Optional map of arguments to apply to the update
+     * @param indexArgs Optional map of arguments to apply to the update
      * @return The index that has been updated
      */
-    public Index addDataToIndex(String indexName, String stringData, Map<String, Object> args) {
+    public Index addDataToIndex(String indexName, String stringData, Map<String, Object> indexArgs) {
         Index index = service.getIndexes().get(indexName);
-        if (args != null && !args.isEmpty()) {
+        if (indexArgs != null && !indexArgs.isEmpty()) {
             Args eventArgs = new Args();
-            eventArgs.putAll(args);
+            eventArgs.putAll(indexArgs);
             index.submit(eventArgs, stringData);
         } else {
             index.submit(stringData);
@@ -800,7 +804,8 @@ public class SplunkClient {
      * @return The TcpInput
      */
     public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
-        TcpInput input = (TcpInput) service.getInputs().get(portNumber);
+        InputCollection coll = service.getInputs();
+        TcpInput input = (TcpInput) coll.get(portNumber);
         try {
             input.submit(stringData);
         } catch (IOException e) {
@@ -838,5 +843,20 @@ public class SplunkClient {
         Input input = service.getInputs().get(inputIdentifier);
         input.remove();
         return input;
+    }
+
+    /**
+     * Remove an index
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
+     *
+     * @param indexName The name of the index to remove
+     * @return the Index that was removed
+     */
+    public Index removeIndex(String indexName) {
+        IndexCollection coll = service.getIndexes();
+        Index index = coll.get(indexName);
+        index.remove();
+        return index;
     }
 }

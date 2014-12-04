@@ -244,26 +244,36 @@
               value-type="java.lang.Object">
         <entry key="inputIdentifier" value="Test"/>
         <entry key="kind" value="Tcp"/>
-        <entry key="properties" value-ref="createInputArgs"/>
+        <entry key="args" value-ref="createInputArgs"/>
     </util:map>
     <!--modifyInput-->
+    <util:map id="invalidModifyInputArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="invalid" value="not valid"/>
+    </util:map>
+    <util:map id="modifyInputArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="rawTcpDoneTimeout" value="60"/>
+    </util:map>
     <util:map id="modifyInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="input" value="Placeholder"/>
-        <entry key="properties" value-ref="createInputArgs"/>
+        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="inputArgs" value-ref="modifyInputArgs"/>
+    </util:map>
+    <util:map id="modifyInputWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="inputArgs" value-ref="invalidModifyInputArgs"/>
     </util:map>
     <!--getInput-->
     <util:map id="getInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="/var/syslog"/>
+        <entry key="inputIdentifier" value="9906"/>
     </util:map>
     <!--getIndexes-->
-    <util:map id="validCollectionParameters" map-class="java.util.HashMap"
-              key-type="java.lang.String" value-type="java.lang.Object">
-        <entry key="assureUTF8" value="true"/>
-    </util:map>
     <util:map id="invalidCollectionParameters" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="invalidparameter" value="true"/>
@@ -278,7 +288,6 @@
               value-type="java.lang.Object">
         <entry key="sortKey" value="totalEventCount"/>
         <entry key="sortDirection" value="DESC"/>
-        <entry key="collectionParameters" value-ref="validCollectionParameters"/>
     </util:map>
     <util:map id="getIndexesWithInvalidParametersTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
@@ -293,17 +302,115 @@
         <entry key="sortKey" value="totalEventCount"/>
         <entry key="sortDirection" value="NOTHING"/>
     </util:map>
-    <util:map id="getIndexesWithInvalidSortKeyTestData" key-type="java.lang.String" map-class="java.util.HashMap"
-              scope="prototype"
-              value-type="java.lang.Object">
-        <entry key="sortKey" value="Invalid"/>
-    </util:map>
-
 
     <!-- removeInputTestData -->
     <util:map id="removeInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
         <entry key="inputIdentifier" value="9192"/>
+    </util:map>
+
+    <!-- createIndexTestData -->
+    <util:map id="createIndexArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="maxDataSize" value="750"/>
+    </util:map>
+    <util:map id="invalidCreateIndexArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="Invalid" value="true"/>
+    </util:map>
+
+    <util:map id="createIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value-ref="randomShortString"/>
+    </util:map>
+    <util:map id="createIndexWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="IntegrationTestIndex"/>
+        <entry key="args" value-ref="createIndexArgs"/>
+    </util:map>
+    <util:map id="createIndexWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="args" value-ref="invalidCreateIndexArgs"/>
+    </util:map>
+
+    <!-- removeIndexTestData -->
+    <util:map id="removeIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="TestIndex"/>
+    </util:map>
+
+    <!-- getIndexTestData -->
+    <util:map id="getIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexIdentifier" value="TestIndex"/>
+    </util:map>
+
+    <!--modifyIndex-->
+    <util:map id="invalidModifyIndexArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="invalid" value="not valid"/>
+    </util:map>
+    <util:map id="modifyIndexArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="maxDataSize" value="750"/>
+    </util:map>
+    <util:map id="modifyIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="Placeholder"/>
+        <entry key="indexArgs" value-ref="modifyIndexArgs"/>
+    </util:map>
+    <util:map id="modifyIndexWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="Placeholder"/>
+        <entry key="indexArgs" value-ref="invalidModifyIndexArgs"/>
+    </util:map>
+    <!-- getIndexTestData -->
+    <util:map id="cleanIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="TestIndex"/>
+        <entry key="maxSeconds" value="180"/>
+    </util:map>
+    <!-- addDataToIndexTestData -->
+    <util:map id="addDataToIndexArgs" map-class="java.util.HashMap"
+              key-type="java.lang.String" value-type="java.lang.Object">
+        <entry key="maxDataSize" value="750"/>
+    </util:map>
+
+    <util:map id="addDataToIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="TestIndex"/>
+        <entry key="stringData" value="Testing Data"/>
+    </util:map>
+    <util:map id="addDataToIndexWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="indexName" value="TestIndex"/>
+        <entry key="stringData" value="Testing Data"/>
+        <entry key="indexArgs" value-ref="addDataToIndexArgs"/>
+    </util:map>
+    <!-- addDataToTcpInputTestData -->
+    <util:map id="addDataToTcpInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="TestIndex"/>
+        <entry key="stringData" value="Testing Data"/>
+    </util:map>
+    <!-- addDataToUdpInputTestData -->
+    <util:map id="addDataToUdpInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
+              scope="prototype"
+              value-type="java.lang.Object">
+        <entry key="portNumber" value="TestIndex"/>
+        <entry key="stringData" value="Testing Data"/>
     </util:map>
 </beans>

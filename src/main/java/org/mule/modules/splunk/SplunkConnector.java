@@ -390,12 +390,12 @@ public class SplunkConnector {
      *
      * @param inputIdentifier The name of the domain controller
      * @param kind The InputKind
-     * @param properties           An Optional Key-Value Map of Properties to set
+     * @param args           An Optional Key-Value Map of Properties to set
      * @return An Input of that Kind
      */
     @Processor
-    public Input createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> properties) {
-        return splunkClient.createInput(inputIdentifier, kind, properties);
+    public Input createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) {
+        return splunkClient.createInput(inputIdentifier, kind, args);
     }
 
     /**
@@ -403,13 +403,13 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-input}
      *
-     * @param input      A Splunk Input to modify.
-     * @param properties The map of properties to update
+     * @param inputIdentifier      A Splunk Input to modify.
+     * @param inputArgs The map of properties to update
      * @return Returns the modified input.
      */
     @Processor
-    public Input modifyInput(Input input, Map<String, Object> properties) {
-        return splunkClient.modifyInput(input, properties);
+    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+        return splunkClient.modifyInput(inputIdentifier, inputArgs);
     }
 
     /**
@@ -459,13 +459,13 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-index}
      *
-     * @param index      A Splunk Index to modify.
-     * @param properties The map of properties to update
+     * @param indexName      A Splunk Index to modify.
+     * @param indexArgs The map of properties to update
      * @return Returns the modified index.
      */
     @Processor
-    public Index modifyIndex(Index index, Map<String, Object> properties) {
-        return splunkClient.modifyIndex(index, properties);
+    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+        return splunkClient.modifyIndex(indexName, indexArgs);
     }
 
     /**
@@ -503,12 +503,12 @@ public class SplunkConnector {
      *
      * @param indexName  The name of the index to update
      * @param stringData The data string to send
-     * @param args       Optional map of arguments to apply to the update
+     * @param indexArgs Optional map of arguments to apply to the update
      * @return The index that has been updated
      */
     @Processor
-    public Index addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> args) {
-        return splunkClient.addDataToIndex(indexName, stringData, args);
+    public Index addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> indexArgs) {
+        return splunkClient.addDataToIndex(indexName, stringData, indexArgs);
     }
 
     /**
@@ -552,6 +552,19 @@ public class SplunkConnector {
     @Processor
     public Input removeInput(String inputIdentifier) {
         return splunkClient.removeInput(inputIdentifier);
+    }
+
+    /**
+     * Remove an index
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
+     *
+     * @param indexName The name of the index to remove
+     * @return the Index that was removed
+     */
+    @Processor
+    public Index removeIndex(String indexName) {
+        return splunkClient.removeIndex(indexName);
     }
 
     /**

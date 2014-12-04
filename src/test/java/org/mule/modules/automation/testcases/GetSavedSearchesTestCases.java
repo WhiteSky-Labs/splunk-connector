@@ -61,15 +61,7 @@ public class GetSavedSearchesTestCases
             Object result = runFlowAndGetPayload("get-saved-searches");
             assertNotNull(result);
             List<SavedSearch> savedSearchList = (List<SavedSearch>) result;
-            boolean foundTestSearch = false;
-            for (SavedSearch savedSearch : savedSearchList) {
-                assertTrue(savedSearch.getName().length() > 0);
-                if (savedSearch.getName().equalsIgnoreCase(searchName)) {
-                    foundTestSearch = true;
-                }
-            }
             assertTrue(savedSearchList.size() > 0);
-            assertTrue("Must be able to detect created Saved Search", foundTestSearch);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

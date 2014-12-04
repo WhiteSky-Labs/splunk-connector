@@ -230,7 +230,7 @@ public class SplunkConnectorTest {
         Input input = null;
         HashMap<String, Object> nullProperties = null;
         when(client.createInput(anyString(), any(InputKind.class), eq(nullProperties))).thenReturn(input);
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, nullProperties));
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, nullProperties));
     }
 
     @Test
@@ -239,7 +239,7 @@ public class SplunkConnectorTest {
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
         when(client.createInput(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, props));
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, props));
     }
 
     @Test
@@ -247,21 +247,21 @@ public class SplunkConnectorTest {
         Input input = null;
         HashMap<String, Object> props = new HashMap<String, Object>();
         when(client.createInput(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, props));
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, props));
     }
 
     @Test
     public void testGetInput() throws Exception {
         Input input = null;
         when(client.getInput(anyString())).thenReturn(input);
-        assertEquals(input, client.getInput("Test"));
+        assertEquals(input, connector.getInput("Test"));
     }
 
     @Test
     public void testModifyInput() throws Exception {
         Input input = null;
-        when(client.modifyInput(eq(input), anyMap())).thenReturn(input);
-        assertEquals(input, client.modifyInput(input, new HashMap<String, Object>()));
+        when(client.modifyInput(anyString(), anyMap())).thenReturn(input);
+        assertEquals(input, connector.modifyInput("Test", new HashMap<String, Object>()));
     }
 
     @Test
@@ -323,8 +323,8 @@ public class SplunkConnectorTest {
     @Test
     public void testModifyIndex() throws Exception {
         Index index = null;
-        when(client.modifyIndex(eq(index), anyMap())).thenReturn(index);
-        assertEquals(index, connector.modifyIndex(index, new HashMap<String, Object>()));
+        when(client.modifyIndex(anyString(), anyMap())).thenReturn(index);
+        assertEquals(index, connector.modifyIndex("Test", new HashMap<String, Object>()));
     }
 
     @Test
@@ -362,6 +362,13 @@ public class SplunkConnectorTest {
         Input input = null;
         when(client.removeInput(anyString())).thenReturn(input);
         assertEquals(input, connector.removeInput("Test"));
+    }
+
+    @Test
+    public void testRemoveIndex() throws Exception {
+        Index index = null;
+        when(client.removeIndex(anyString())).thenReturn(index);
+        assertEquals(index, connector.removeIndex("Test"));
     }
 
 }

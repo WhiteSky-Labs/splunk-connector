@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 
 public class CreateInputsTestCases extends SplunkTestParent {
 
-    private String tcpRawPort = "9292";
+    private String tcpRawPort = "9293";
     private String tcpCookedPort = "9112";
     private String udpPort = "9113";
     private String monitor = "/tmp";

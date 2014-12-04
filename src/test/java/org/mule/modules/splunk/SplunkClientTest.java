@@ -423,18 +423,23 @@ public class SplunkClientTest {
     @Test
     public void testModifyInputWithValidProperties() throws Exception {
         HashMap<String, Object> props = new HashMap<String, Object>();
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(input);
         props.put("index", "text_index");
         doNothing().when(input).putAll(props);
         doNothing().when(input).update();
 
-        assertEquals(input, client.modifyInput(input, props));
+        assertEquals(input, client.modifyInput("Test", props));
     }
 
     @Test
     public void testModifyInputWithEmptyProperties() throws Exception {
         HashMap<String, Object> props = new HashMap<String, Object>();
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(input);
+
         try {
-            input = client.modifyInput(input, props);
+            input = client.modifyInput("Test", props);
             fail("Should throw an error when modifying an input with empty properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -444,8 +449,11 @@ public class SplunkClientTest {
     @Test
     public void testModifyInputWithNullProperties() throws Exception {
         HashMap<String, Object> props = null;
+        when(service.getInputs()).thenReturn(coll);
+        when(coll.get(anyString())).thenReturn(input);
+
         try {
-            input = client.modifyInput(input, props);
+            input = client.modifyInput("Test", props);
             fail("Should throw an error when modifying an input with null properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -515,17 +523,21 @@ public class SplunkClientTest {
     public void testModifyIndexWithValidProperties() throws Exception {
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("assureUTF8", "true");
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
         doNothing().when(index).putAll(props);
         doNothing().when(index).update();
 
-        assertEquals(index, client.modifyIndex(index, props));
+        assertEquals(index, client.modifyIndex("Test", props));
     }
 
     @Test
     public void testModifyIndexWithEmptyProperties() throws Exception {
         HashMap<String, Object> props = new HashMap<String, Object>();
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
         try {
-            index = client.modifyIndex(index, props);
+            index = client.modifyIndex("Test", props);
             fail("Should throw an error when modifying an index with empty properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -535,8 +547,11 @@ public class SplunkClientTest {
     @Test
     public void testModifyIndexWithNullProperties() throws Exception {
         HashMap<String, Object> props = null;
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
+
         try {
-            index = client.modifyIndex(index, props);
+            index = client.modifyIndex("Test", props);
             fail("Should throw an error when modifying an index with null properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -667,4 +682,13 @@ public class SplunkClientTest {
         when(input.remove(anyString())).thenReturn(input);
         assertEquals(input, client.removeInput("Test"));
     }
+
+    @Test
+    public void testRemoveIndex() throws Exception {
+        when(service.getIndexes()).thenReturn(indexCollection);
+        when(indexCollection.get(anyString())).thenReturn(index);
+        when(index.remove(anyString())).thenReturn(index);
+        assertEquals(index, client.removeIndex("Test"));
+    }
+
 }

@@ -119,15 +119,19 @@
 
     <flow name="create-input" doc:name="create-input">
         <splunk:create-input inputIdentifier="#[flowVars.inputIdentifier]" kind-ref="#[flowVars.kind]">
-            <splunk:properties ref="#[flowVars.properties]"/>
+            <splunk:args ref="#[flowVars.args]"/>
         </splunk:create-input>
     </flow>
 
     <flow name="modify-input" doc:name="modify-input">
-        <splunk:modify-input doc:name="Splunk">
-            <splunk:input ref="#[flowVars.input]"/>
-            <splunk:properties ref="#[flowVars.properties]"/>
+        <splunk:modify-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk">
+            <splunk:input-args ref="#[flowVars.inputArgs]"/>
         </splunk:modify-input>
+    </flow>
+    <flow name="modify-index" doc:name="modify-index">
+        <splunk:modify-index indexName="#[flowVars.indexName]" doc:name="Splunk">
+            <splunk:index-args ref="#[flowVars.indexArgs]"/>
+        </splunk:modify-index>
     </flow>
     <flow name="get-input" doc:name="get-input">
         <splunk:get-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
@@ -139,6 +143,35 @@
     </flow>
     <flow name="remove-input" doc:name="remove-input">
         <splunk:remove-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
+    </flow>
+    <flow name="remove-index" doc:name="remove-index">
+        <splunk:remove-index indexName="#[flowVars.indexName]" doc:name="Splunk"/>
+    </flow>
+
+    <flow name="create-index" doc:name="create-index">
+        <splunk:create-index indexName="#[flowVars.indexName]" doc:name="Splunk">
+            <splunk:args ref="#[flowVars.args]"/>
+        </splunk:create-index>
+    </flow>
+    <flow name="get-index" doc:name="get-index">
+        <splunk:get-index indexIdentifier="#[flowVars.indexIdentifier]" doc:name="Splunk"/>
+    </flow>
+    <flow name="clean-index" doc:name="clean-index">
+        <splunk:clean-index indexName="#[flowVars.indexName]" maxSeconds="#[flowVars.maxSeconds]" doc:name="Splunk"/>
+    </flow>
+    <flow name="add-data-to-index" doc:name="add-data-to-index">
+        <splunk:add-data-to-index indexName="#[flowVars.indexName]" stringData="#[flowVars.stringData]"
+                                  doc:name="Splunk">
+            <splunk:index-args ref="#[flowVars.indexArgs]"/>
+        </splunk:add-data-to-index>
+    </flow>
+    <flow name="add-data-to-tcp-input" doc:name="add-data-to-tcp-input">
+        <splunk:add-data-to-tcp-input portNumber="#[flowVars.portNumber]" stringData="#[flowVars.stringData]"
+                                      doc:name="Splunk"/>
+    </flow>
+    <flow name="add-data-to-udp-input" doc:name="add-data-to-udp-input">
+        <splunk:add-data-to-udp-input portNumber="#[flowVars.portNumber]" stringData="#[flowVars.stringData]"
+                                      doc:name="Splunk"/>
     </flow>
 </mule>
 
