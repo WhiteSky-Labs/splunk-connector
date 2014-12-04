@@ -78,6 +78,8 @@ public class SplunkClientTest {
     TcpInput tcpInput;
     @Mock
     UdpInput udpInput;
+    @Mock
+    HttpException httpException;
 
     @Before
     public void setUp() throws Exception {
@@ -101,7 +103,6 @@ public class SplunkClientTest {
     @Test
     public void testCreateSavedSearch() throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("Test", "Test");
 
         when(searchCollection.create("Unit Testing", "Search * | head 100")).thenReturn(search);
         when(searchCollection.create("Unit Testing", "Search * | head 100", map)).thenReturn(search);
@@ -109,7 +110,11 @@ public class SplunkClientTest {
 
         assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
         assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", null));
+        map.put("Test", "Test");
+        when(searchCollection.create("Unit Testing", "Search * | head 100", map)).thenReturn(search);
+        assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
     }
+
 
     @Test
     public void testDeleteSavedSearch() throws Exception {
@@ -119,6 +124,16 @@ public class SplunkClientTest {
         when(service.getSavedSearches()).thenReturn(searchCollection);
         assertEquals(result, client.deleteSavedSearch("Test"));
     }
+
+    @Test
+    public void testDeleteSavedSearchWithException() throws Exception {
+        boolean result = false;
+        doThrow(httpException).when(search).remove();
+        when(searchCollection.get("Test")).thenReturn(search);
+        when(service.getSavedSearches()).thenReturn(searchCollection);
+        assertEquals(result, client.deleteSavedSearch("Test"));
+    }
+
 
     @Test
     public void testGetDataModel() throws Exception {
@@ -149,6 +164,52 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testGetSavedSearchesWithApp() throws Exception {
+        ServiceArgs namespace = new ServiceArgs();
+        namespace.setApp("Test");
+        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
+        SavedSearch search = null;
+        savedSearches.add(search);
+
+        when(searchCollection.values()).thenReturn(savedSearches);
+
+        assertEquals(savedSearches, client.getSavedSearches("Test", null));
+    }
+
+
+    @Test
+    public void testGetSavedSearchesWithOwner() throws Exception {
+        ServiceArgs namespace = new ServiceArgs();
+        namespace.setOwner("Test");
+        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
+        SavedSearch search = null;
+        savedSearches.add(search);
+
+        when(searchCollection.values()).thenReturn(savedSearches);
+
+        assertEquals(savedSearches, client.getSavedSearches(null, "Test"));
+    }
+
+    @Test
+    public void testGetSavedSearchesWithNameSpace() throws Exception {
+        ServiceArgs namespace = new ServiceArgs();
+        namespace.setApp("Test");
+        namespace.setOwner("Test");
+        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
+        SavedSearch search = null;
+        savedSearches.add(search);
+
+        when(searchCollection.values()).thenReturn(savedSearches);
+
+        assertEquals(savedSearches, client.getSavedSearches("Test", "Test"));
+    }
+
+
+
+    @Test
     public void testGetSavedSearchHistory() throws Exception {
         List<Job> jobs = new ArrayList<Job>();
         Job[] history = new Job[0];
@@ -167,6 +228,7 @@ public class SplunkClientTest {
         when(search.history()).thenReturn(history);
         assertEquals(jobs, client.getSavedSearchHistory("Test", "search", "admin"));
         assertEquals(jobs, client.getSavedSearchHistory(null, null, null));
+        assertEquals(jobs, client.getSavedSearchHistory("", null, null));
     }
 
     @Test
@@ -202,6 +264,30 @@ public class SplunkClientTest {
         assertEquals(searchResponse, client.runBlockingSearch("Test", null));
     }
 
+    @Test
+    public void testRunBlockingSearchWithArgsTestCase() throws Exception {
+
+        Map<String, Object> searchResponse = new HashMap<String, Object>();
+        Job job = null;
+        List<Map<String, Object>> eventResponse = new ArrayList<Map<String, Object>>();
+        searchResponse.put("job", job);
+        searchResponse.put("events", eventResponse);
+
+        JobResultsArgs resultsArgs = new JobResultsArgs();
+        resultsArgs.setOutputMode(JobResultsArgs.OutputMode.JSON);
+
+        JobArgs jobArgs = new JobArgs();
+
+        when(service.getJobs()).thenReturn(jobs);
+        when(jobs.create(anyString(), any(JobArgs.class))).thenReturn(job);
+        doReturn(eventResponse).when(client).populateEventResponse(null);
+
+        Map<String, Object> validArgs = new HashMap<String, Object>();
+        validArgs.put("auto_cancel", "60");
+
+        assertEquals(searchResponse, client.runBlockingSearch("Test", new HashMap<String, Object>()));
+        assertEquals(searchResponse, client.runBlockingSearch("Test", validArgs));
+    }
 
     @Test
     public void testRunOneShotSearch() throws Exception {
@@ -260,12 +346,15 @@ public class SplunkClientTest {
 
         when(searchCollection.get("Test")).thenReturn(search);
         when(service.getSavedSearches()).thenReturn(searchCollection);
-        when(search.dispatch(searchArgs)).thenReturn(job);
+        when(search.dispatch(any(SavedSearchDispatchArgs.class))).thenReturn(job);
         when(job.isDone()).thenReturn(true);
 
         doReturn(searchResult).when(client).populateEventResponse(job);
 
         assertEquals(searchResult, client.runSavedSearchWithArguments("Test", customArgs, searchArgs));
+        assertEquals(searchResult, client.runSavedSearchWithArguments("Test", null, searchArgs));
+        assertEquals(searchResult, client.runSavedSearchWithArguments("Test", customArgs, null));
+        assertEquals(searchResult, client.runSavedSearchWithArguments("Test", null, null));
     }
 
     @Test
@@ -282,6 +371,19 @@ public class SplunkClientTest {
         when(search.entrySet()).thenReturn(results.entrySet());
 
         assertEquals(results.entrySet(), client.viewSavedSearchProperties("Test", "search", "admin"));
+    }
+
+    @Test
+    public void testViewSavedSearchPropertiesWithoutNamespace() throws Exception {
+        Map<String, Object> results = new HashMap<String, Object>();
+        results.put("Result 1", "Test");
+        results.put("Result 2", "Test 2");
+
+        when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
+        when(searchCollection.get("Test")).thenReturn(search);
+        when(search.entrySet()).thenReturn(results.entrySet());
+
+        assertEquals(results.entrySet(), client.viewSavedSearchProperties("Test", null, null));
     }
 
     @Test
@@ -490,6 +592,22 @@ public class SplunkClientTest {
     }
 
     @Test
+    public void testGetIndexesWithEmptyParameters() throws Exception {
+        IndexCollection indexes = null;
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("assureUTF8", "true");
+        IndexCollectionArgs args = new IndexCollectionArgs();
+        args.setSortDirection(CollectionArgs.SortDirection.DESC);
+        args.setSortKey("");
+        args.putAll(params);
+
+        when(service.getIndexes(args)).thenReturn(indexes);
+        assertEquals(indexes, client.getIndexes("", CollectionArgs.SortDirection.DESC, params));
+        params = new HashMap<String, Object>();
+        assertEquals(indexes, client.getIndexes("", CollectionArgs.SortDirection.DESC, params));
+    }
+
+    @Test
     public void testCreateIndex() throws Exception {
         Index index = null;
 
@@ -689,6 +807,11 @@ public class SplunkClientTest {
         when(indexCollection.get(anyString())).thenReturn(index);
         when(index.remove(anyString())).thenReturn(index);
         assertEquals(index, client.removeIndex("Test"));
+    }
+
+    @Test
+    public void testGetService() throws Exception {
+        assertEquals(service, client.getService());
     }
 
 }

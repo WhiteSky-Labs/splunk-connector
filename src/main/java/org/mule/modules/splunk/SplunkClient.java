@@ -283,6 +283,9 @@ public class SplunkClient {
                                                                  SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
+        if (searchDispatchArgs == null) {
+            searchDispatchArgs = new SavedSearchDispatchArgs();
+        }
         if (customArgs != null) {
             String queryParams = "";
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
@@ -755,10 +758,7 @@ public class SplunkClient {
      * @return The Index specified.
      */
     public Index getIndex(String indexIdentifier) {
-        IndexCollection coll = service.getIndexes();
-
-        Index index = coll.get(indexIdentifier);
-        return index;
+        return service.getIndexes().get(indexIdentifier);
     }
 
     /**
