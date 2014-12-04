@@ -321,6 +321,19 @@ public class SplunkConnector {
     }
 
     /**
+     * Get all data models
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-data-models}
+     *
+     * @return All DataModels available to the user
+     */
+    @Processor
+    public DataModelCollection getDataModels() {
+        return splunkClient.getDataModels();
+    }
+
+
+    /**
      * Run a realtime search and process the response
      * returns via a sourcecallback
      * <p/>
@@ -356,6 +369,202 @@ public class SplunkConnector {
     @Source
     public void runExportSearch(String searchQuery, @Default("-1h") String earliestTime, @Default("now") String latestTime, final SourceCallback callback) throws SplunkConnectorException {
         splunkClient.runExportSearch(searchQuery, earliestTime, latestTime, SearchMode.NORMAL, OutputMode.JSON, null, callback);
+    }
+
+    /**
+     * Get Inputs returns an InputCollection of possible inputs to use with Splunk
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-inputs}
+     *
+     * @return InputCollection of Inputs available to the user
+     */
+    @Processor
+    public InputCollection getInputs() {
+        return splunkClient.getInputs();
+    }
+
+    /**
+     * Creates an Input with a given identifier and kind
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-input}
+     *
+     * @param inputIdentifier The name of the domain controller
+     * @param kind The InputKind
+     * @param args           An Optional Key-Value Map of Properties to set
+     * @return An Input of that Kind
+     */
+    @Processor
+    public Input createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) {
+        return splunkClient.createInput(inputIdentifier, kind, args);
+    }
+
+    /**
+     * Modifies an input with the properties supplied.
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-input}
+     *
+     * @param inputIdentifier      A Splunk Input to modify.
+     * @param inputArgs The map of properties to update
+     * @return Returns the modified input.
+     */
+    @Processor
+    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+        return splunkClient.modifyInput(inputIdentifier, inputArgs);
+    }
+
+    /**
+     * Retrieves an Input with the given identifier
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-input}
+     *
+     * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
+     * @return The Input specified.
+     */
+    @Processor
+    public Input getInput(String inputIdentifier) {
+        return splunkClient.getInput(inputIdentifier);
+    }
+
+    /**
+     * Retrieves a collection of indexes based on the criteria provided
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-indexes}
+     *
+     * @param sortKey              The Key to sort by
+     * @param sortDirection        The SortDirection to sort by
+     * @param collectionParameters Optional Map of additional arguments to pass to the call
+     * @return IndexCollection of indexes
+     */
+    @Processor
+    public IndexCollection getIndexes(@Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection, @Optional Map<String, Object> collectionParameters) {
+        return splunkClient.getIndexes(sortKey, sortDirection, collectionParameters);
+    }
+
+    /**
+     * Creates an Index with optional arguments
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:create-index}
+     *
+     * @param indexName The name of the index to create
+     * @param args      Optional key-value pairs of arguments to apply on creation
+     * @return the new Index
+     */
+    @Processor
+    public Index createIndex(String indexName, @Optional Map<String, Object> args) {
+        return splunkClient.createIndex(indexName, args);
+    }
+
+    /**
+     * Modifies an index with the properties supplied.
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:modify-index}
+     *
+     * @param indexName      A Splunk Index to modify.
+     * @param indexArgs The map of properties to update
+     * @return Returns the modified index.
+     */
+    @Processor
+    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+        return splunkClient.modifyIndex(indexName, indexArgs);
+    }
+
+    /**
+     * Retrieves an Index with the given identifier
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-index}
+     *
+     * @param indexIdentifier The identifier of the index
+     * @return The Index specified.
+     */
+    @Processor
+    public Index getIndex(String indexIdentifier) {
+        return splunkClient.getIndex(indexIdentifier);
+    }
+
+    /**
+     * Clean the index, which removes all events from it
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:clean-index}
+     *
+     * @param indexName  The name of the index to clean
+     * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
+     * @return the cleaned index
+     */
+    @Processor
+    public Index cleanIndex(String indexName, @Default("180") int maxSeconds) {
+        return splunkClient.cleanIndex(indexName, maxSeconds);
+    }
+
+
+    /**
+     * Add data to an index without an input, using HTTP to submit a string
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-index}
+     *
+     * @param indexName  The name of the index to update
+     * @param stringData The data string to send
+     * @param indexArgs Optional map of arguments to apply to the update
+     * @return The index that has been updated
+     */
+    @Processor
+    public Index addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> indexArgs) {
+        return splunkClient.addDataToIndex(indexName, stringData, indexArgs);
+    }
+
+    /**
+     * Add data to a Tcp Input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-tcp-input}
+     *
+     * @param portNumber The port number to send data on
+     * @param stringData The data to send
+     * @return The TcpInput that was used
+     * @throws SplunkConnectorException when cannot connect to the port
+     */
+    @Processor
+    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        return splunkClient.addDataToTcpInput(portNumber, stringData);
+    }
+
+    /**
+     * Add data to a Udp Input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:add-data-to-udp-input}
+     *
+     * @param portNumber The port number to send data on
+     * @param stringData The data to send
+     * @return The UdpInput that was used
+     * @throws SplunkConnectorException when cannot connect to the port
+     */
+    @Processor
+    public UdpInput addDataToUdpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        return splunkClient.addDataToUdpInput(portNumber, stringData);
+    }
+
+    /**
+     * Remove an input
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-input}
+     *
+     * @param inputIdentifier the identifier, for example the port number
+     * @return The Input Object that was removed for verification
+     */
+    @Processor
+    public Input removeInput(String inputIdentifier) {
+        return splunkClient.removeInput(inputIdentifier);
+    }
+
+    /**
+     * Remove an index
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
+     *
+     * @param indexName The name of the index to remove
+     * @return the Index that was removed
+     */
+    @Processor
+    public Index removeIndex(String indexName) {
+        return splunkClient.removeIndex(indexName);
     }
 
     /**

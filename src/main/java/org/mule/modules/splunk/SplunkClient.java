@@ -283,18 +283,23 @@ public class SplunkClient {
                                                                  SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
+        SavedSearchDispatchArgs notNullSearchDispatchArgs = new SavedSearchDispatchArgs();
+
+        if (searchDispatchArgs != null) {
+            notNullSearchDispatchArgs.putAll(searchDispatchArgs);
+        }
         if (customArgs != null) {
             String queryParams = "";
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
                 queryParams += " " + key + "=$args." + key + "$";
-                searchDispatchArgs.add("args." + key, value);
+                notNullSearchDispatchArgs.add("args." + key, value);
             }
         }
 
         try {
-            Job job = savedSearch.dispatch(searchDispatchArgs);
+            Job job = savedSearch.dispatch(notNullSearchDispatchArgs);
             while (!job.isDone()) {
                 Thread.sleep(500);
             }
@@ -378,6 +383,14 @@ public class SplunkClient {
         return dataModelCollection.get(dataModelName);
     }
 
+    /**
+     * Retrieve all data models available to the user
+     *
+     * @return All Data Models available
+     */
+    public DataModelCollection getDataModels() {
+        return service.getDataModels();
+    }
 
     /**
      * Get the Service
@@ -623,6 +636,16 @@ public class SplunkClient {
     }
 
     /**
+     * Get the Collection of Inputs
+     *
+     * @return InputCollection of all inputs available to the user
+     */
+    public InputCollection getInputs() {
+        return service.getInputs();
+    }
+
+
+    /**
      * Convert the java key
      *
      * @param key - the String key to convert to the java convention (camelCase)
@@ -632,5 +655,210 @@ public class SplunkClient {
         return Inflector.getInstance().lowerCamelCase(key).replace("_", "");
     }
 
+    /**
+     * Creates an Input with a given identifier and kind
+     *
+     * @param inputIdentifier The name of the domain controller
+     * @param kind The InputKind
+     * @param args An Optional Key-Value Map of Properties to set
+     * @return An Input of that Kind
+     */
+    public Input createInput(String inputIdentifier, InputKind kind, Map<String, Object> args) {
+        InputCollection myInputs = service.getInputs();
+        if ((args != null) && (!args.isEmpty())) {
+            return myInputs.create(inputIdentifier, kind, args);
+        } else {
+            return myInputs.create(inputIdentifier, kind);
+        }
+    }
 
+    /**
+     * Modifies an input with the properties supplied.
+     *
+     * @param inputIdentifier      The identifier of the Input to modify
+     * @param inputArgs The map of properties to update
+     * @return Returns the modified input.
+     */
+    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+        Validate.notNull(inputArgs, "You must provide some properties to modify");
+        Validate.notEmpty(inputArgs, "You must provide some properties to modify");
+        Input input = service.getInputs().get(inputIdentifier);
+        input.update(inputArgs);
+        return input;
+    }
+
+    /**
+     * Retrieves an Input with the given identifier
+     *
+     * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
+     * @return The Input specified.
+     */
+    public Input getInput(String inputIdentifier) {
+        return service.getInputs().get(inputIdentifier);
+    }
+
+    /**
+     * Retrieves a collection of indexes based on the criteria provided
+     *
+     * @param sortKey              The Key to sort by
+     * @param sortDirection        The SortDirection to sort by
+     * @param collectionParameters Optional Map of additional arguments to pass to the call
+     * @return IndexCollection of indexes
+     */
+    public IndexCollection getIndexes(String sortKey, CollectionArgs.SortDirection sortDirection, Map<String, Object> collectionParameters) {
+        IndexCollectionArgs args = new IndexCollectionArgs();
+        if ((sortKey != null) && !sortKey.isEmpty()) {
+            args.setSortKey(sortKey);
+        }
+        if (sortDirection != null) {
+            args.setSortDirection(sortDirection);
+        }
+        if ((collectionParameters != null) && (!collectionParameters.isEmpty())) {
+            args.putAll(collectionParameters);
+        }
+        if (args.isEmpty()) {
+            return service.getIndexes();
+        } else {
+            return service.getIndexes(args);
+        }
+    }
+
+    /**
+     * Creates an Index with optional arguments
+     *
+     * @param indexName The name of the index to create
+     * @param args      Optional key-value pairs of arguments to apply on creation
+     * @return the new Index
+     */
+    public Index createIndex(String indexName, Map<String, Object> args) {
+        if ((args != null) && !args.isEmpty()) {
+            return service.getIndexes().create(indexName, args);
+        } else {
+            return service.getIndexes().create(indexName);
+        }
+    }
+
+    /**
+     * Modifies an index with the properties supplied.
+     *
+     * @param indexName  A Splunk Index to modify.
+     * @param indexArgs The map of arguments to update
+     * @return Returns the modified index.
+     */
+    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+        Validate.notNull(indexArgs, "You must provide some properties to modify");
+        Validate.notEmpty(indexArgs, "You must provide some properties to modify");
+        Index index = service.getIndexes().get(indexName);
+        index.update(indexArgs);
+        return index;
+    }
+
+    /**
+     * Retrieves an Index with the given identifier
+     *
+     * @param indexIdentifier The identifier
+     * @return The Index specified.
+     */
+    public Index getIndex(String indexIdentifier) {
+        return service.getIndexes().get(indexIdentifier);
+    }
+
+    /**
+     * Clean the index, which removes all events from it
+     *
+     * @param indexName The name of the index to clean
+     * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
+     * @return the cleaned index
+     */
+    public Index cleanIndex(String indexName, int maxSeconds) {
+        Validate.notNull(indexName, "You must provide an index name");
+        Validate.notEmpty(indexName, "You must provide an index name");
+        Index index = service.getIndexes().get(indexName);
+        return index.clean(maxSeconds);
+    }
+
+    /**
+     * Add data to an index without an input, using HTTP to submit a string
+     *
+     * @param indexName  The name of the index to update
+     * @param stringData The data string to send
+     * @param indexArgs Optional map of arguments to apply to the update
+     * @return The index that has been updated
+     */
+    public Index addDataToIndex(String indexName, String stringData, Map<String, Object> indexArgs) {
+        Index index = service.getIndexes().get(indexName);
+        if (indexArgs != null && !indexArgs.isEmpty()) {
+            Args eventArgs = new Args();
+            eventArgs.putAll(indexArgs);
+            index.submit(eventArgs, stringData);
+        } else {
+            index.submit(stringData);
+        }
+        return index;
+    }
+
+
+    /**
+     * Add data to a tcp input on a given port
+     *
+     * @param portNumber The TCP Port Number to use
+     * @param stringData The data string to add
+     * @return The TcpInput
+     */
+    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+        InputCollection coll = service.getInputs();
+        TcpInput input = (TcpInput) coll.get(portNumber);
+        try {
+            input.submit(stringData);
+        } catch (IOException e) {
+            LOGGER.info("Unable to submit to that TCP Port", e);
+            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+        }
+        return input;
+    }
+
+    /**
+     * Add data to a udp input on a given port
+     *
+     * @param portNumber The UDP Port Number to use
+     * @param data       The data string to add
+     * @return The UdpInput
+     */
+    public UdpInput addDataToUdpInput(String portNumber, String data) throws SplunkConnectorException {
+        UdpInput input = (UdpInput) service.getInputs().get(portNumber);
+        try {
+            input.submit(data);
+        } catch (IOException e) {
+            LOGGER.info("Unable to submit to that TCP Port", e);
+            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+        }
+        return input;
+    }
+
+    /**
+     * Remove an Input
+     *
+     * @param inputIdentifier the identifier of the input to remove, for example a port number or filename
+     * @return the Input that was removed
+     */
+    public Input removeInput(String inputIdentifier) {
+        Input input = service.getInputs().get(inputIdentifier);
+        input.remove();
+        return input;
+    }
+
+    /**
+     * Remove an index
+     * <p/>
+     * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
+     *
+     * @param indexName The name of the index to remove
+     * @return the Index that was removed
+     */
+    public Index removeIndex(String indexName) {
+        IndexCollection coll = service.getIndexes();
+        Index index = coll.get(indexName);
+        index.remove();
+        return index;
+    }
 }

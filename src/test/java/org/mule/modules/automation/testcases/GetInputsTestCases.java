@@ -7,11 +7,9 @@
  * place, you may not use the software.
  */
 
-
 package org.mule.modules.automation.testcases;
 
-import com.splunk.SavedSearch;
-import org.junit.After;
+import com.splunk.InputCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,35 +18,14 @@ import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
-public class GetSavedSearchesTestCases
+public class GetInputsTestCases
         extends SplunkTestParent {
-
-    private String searchName;
 
     @Before
     public void setup() {
-        try {
-            initializeTestRunMessage("createSavedSearchTestData");
-            searchName = getTestRunMessageValue("searchName");
-            Object result = runFlowAndGetPayload("create-saved-search");
-            initializeTestRunMessage("getSavedSearchesTestData");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @After
-    public void tearDown() {
-        try {
-            upsertOnTestRunMessage("searchName", searchName);
-            runFlowAndGetPayload("delete-saved-search");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+        initializeTestRunMessage("getInputsTestData");
     }
 
     @Category({
@@ -56,15 +33,14 @@ public class GetSavedSearchesTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetSavedSearches() {
+    public void testGetInputs() {
         try {
-            Object result = runFlowAndGetPayload("get-saved-searches");
+            Object result = runFlowAndGetPayload("get-inputs");
             assertNotNull(result);
-            List<SavedSearch> savedSearchList = (List<SavedSearch>) result;
-            assertTrue(savedSearchList.size() > 0);
+            InputCollection inputs = (InputCollection) result;
+            assertTrue(inputs.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
-
 }

@@ -87,6 +87,10 @@
         <splunk:get-data-model config-ref="Splunk" dataModelName="#[flowVars.dataModelName]" doc:name="Splunk"/>
     </flow>
 
+    <flow name="get-data-models" doc:name="get-data-models">
+        <splunk:get-data-models config-ref="Splunk" doc:name="Splunk"/>
+    </flow>
+
     <flow name="run-export-search" doc:name="run-export-search" initialState="stopped">
         <splunk:run-export-search config-ref="Splunk" searchQuery="search * | head 10" earliestTime="-20d"
                                   latestTime="now" doc:name="Splunk"/>
@@ -108,4 +112,66 @@
         </splunk:run-normal-search>
         <vm:outbound-endpoint path="receive"/>
     </flow>
+
+    <flow name="get-inputs" doc:name="get-inputs">
+        <splunk:get-inputs doc:name="Splunk"/>
+    </flow>
+
+    <flow name="create-input" doc:name="create-input">
+        <splunk:create-input inputIdentifier="#[flowVars.inputIdentifier]" kind-ref="#[flowVars.kind]">
+            <splunk:args ref="#[flowVars.args]"/>
+        </splunk:create-input>
+    </flow>
+
+    <flow name="modify-input" doc:name="modify-input">
+        <splunk:modify-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk">
+            <splunk:input-args ref="#[flowVars.inputArgs]"/>
+        </splunk:modify-input>
+    </flow>
+    <flow name="modify-index" doc:name="modify-index">
+        <splunk:modify-index indexName="#[flowVars.indexName]" doc:name="Splunk">
+            <splunk:index-args ref="#[flowVars.indexArgs]"/>
+        </splunk:modify-index>
+    </flow>
+    <flow name="get-input" doc:name="get-input">
+        <splunk:get-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
+    </flow>
+    <flow name="get-indexes" doc:name="get-indexes">
+        <splunk:get-indexes sortKey="#[flowVars.sortKey]" sortDirection="#[flowVars.sortDirection]" doc:name="Splunk">
+            <splunk:collection-parameters ref="#[flowVars.collectionParameters]"/>
+        </splunk:get-indexes>
+    </flow>
+    <flow name="remove-input" doc:name="remove-input">
+        <splunk:remove-input inputIdentifier="#[flowVars.inputIdentifier]" doc:name="Splunk"/>
+    </flow>
+    <flow name="remove-index" doc:name="remove-index">
+        <splunk:remove-index indexName="#[flowVars.indexName]" doc:name="Splunk"/>
+    </flow>
+
+    <flow name="create-index" doc:name="create-index">
+        <splunk:create-index indexName="#[flowVars.indexName]" doc:name="Splunk">
+            <splunk:args ref="#[flowVars.args]"/>
+        </splunk:create-index>
+    </flow>
+    <flow name="get-index" doc:name="get-index">
+        <splunk:get-index indexIdentifier="#[flowVars.indexIdentifier]" doc:name="Splunk"/>
+    </flow>
+    <flow name="clean-index" doc:name="clean-index">
+        <splunk:clean-index indexName="#[flowVars.indexName]" maxSeconds="#[flowVars.maxSeconds]" doc:name="Splunk"/>
+    </flow>
+    <flow name="add-data-to-index" doc:name="add-data-to-index">
+        <splunk:add-data-to-index indexName="#[flowVars.indexName]" stringData="#[flowVars.stringData]"
+                                  doc:name="Splunk">
+            <splunk:index-args ref="#[flowVars.indexArgs]"/>
+        </splunk:add-data-to-index>
+    </flow>
+    <flow name="add-data-to-tcp-input" doc:name="add-data-to-tcp-input">
+        <splunk:add-data-to-tcp-input portNumber="#[flowVars.portNumber]" stringData="#[flowVars.stringData]"
+                                      doc:name="Splunk"/>
+    </flow>
+    <flow name="add-data-to-udp-input" doc:name="add-data-to-udp-input">
+        <splunk:add-data-to-udp-input portNumber="#[flowVars.portNumber]" stringData="#[flowVars.stringData]"
+                                      doc:name="Splunk"/>
+    </flow>
 </mule>
+

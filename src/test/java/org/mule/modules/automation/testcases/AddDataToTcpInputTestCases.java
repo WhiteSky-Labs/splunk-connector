@@ -7,10 +7,10 @@
  * place, you may not use the software.
  */
 
-
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Job;
+import com.splunk.Input;
+import com.splunk.InputKind;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,27 +20,21 @@ import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
-import java.util.List;
-
 import static org.junit.Assert.*;
 
-public class GetSavedSearchHistoryTestCases
-        extends SplunkTestParent {
-    private String searchName;
-    private final String searchQuery = "search " + searchName + " | head 100";
+
+public class AddDataToTcpInputTestCases extends SplunkTestParent {
+
+    private String inputIdentifier = "9988";
 
     @Before
     public void setup() {
-        // create and run a saved search
         try {
-            initializeTestRunMessage("createSavedSearchTestData");
-            searchName = getTestRunMessageValue("searchName");
-            upsertOnTestRunMessage("searchQuery", searchQuery);
-            Object result = runFlowAndGetPayload("create-saved-search");
-            initializeTestRunMessage("runSavedSearchTestData");
-            upsertOnTestRunMessage("searchName", searchName);
-            result = runFlowAndGetPayload("run-saved-search");
-            initializeTestRunMessage("getSavedSearchHistoryTestData");
+            initializeTestRunMessage("createInputTestData");
+            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+            upsertOnTestRunMessage("kind", InputKind.Tcp);
+
+            Object result = runFlowAndGetPayload("create-input");
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -49,8 +43,9 @@ public class GetSavedSearchHistoryTestCases
     @After
     public void tearDown() {
         try {
-            upsertOnTestRunMessage("searchName", searchName);
-            runFlowAndGetPayload("delete-saved-search");
+            initializeTestRunMessage("removeInputTestData");
+            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+            Object result = runFlowAndGetPayload("remove-input");
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -61,15 +56,16 @@ public class GetSavedSearchHistoryTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetSavedSearchHistory() {
+    public void testAddDataToTcpInput() {
         try {
-            Object result = runFlowAndGetPayload("get-saved-search-history");
-            List<Job> jobs = (List<Job>) result;
-            assertNotNull(jobs);
-            assertTrue(jobs.size() > 0);
+            initializeTestRunMessage("addDataToTcpInputTestData");
+            upsertOnTestRunMessage("portNumber", inputIdentifier);
+            Object result = runFlowAndGetPayload("add-data-to-tcp-input");
+            assertNotNull(result);
+            Input input = (Input) result;
+            assertEquals(InputKind.Tcp, input.getKind());
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
-
 }

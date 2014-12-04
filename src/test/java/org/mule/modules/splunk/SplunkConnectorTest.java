@@ -21,8 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -75,6 +74,13 @@ public class SplunkConnectorTest {
         DataModel model = null;
         when(client.getDataModel("Test")).thenReturn(model);
         assertEquals(model, connector.getDataModel("Test"));
+    }
+
+    @Test
+    public void testGetDataModels() throws Exception {
+        DataModelCollection models = null;
+        when(client.getDataModels()).thenReturn(models);
+        assertEquals(models, connector.getDataModels());
     }
 
     @Test
@@ -176,6 +182,10 @@ public class SplunkConnectorTest {
     @Test
     public void testConnectionIdentifier() throws Exception {
         assertEquals("001", connector.getConnectionIdentifier());
+
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn("token");
+        assertEquals("token", connector.getConnectionIdentifier());
     }
 
     @Test
@@ -207,6 +217,160 @@ public class SplunkConnectorTest {
         doNothing().when(client).runExportSearch(anyString(), anyString(), anyString(), any(SearchMode.class), any(OutputMode.class), any(JobExportArgs.class), eq(cb));
         connector.runExportSearch("Test", "rt-10m", "rt", cb);
     }
+
+    @Test
+    public void testGetInputs() throws Exception {
+        InputCollection coll = null;
+        when(client.getInputs()).thenReturn(coll);
+        assertEquals(coll, connector.getInputs());
+    }
+
+    @Test
+    public void testCreateInputWithoutProperties() throws Exception {
+        Input input = null;
+        HashMap<String, Object> nullProperties = null;
+        when(client.createInput(anyString(), any(InputKind.class), eq(nullProperties))).thenReturn(input);
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, nullProperties));
+    }
+
+    @Test
+    public void testCreateInputWithProperties() throws Exception {
+        Input input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        props.put("index", "text_index");
+        when(client.createInput(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, props));
+    }
+
+    @Test
+    public void testCreateInputWithEmptyProperties() throws Exception {
+        Input input = null;
+        HashMap<String, Object> props = new HashMap<String, Object>();
+        when(client.createInput(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
+        assertEquals(input, connector.createInput("Test", InputKind.Tcp, props));
+    }
+
+    @Test
+    public void testGetInput() throws Exception {
+        Input input = null;
+        when(client.getInput(anyString())).thenReturn(input);
+        assertEquals(input, connector.getInput("Test"));
+    }
+
+    @Test
+    public void testModifyInput() throws Exception {
+        Input input = null;
+        when(client.modifyInput(anyString(), anyMap())).thenReturn(input);
+        assertEquals(input, connector.modifyInput("Test", new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void testDisconnect() throws Exception {
+        when(client.getService()).thenReturn(service);
+        doNothing().when(client).setService(null);
+        connector.disconnect();
+    }
+
+    @Test
+    public void testIsConnectedWhenConnected() throws Exception {
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn("Token");
+        assertTrue(connector.isConnected());
+    }
+
+    @Test
+    public void testIsConnectedWhenNotConnected() throws Exception {
+        when(client.getService()).thenReturn(service);
+        when(service.getToken()).thenReturn(null);
+        assertFalse(connector.isConnected());
+
+        client.setService(null);
+        assertFalse(connector.isConnected());
+
+    }
+
+    @Test
+    public void testGetIndexes() throws Exception {
+        IndexCollection indexes = null;
+        when(client.getIndexes(null, null, null)).thenReturn(indexes);
+        assertEquals(indexes, connector.getIndexes(null, null, null));
+    }
+
+    @Test
+    public void testGetIndexesWithParameters() throws Exception {
+        IndexCollection indexes = null;
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put("assureUTF8", "true");
+
+        when(client.getIndexes(anyString(), any(CollectionArgs.SortDirection.class), eq(params))).thenReturn(indexes);
+        assertEquals(indexes, connector.getIndexes("Test", CollectionArgs.SortDirection.DESC, params));
+    }
+
+    @Test
+    public void testCreateIndex() throws Exception {
+        Index index = null;
+        when(client.createIndex("Test", null)).thenReturn(index);
+        assertEquals(index, connector.createIndex("Test", null));
+    }
+
+    @Test
+    public void testGetIndex() throws Exception {
+        Index index = null;
+        when(client.getIndex(anyString())).thenReturn(index);
+        assertEquals(index, connector.getIndex("Test"));
+    }
+
+    @Test
+    public void testModifyIndex() throws Exception {
+        Index index = null;
+        when(client.modifyIndex(anyString(), anyMap())).thenReturn(index);
+        assertEquals(index, connector.modifyIndex("Test", new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void testCleanIndex() throws Exception {
+        Index index = null;
+        when(client.cleanIndex("Test", 120)).thenReturn(index);
+        assertEquals(index, connector.cleanIndex("Test", 120));
+    }
+
+    @Test
+    public void testAddDataToIndex() throws Exception {
+        Index index = null;
+        when(client.addDataToIndex(anyString(), anyString(), anyMap())).thenReturn(index);
+        assertEquals(index, connector.addDataToIndex("Test", "Test", new HashMap<String, Object>()));
+    }
+
+    @Test
+    public void testAddDataToTcpInput() throws Exception {
+        TcpInput input = null;
+        when(client.addDataToTcpInput(anyString(), anyString())).thenReturn(input);
+
+        assertEquals(input, connector.addDataToTcpInput("Test", "Test"));
+    }
+
+    @Test
+    public void testAddDataToUdpInput() throws Exception {
+        UdpInput input = null;
+        when(client.addDataToUdpInput(anyString(), anyString())).thenReturn(input);
+
+        assertEquals(input, connector.addDataToUdpInput("Test", "Test"));
+    }
+
+    @Test
+    public void testRemoveInput() throws Exception {
+        Input input = null;
+        when(client.removeInput(anyString())).thenReturn(input);
+        assertEquals(input, connector.removeInput("Test"));
+    }
+
+    @Test
+    public void testRemoveIndex() throws Exception {
+        Index index = null;
+        when(client.removeIndex(anyString())).thenReturn(index);
+        assertEquals(index, connector.removeIndex("Test"));
+    }
+
 }
 
 
