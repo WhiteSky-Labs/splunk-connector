@@ -283,8 +283,10 @@ public class SplunkClient {
                                                                  SavedSearchDispatchArgs searchDispatchArgs)
             throws SplunkConnectorException {
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-        if (searchDispatchArgs == null) {
-            searchDispatchArgs = new SavedSearchDispatchArgs();
+        SavedSearchDispatchArgs notNullSearchDispatchArgs = new SavedSearchDispatchArgs();
+
+        if (searchDispatchArgs != null) {
+            notNullSearchDispatchArgs.putAll(searchDispatchArgs);
         }
         if (customArgs != null) {
             String queryParams = "";
@@ -292,12 +294,12 @@ public class SplunkClient {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
                 queryParams += " " + key + "=$args." + key + "$";
-                searchDispatchArgs.add("args." + key, value);
+                notNullSearchDispatchArgs.add("args." + key, value);
             }
         }
 
         try {
-            Job job = savedSearch.dispatch(searchDispatchArgs);
+            Job job = savedSearch.dispatch(notNullSearchDispatchArgs);
             while (!job.isDone()) {
                 Thread.sleep(500);
             }

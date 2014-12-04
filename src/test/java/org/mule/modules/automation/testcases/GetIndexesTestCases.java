@@ -77,21 +77,4 @@ public class GetIndexesTestCases extends SplunkTestParent {
         }
     }
 
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testGetIndexesWithInvalidSortDirectionTestData() {
-        try {
-            initializeTestRunMessage("getIndexesWithInvalidSortDirectionTestData");
-            Object result = runFlowAndGetPayload("get-indexes");
-            IndexCollection indexes = (IndexCollection) result;
-            // attempt to instantiate
-            assertTrue(indexes.toString() instanceof String);
-            fail("Error should be thrown for invalid parameter");
-        } catch (Exception e) {
-            assertTrue(e.getCause().getMessage().contains("No enum const class"));
-        }
-    }
-
 }
