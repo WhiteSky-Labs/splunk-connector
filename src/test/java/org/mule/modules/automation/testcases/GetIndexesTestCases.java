@@ -9,7 +9,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.IndexCollection;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -17,6 +16,9 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +38,7 @@ public class GetIndexesTestCases extends SplunkTestParent {
         try {
             Object result = runFlowAndGetPayload("get-indexes");
             assertNotNull(result);
-            IndexCollection indexes = (IndexCollection) result;
+            List<Map<String, Object>> indexes = (List<Map<String, Object>>) result;
             assertTrue(indexes.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
@@ -52,7 +54,7 @@ public class GetIndexesTestCases extends SplunkTestParent {
             initializeTestRunMessage("getIndexesWithParametersTestData");
             Object result = runFlowAndGetPayload("get-indexes");
             assertNotNull(result);
-            IndexCollection indexes = (IndexCollection) result;
+            List<Map<String, Object>> indexes = (List<Map<String, Object>>) result;
             assertTrue(indexes.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
@@ -68,12 +70,12 @@ public class GetIndexesTestCases extends SplunkTestParent {
             initializeTestRunMessage("getIndexesWithInvalidParametersTestData");
             Object result = runFlowAndGetPayload("get-indexes");
 
-            IndexCollection indexes = (IndexCollection) result;
+            List<Map<String, Object>> indexes = (List<Map<String, Object>>) result;
             // attempt to instantiate
             assertTrue(indexes.toString() instanceof String);
             fail("Error should be thrown for invalid parameter");
         } catch (Exception e) {
-            assertTrue(e.getMessage().contains("is not supported by this handler"));
+            assertTrue(e.getCause().getMessage().contains("is not supported by this handler"));
         }
     }
 

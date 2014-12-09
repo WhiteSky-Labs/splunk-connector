@@ -9,13 +9,15 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.*;
+import com.splunk.InputKind;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -38,11 +40,13 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Tcp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            TcpInput input = (TcpInput) result;
-            assertTrue(input instanceof TcpInput);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("default", input.get("index"));
             tearDown(tcpRawPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(tcpRawPort);
         }
     }
 
@@ -57,11 +61,12 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Tcp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            TcpInput input = (TcpInput) result;
-            assertTrue(input instanceof TcpInput);
-            tearDown(tcpRawPort);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("summary", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(tcpRawPort);
         }
     }
 
@@ -77,11 +82,12 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.TcpSplunk);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            TcpSplunkInput input = (TcpSplunkInput) result;
-            assertTrue(input instanceof TcpSplunkInput);
-            tearDown(tcpCookedPort);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("default", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(tcpCookedPort);
         }
     }
 
@@ -97,11 +103,12 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Udp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            UdpInput input = (UdpInput) result;
-            assertTrue(input instanceof UdpInput);
-            tearDown(udpPort);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("default", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(udpPort);
         }
     }
 
@@ -116,11 +123,13 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Udp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            UdpInput input = (UdpInput) result;
-            assertTrue(input instanceof UdpInput);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("summary", input.get("index"));
             tearDown(udpPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(udpPort);
         }
     }
 
@@ -136,11 +145,12 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Monitor);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            MonitorInput input = (MonitorInput) result;
-            assertTrue(input instanceof MonitorInput);
-            tearDown(monitor);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("default", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(monitor);
         }
     }
 
@@ -155,11 +165,12 @@ public class CreateInputsTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("kind", InputKind.Monitor);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
-            MonitorInput input = (MonitorInput) result;
-            assertTrue(input instanceof MonitorInput);
-            tearDown(monitor);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("summary", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
+        } finally {
+            tearDown(monitor);
         }
     }
 
@@ -169,9 +180,13 @@ public class CreateInputsTestCases extends SplunkTestParent {
      * @param inputIdentifier the Input Identifier
      * @throws Exception When there is a problem running the flow.
      */
-    private void tearDown(String inputIdentifier) throws Exception {
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-        Object removedResult = runFlowAndGetPayload("remove-input");
+    private void tearDown(String inputIdentifier) {
+        try {
+            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+            Object removedResult = runFlowAndGetPayload("remove-input");
+        } catch (Exception e) {
+            ConnectorTestUtils.getStackTrace(e);
+        }
     }
 
 }

@@ -9,7 +9,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Input;
 import com.splunk.InputKind;
 import org.junit.After;
 import org.junit.Before;
@@ -62,8 +61,8 @@ public class AddDataToTcpInputTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("portNumber", inputIdentifier);
             Object result = runFlowAndGetPayload("add-data-to-tcp-input");
             assertNotNull(result);
-            Input input = (Input) result;
-            assertEquals(InputKind.Tcp, input.getKind());
+            Boolean success = (Boolean) result;
+            assertEquals(true, success);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

@@ -9,13 +9,14 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Index;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -34,8 +35,8 @@ public class CreateIndexTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("create-index");
             assertNotNull(result);
-            Index index = (Index) result;
-            assertEquals(indexName, index.getName());
+            Map<String, Object> index = (Map<String, Object>) result;
+            assertEquals("main", index.get("defaultDatabase"));
             tearDown(indexName);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
@@ -52,8 +53,8 @@ public class CreateIndexTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("create-index");
             assertNotNull(result);
-            Index index = (Index) result;
-            assertEquals(indexName, index.getName());
+            Map<String, Object> index = (Map<String, Object>) result;
+            assertEquals("main", index.get("defaultDatabase"));
             tearDown(indexName);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));

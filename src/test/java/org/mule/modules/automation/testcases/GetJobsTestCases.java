@@ -20,6 +20,7 @@ import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static com.yourkit.util.Asserts.assertTrue;
 import static org.junit.Assert.assertNotNull;
@@ -43,7 +44,7 @@ public class GetJobsTestCases
         try {
             Object result = runFlowAndGetPayload("get-jobs");
             assertNotNull(result);
-            List<Job> jobList = (List<Job>) result;
+            List<Map<String, Object>> jobList = (List<Map<String, Object>>) result;
             assertTrue(jobList.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));

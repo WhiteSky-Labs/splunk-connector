@@ -61,8 +61,8 @@ public class AddDataToUdpInputTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("portNumber", inputIdentifier);
             Object result = runFlowAndGetPayload("add-data-to-udp-input");
             assertNotNull(result);
-            Input input = (Input) result;
-            assertEquals(InputKind.Udp, input.getKind());
+            Boolean success = (Boolean) result;
+            assertEquals(true, success);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

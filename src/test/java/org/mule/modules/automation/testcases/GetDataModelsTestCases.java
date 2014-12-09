@@ -19,6 +19,9 @@ import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class GetDataModelsTestCases
@@ -38,7 +41,7 @@ public class GetDataModelsTestCases
         try {
             Object result = runFlowAndGetPayload("get-data-models");
             assertNotNull(result);
-            DataModelCollection dataModels = (DataModelCollection) result;
+            List<Map<String, Object>> dataModels = (List<Map<String, Object>>) result;
             assertTrue(dataModels.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
