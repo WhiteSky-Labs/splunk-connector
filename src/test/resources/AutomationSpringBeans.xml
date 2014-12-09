@@ -14,8 +14,8 @@
           factory-method="generateRandomShortString" scope="prototype"/>
     <bean id="secondRandomShortString" class="org.mule.modules.tests.ConnectorTestUtils"
           factory-method="generateRandomShortString" scope="prototype"/>
-    <util:constant static-field="org.mule.modules.splunk.SearchMode.NORMAL" id="searchModeNormal"/>
-    <util:constant static-field="org.mule.modules.splunk.OutputMode.XML" id="outputModeXML"/>
+    <util:constant static-field="com.wsl.modules.splunk.SearchMode.NORMAL" id="searchModeNormal"/>
+    <util:constant static-field="com.wsl.modules.splunk.OutputMode.XML" id="outputModeXML"/>
 
     <!--getApplications-->
     <util:map id="getApplicationsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
@@ -414,3 +414,4 @@
         <entry key="stringData" value="Testing Data"/>
     </util:map>
 </beans>
+
