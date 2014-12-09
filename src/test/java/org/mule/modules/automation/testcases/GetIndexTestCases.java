@@ -9,7 +9,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Index;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,7 +17,8 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
-import org.mule.transport.NullPayload;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -60,8 +60,8 @@ public class GetIndexTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("indexIdentifier", indexName);
             Object result = runFlowAndGetPayload("get-index");
             assertNotNull(result);
-            Index index = (Index) result;
-            assertEquals(indexName, index.getName());
+            Map<String, Object> index = (Map<String, Object>) result;
+            assertEquals("main", index.get("defaultDatabase"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -76,9 +76,9 @@ public class GetIndexTestCases extends SplunkTestParent {
             initializeTestRunMessage("getIndexTestData");
             upsertOnTestRunMessage("indexIdentifier", "Not a real index");
             Object result = runFlowAndGetPayload("get-index");
-            assertTrue(result instanceof NullPayload);
+            fail("Should throw exception for invalid index name");
         } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
+            assertTrue(e.getCause().getMessage().contains("You must provide a valid index name"));
         }
     }
 }

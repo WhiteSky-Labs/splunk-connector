@@ -10,7 +10,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.SavedSearch;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +20,7 @@ import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -62,31 +62,12 @@ public class ModifySavedSearchPropertiesTestCases
             upsertOnTestRunMessage("searchName", searchName);
             Object result = runFlowAndGetPayload("modify-saved-search-properties");
             assertNotNull(result);
-            SavedSearch savedSearch = (SavedSearch) result;
-            assertEquals(getTestRunMessageValue("searchName"), savedSearch.getName());
+            Map<String, Object> savedSearch = (Map<String, Object>) result;
+            assertEquals("list", savedSearch.get("display.events.type"));
             HashMap<String, String> searchProperties = getTestRunMessageValue("searchPropertiesRef");
-            // convert type of is_scheduled
-            boolean isScheduled = new Boolean(searchProperties.get("is_scheduled")).booleanValue();
-            assertEquals(searchProperties.get("description"), savedSearch.getDescription());
-            assertEquals(isScheduled, savedSearch.isScheduled());
-            assertEquals(searchProperties.get("cron_schedule"), savedSearch.getCronSchedule());
+            assertEquals(searchProperties.get("cron_schedule"), savedSearch.get("cron_schedule"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testModifyInvalidSearchProperties() {
-        try {
-            initializeTestRunMessage("modifySavedSearchPropertiesInvalidTestData");
-            upsertOnTestRunMessage("searchName", searchName);
-            Object result = runFlowAndGetPayload("modify-saved-search-properties");
-            fail("Should throw exception when modifying invalid properties");
-        } catch (Exception e) {
-            assertEquals("No matching method, check your properties are correct", e.getCause().getMessage());
         }
     }
 

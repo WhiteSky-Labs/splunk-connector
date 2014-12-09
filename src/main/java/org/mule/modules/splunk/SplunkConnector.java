@@ -7,7 +7,9 @@
  **/
 package org.mule.modules.splunk;
 
-import com.splunk.*;
+import com.splunk.CollectionArgs;
+import com.splunk.InputKind;
+import com.splunk.SavedSearchDispatchArgs;
 import org.mule.api.ConnectionException;
 import org.mule.api.annotations.*;
 import org.mule.api.annotations.display.Password;
@@ -81,12 +83,7 @@ public class SplunkConnector {
      */
     @Disconnect
     public void disconnect() {
-        if (splunkClient != null) {
-            if (splunkClient.getService() != null) {
-                splunkClient.setService(null);
-            }
-            splunkClient = null;
-        }
+        splunkClient = null;
     }
 
     /**
@@ -96,7 +93,6 @@ public class SplunkConnector {
      */
     @ValidateConnection
     public boolean isConnected() {
-
         return splunkClient != null && splunkClient.getService().getToken() != null;
     }
 
@@ -118,10 +114,10 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-applications}
      *
-     * @return Applications
+     * @return A List of Applications as a Map
      */
     @Processor
-    public List<Application> getApplications() {
+    public List<Map<String, Object>> getApplications() {
         return splunkClient.getApplications();
     }
 
@@ -130,10 +126,10 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-jobs}
      *
-     * @return List of jobs of the current user
+     * @return List of jobs for the current user as Maps
      */
     @Processor
-    public List<Job> getJobs() {
+    public List<Map<String, Object>> getJobs() {
         return splunkClient.getJobs();
     }
 
@@ -194,10 +190,10 @@ public class SplunkConnector {
      *
      * @param app   Optional the name of the App to restrict the namespace of the list of saved searches to
      * @param owner Optional the owner of the namespace to restrict the list of saved searches by
-     * @return SavedSearchCollection
+     * @return A List of Maps that represent the saved searches
      */
     @Processor
-    public List<SavedSearch> getSavedSearches(@Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearches(@Optional String app, @Optional String owner) {
         return splunkClient.getSavedSearches(app, owner);
     }
 
@@ -209,10 +205,10 @@ public class SplunkConnector {
      * @param searchName  The name of the search
      * @param searchQuery The query
      * @param searchArgs  A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
-     * @return SavedSearch the SavedSearch object that can then be executed
+     * @return a map of the SavedSearch object that can then be executed
      */
     @Processor
-    public SavedSearch createSavedSearch(String searchName, String searchQuery, @Optional Map<String, Object> searchArgs) {
+    public Map<String, Object> createSavedSearch(String searchName, String searchQuery, @Optional Map<String, Object> searchArgs) {
         return splunkClient.createSavedSearch(searchName, searchQuery, searchArgs);
     }
 
@@ -242,7 +238,7 @@ public class SplunkConnector {
      * @throws SplunkConnectorException when the search properties are invalid
      */
     @Processor
-    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
+    public Map<String, Object> modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
         return splunkClient.modifySavedSearchProperties(searchName, searchProperties);
     }
 
@@ -257,7 +253,7 @@ public class SplunkConnector {
      * @return List of Job History
      */
     @Processor
-    public List<Job> getSavedSearchHistory(@Optional String searchName, @Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearchHistory(@Optional String searchName, @Optional String app, @Optional String owner) {
         return splunkClient.getSavedSearchHistory(searchName, app, owner);
     }
 
@@ -316,7 +312,7 @@ public class SplunkConnector {
      * @return the DataModel requested
      */
     @Processor
-    public DataModel getDataModel(String dataModelName) {
+    public Map<String, Object> getDataModel(String dataModelName) {
         return splunkClient.getDataModel(dataModelName);
     }
 
@@ -328,7 +324,7 @@ public class SplunkConnector {
      * @return All DataModels available to the user
      */
     @Processor
-    public DataModelCollection getDataModels() {
+    public List<Map<String, Object>> getDataModels() {
         return splunkClient.getDataModels();
     }
 
@@ -368,7 +364,7 @@ public class SplunkConnector {
      */
     @Source
     public void runExportSearch(String searchQuery, @Default("-1h") String earliestTime, @Default("now") String latestTime, final SourceCallback callback) throws SplunkConnectorException {
-        splunkClient.runExportSearch(searchQuery, earliestTime, latestTime, SearchMode.NORMAL, OutputMode.JSON, null, callback);
+        splunkClient.runExportSearch(searchQuery, earliestTime, latestTime, SearchMode.NORMAL, OutputMode.JSON, callback);
     }
 
     /**
@@ -376,10 +372,10 @@ public class SplunkConnector {
      * <p/>
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:get-inputs}
      *
-     * @return InputCollection of Inputs available to the user
+     * @return List of Inputs available to the user
      */
     @Processor
-    public InputCollection getInputs() {
+    public List<Map<String, Object>> getInputs() {
         return splunkClient.getInputs();
     }
 
@@ -394,7 +390,7 @@ public class SplunkConnector {
      * @return An Input of that Kind
      */
     @Processor
-    public Input createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) {
+    public Map<String, Object> createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) {
         return splunkClient.createInput(inputIdentifier, kind, args);
     }
 
@@ -408,7 +404,7 @@ public class SplunkConnector {
      * @return Returns the modified input.
      */
     @Processor
-    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+    public Map<String, Object> modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
         return splunkClient.modifyInput(inputIdentifier, inputArgs);
     }
 
@@ -421,7 +417,7 @@ public class SplunkConnector {
      * @return The Input specified.
      */
     @Processor
-    public Input getInput(String inputIdentifier) {
+    public Map<String, Object> getInput(String inputIdentifier) {
         return splunkClient.getInput(inputIdentifier);
     }
 
@@ -433,10 +429,10 @@ public class SplunkConnector {
      * @param sortKey              The Key to sort by
      * @param sortDirection        The SortDirection to sort by
      * @param collectionParameters Optional Map of additional arguments to pass to the call
-     * @return IndexCollection of indexes
+     * @return Collection of indexes
      */
     @Processor
-    public IndexCollection getIndexes(@Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection, @Optional Map<String, Object> collectionParameters) {
+    public List<Map<String, Object>> getIndexes(@Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection, @Optional Map<String, Object> collectionParameters) {
         return splunkClient.getIndexes(sortKey, sortDirection, collectionParameters);
     }
 
@@ -450,7 +446,7 @@ public class SplunkConnector {
      * @return the new Index
      */
     @Processor
-    public Index createIndex(String indexName, @Optional Map<String, Object> args) {
+    public Map<String, Object> createIndex(String indexName, @Optional Map<String, Object> args) {
         return splunkClient.createIndex(indexName, args);
     }
 
@@ -464,7 +460,7 @@ public class SplunkConnector {
      * @return Returns the modified index.
      */
     @Processor
-    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+    public Map<String, Object> modifyIndex(String indexName, Map<String, Object> indexArgs) {
         return splunkClient.modifyIndex(indexName, indexArgs);
     }
 
@@ -477,7 +473,7 @@ public class SplunkConnector {
      * @return The Index specified.
      */
     @Processor
-    public Index getIndex(String indexIdentifier) {
+    public Map<String, Object> getIndex(String indexIdentifier) {
         return splunkClient.getIndex(indexIdentifier);
     }
 
@@ -491,10 +487,9 @@ public class SplunkConnector {
      * @return the cleaned index
      */
     @Processor
-    public Index cleanIndex(String indexName, @Default("180") int maxSeconds) {
+    public Map<String, Object> cleanIndex(String indexName, @Default("180") int maxSeconds) {
         return splunkClient.cleanIndex(indexName, maxSeconds);
     }
-
 
     /**
      * Add data to an index without an input, using HTTP to submit a string
@@ -507,7 +502,7 @@ public class SplunkConnector {
      * @return The index that has been updated
      */
     @Processor
-    public Index addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> indexArgs) {
+    public Map<String, Object> addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> indexArgs) {
         return splunkClient.addDataToIndex(indexName, stringData, indexArgs);
     }
 
@@ -518,11 +513,11 @@ public class SplunkConnector {
      *
      * @param portNumber The port number to send data on
      * @param stringData The data to send
-     * @return The TcpInput that was used
+     * @return Success or Failure
      * @throws SplunkConnectorException when cannot connect to the port
      */
     @Processor
-    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+    public Boolean addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
         return splunkClient.addDataToTcpInput(portNumber, stringData);
     }
 
@@ -533,11 +528,11 @@ public class SplunkConnector {
      *
      * @param portNumber The port number to send data on
      * @param stringData The data to send
-     * @return The UdpInput that was used
+     * @return Success or Failure
      * @throws SplunkConnectorException when cannot connect to the port
      */
     @Processor
-    public UdpInput addDataToUdpInput(String portNumber, String stringData) throws SplunkConnectorException {
+    public Boolean addDataToUdpInput(String portNumber, String stringData) throws SplunkConnectorException {
         return splunkClient.addDataToUdpInput(portNumber, stringData);
     }
 
@@ -547,10 +542,10 @@ public class SplunkConnector {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-input}
      *
      * @param inputIdentifier the identifier, for example the port number
-     * @return The Input Object that was removed for verification
+     * @return Success or Failure
      */
     @Processor
-    public Input removeInput(String inputIdentifier) {
+    public Boolean removeInput(String inputIdentifier) {
         return splunkClient.removeInput(inputIdentifier);
     }
 
@@ -560,10 +555,10 @@ public class SplunkConnector {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
      *
      * @param indexName The name of the index to remove
-     * @return the Index that was removed
+     * @return Success or Failure
      */
     @Processor
-    public Index removeIndex(String indexName) {
+    public Boolean removeIndex(String indexName) {
         return splunkClient.removeIndex(indexName);
     }
 

@@ -17,7 +17,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mule.api.ConnectionException;
 import org.mule.api.callback.SourceCallback;
-import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,24 +94,27 @@ public class SplunkClientTest {
     @Test
     public void testGetApplications() throws Exception {
         List<Application> applist = new ArrayList<Application>();
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+
         when(apps.values()).thenReturn(applist);
         when(service.getApplications()).thenReturn(apps);
-        assertEquals(applist, client.getApplications());
+        assertEquals(returnList, client.getApplications());
     }
 
     @Test
     public void testCreateSavedSearch() throws Exception {
         Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
 
         when(searchCollection.create("Unit Testing", "Search * | head 100")).thenReturn(search);
         when(searchCollection.create("Unit Testing", "Search * | head 100", map)).thenReturn(search);
         when(service.getSavedSearches()).thenReturn(searchCollection);
 
-        assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
-        assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", null));
+        assertEquals(result, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
+        assertEquals(result, client.createSavedSearch("Unit Testing", "Search * | head 100", null));
         map.put("Test", "Test");
         when(searchCollection.create("Unit Testing", "Search * | head 100", map)).thenReturn(search);
-        assertEquals(search, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
+        assertEquals(result, client.createSavedSearch("Unit Testing", "Search * | head 100", map));
     }
 
 
@@ -137,27 +139,29 @@ public class SplunkClientTest {
 
     @Test
     public void testGetDataModel() throws Exception {
+        Map<String, Object> result = new HashMap<String, Object>();
         when(dataModelCollection.get("Test")).thenReturn(model);
         when(service.getDataModels()).thenReturn(dataModelCollection);
-        assertEquals(model, client.getDataModel("Test"));
+        assertEquals(result, client.getDataModel("Test"));
     }
 
     @Test
     public void testGetDataModels() throws Exception {
         when(service.getDataModels()).thenReturn(dataModelCollection);
-        assertEquals(dataModelCollection, client.getDataModels());
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        assertEquals(result, client.getDataModels());
     }
 
     @Test
     public void testGetJobs() throws Exception {
         when(service.getJobs()).thenReturn(jobs);
-        List<Job> jobList = new ArrayList<Job>();
+        List<Map<String, Object>> jobList = new ArrayList<Map<String, Object>>();
         assertEquals(jobList, client.getJobs());
     }
 
     @Test
     public void testGetSavedSearches() throws Exception {
-        List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
+        List<Map<String, Object>> savedSearches = new ArrayList<Map<String, Object>>();
         when(service.getSavedSearches()).thenReturn(searchCollection);
 
         assertEquals(savedSearches, client.getSavedSearches(null, null));
@@ -169,12 +173,10 @@ public class SplunkClientTest {
         namespace.setApp("Test");
         List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
         when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
-        SavedSearch search = null;
-        savedSearches.add(search);
 
         when(searchCollection.values()).thenReturn(savedSearches);
-
-        assertEquals(savedSearches, client.getSavedSearches("Test", null));
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        assertEquals(result, client.getSavedSearches("Test", null));
     }
 
 
@@ -184,12 +186,11 @@ public class SplunkClientTest {
         namespace.setOwner("Test");
         List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
         when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
-        SavedSearch search = null;
-        savedSearches.add(search);
 
         when(searchCollection.values()).thenReturn(savedSearches);
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 
-        assertEquals(savedSearches, client.getSavedSearches(null, "Test"));
+        assertEquals(result, client.getSavedSearches(null, "Test"));
     }
 
     @Test
@@ -199,19 +200,18 @@ public class SplunkClientTest {
         namespace.setOwner("Test");
         List<SavedSearch> savedSearches = new ArrayList<SavedSearch>();
         when(service.getSavedSearches(any(ServiceArgs.class))).thenReturn(searchCollection);
-        SavedSearch search = null;
-        savedSearches.add(search);
 
         when(searchCollection.values()).thenReturn(savedSearches);
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
 
-        assertEquals(savedSearches, client.getSavedSearches("Test", "Test"));
+        assertEquals(result, client.getSavedSearches("Test", "Test"));
     }
 
 
 
     @Test
     public void testGetSavedSearchHistory() throws Exception {
-        List<Job> jobs = new ArrayList<Job>();
+        List<Map<String, Object>> jobs = new ArrayList<Map<String, Object>>();
         Job[] history = new Job[0];
         ServiceArgs namespace = new ServiceArgs();
         namespace.setApp("search");
@@ -238,8 +238,9 @@ public class SplunkClientTest {
         when(service.getSavedSearches()).thenReturn(searchCollection);
 
         Map<String, Object> props = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<String, Object>();
         props.put("description", "test");
-        assertEquals(search, client.modifySavedSearchProperties("Test", props));
+        assertEquals(result, client.modifySavedSearchProperties("Test", props));
     }
 
     @Test
@@ -459,7 +460,7 @@ public class SplunkClientTest {
         when(service.export(anyString(), any(JobExportArgs.class))).thenReturn(stubInputStream);
         when(cb.process(any())).thenReturn(new Object());
 
-        client.runExportSearch("Test", "rt-10m", "rt", SearchMode.NORMAL, OutputMode.XML, new JobExportArgs(), cb);
+        client.runExportSearch("Test", "rt-10m", "rt", SearchMode.NORMAL, OutputMode.XML, cb);
 
     }
 
@@ -487,39 +488,38 @@ public class SplunkClientTest {
     @Test
     public void testGetInputs() throws Exception {
         when(service.getInputs()).thenReturn(coll);
-        assertEquals(coll, client.getInputs());
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        assertEquals(result, client.getInputs());
     }
 
     @Test
     public void testCreateInputWithoutProperties() throws Exception {
-        Input input = null;
         when(service.getInputs()).thenReturn(coll);
         when(coll.create(anyString(), any(InputKind.class))).thenReturn(input);
-
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, null));
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createInput("Test", InputKind.Tcp, null));
     }
 
     @Test
     public void testCreateInputWithProperties() throws Exception {
-        Input input = null;
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("index", "text_index");
 
         when(coll.create(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
-
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, props));
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createInput("Test", InputKind.Tcp, props));
     }
 
     @Test
     public void testCreateInputWithEmptyProperties() throws Exception {
-        Input input = null;
         when(service.getInputs()).thenReturn(coll);
         HashMap<String, Object> props = new HashMap<String, Object>();
 
         when(coll.create(anyString(), any(InputKind.class), eq(props))).thenReturn(input);
-
-        assertEquals(input, client.createInput("Test", InputKind.Tcp, props));
+        when(coll.create(anyString(), any(InputKind.class))).thenReturn(input);
+        HashMap<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createInput("Test", InputKind.Tcp, props));
     }
 
     @Test
@@ -530,8 +530,9 @@ public class SplunkClientTest {
         props.put("index", "text_index");
         doNothing().when(input).putAll(props);
         doNothing().when(input).update();
+        Map<String, Object> result = new HashMap<String, Object>();
 
-        assertEquals(input, client.modifyInput("Test", props));
+        assertEquals(result, client.modifyInput("Test", props));
     }
 
     @Test
@@ -539,9 +540,9 @@ public class SplunkClientTest {
         HashMap<String, Object> props = new HashMap<String, Object>();
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(input);
-
+        Map<String, Object> result = new HashMap<String, Object>();
         try {
-            input = client.modifyInput("Test", props);
+            result = client.modifyInput("Test", props);
             fail("Should throw an error when modifying an input with empty properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -553,9 +554,10 @@ public class SplunkClientTest {
         HashMap<String, Object> props = null;
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(input);
+        Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            input = client.modifyInput("Test", props);
+            result = client.modifyInput("Test", props);
             fail("Should throw an error when modifying an input with null properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -566,20 +568,19 @@ public class SplunkClientTest {
     public void testGetInput() throws Exception {
         when(service.getInputs()).thenReturn(coll);
         when(coll.get("Test")).thenReturn(input);
-
-        assertEquals(input, client.getInput("Test"));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.getInput("Test"));
     }
 
     @Test
     public void testGetIndexes() throws Exception {
-        IndexCollection indexes = null;
-        when(service.getIndexes()).thenReturn(indexes);
-        assertEquals(indexes, client.getIndexes(null, null, null));
+        when(service.getIndexes()).thenReturn(indexCollection);
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        assertEquals(result, client.getIndexes(null, null, null));
     }
 
     @Test
     public void testGetIndexesWithParameters() throws Exception {
-        IndexCollection indexes = null;
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put("assureUTF8", "true");
         IndexCollectionArgs args = new IndexCollectionArgs();
@@ -587,53 +588,52 @@ public class SplunkClientTest {
         args.setSortKey("test");
         args.putAll(params);
 
-        when(service.getIndexes(args)).thenReturn(indexes);
-        assertEquals(indexes, client.getIndexes("test", CollectionArgs.SortDirection.DESC, params));
+        when(service.getIndexes(args)).thenReturn(indexCollection);
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        assertEquals(result, client.getIndexes("test", CollectionArgs.SortDirection.DESC, params));
     }
 
     @Test
     public void testGetIndexesWithEmptyParameters() throws Exception {
-        IndexCollection indexes = null;
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put("assureUTF8", "true");
         IndexCollectionArgs args = new IndexCollectionArgs();
         args.setSortDirection(CollectionArgs.SortDirection.DESC);
         args.setSortKey("");
         args.putAll(params);
 
-        when(service.getIndexes(args)).thenReturn(indexes);
-        assertEquals(indexes, client.getIndexes("", CollectionArgs.SortDirection.DESC, params));
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        when(service.getIndexes(any(IndexCollectionArgs.class))).thenReturn(indexCollection);
         params = new HashMap<String, Object>();
-        assertEquals(indexes, client.getIndexes("", CollectionArgs.SortDirection.DESC, params));
+        assertEquals(result, client.getIndexes("", CollectionArgs.SortDirection.DESC, params));
     }
 
     @Test
     public void testCreateIndex() throws Exception {
-        Index index = null;
-
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.create("Test")).thenReturn(index);
-        assertEquals(index, client.createIndex("Test", null));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createIndex("Test", null));
     }
 
     @Test
     public void testCreateIndexWithArgs() throws Exception {
-        Index index = null;
         HashMap<String, Object> args = new HashMap<String, Object>();
         args.put("assureUTF8", "true");
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.create("Test", args)).thenReturn(index);
-        assertEquals(index, client.createIndex("Test", args));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createIndex("Test", args));
     }
 
     @Test
     public void testCreateIndexWithEmptyArgs() throws Exception {
-        Index index = null;
         HashMap<String, Object> args = new HashMap<String, Object>();
 
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.create("Test", args)).thenReturn(index);
-        assertEquals(index, client.createIndex("Test", args));
+        when(indexCollection.create("Test")).thenReturn(index);
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.createIndex("Test", args));
     }
 
 
@@ -645,8 +645,9 @@ public class SplunkClientTest {
         when(indexCollection.get(anyString())).thenReturn(index);
         doNothing().when(index).putAll(props);
         doNothing().when(index).update();
+        Map<String, Object> result = new HashMap<String, Object>();
 
-        assertEquals(index, client.modifyIndex("Test", props));
+        assertEquals(result, client.modifyIndex("Test", props));
     }
 
     @Test
@@ -654,8 +655,10 @@ public class SplunkClientTest {
         HashMap<String, Object> props = new HashMap<String, Object>();
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
+        Map<String, Object> result = new HashMap<String, Object>();
+
         try {
-            index = client.modifyIndex("Test", props);
+            result = client.modifyIndex("Test", props);
             fail("Should throw an error when modifying an index with empty properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -667,9 +670,10 @@ public class SplunkClientTest {
         HashMap<String, Object> props = null;
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
+        Map<String, Object> result = new HashMap<String, Object>();
 
         try {
-            index = client.modifyIndex("Test", props);
+            result = client.modifyIndex("Test", props);
             fail("Should throw an error when modifying an index with null properties");
         } catch (Exception e) {
             assertEquals("You must provide some properties to modify", e.getMessage());
@@ -680,8 +684,8 @@ public class SplunkClientTest {
     public void testGetIndex() throws Exception {
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get("Test")).thenReturn(index);
-
-        assertEquals(index, client.getIndex("Test"));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.getIndex("Test"));
     }
 
     @Test
@@ -689,7 +693,8 @@ public class SplunkClientTest {
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get("Test")).thenReturn(index);
         when(index.clean(120)).thenReturn(index);
-        assertEquals(index, client.cleanIndex("Test", 120));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.cleanIndex("Test", 120));
     }
 
     @Test
@@ -697,14 +702,16 @@ public class SplunkClientTest {
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get("Test")).thenReturn(index);
         when(index.clean(120)).thenReturn(index);
+        Map<String, Object> result = new HashMap<String, Object>();
+
         try {
-            assertEquals(index, client.cleanIndex(null, 120));
+            assertEquals(result, client.cleanIndex(null, 120));
             fail("Cleaning an index without a name should return an error");
         } catch (Exception e) {
             assertEquals("You must provide an index name", e.getMessage());
         }
         try {
-            assertEquals(index, client.cleanIndex("", 120));
+            assertEquals(result, client.cleanIndex("", 120));
             fail("Cleaning an index without a name should return an error");
         } catch (Exception e) {
             assertEquals("You must provide an index name", e.getMessage());
@@ -717,7 +724,8 @@ public class SplunkClientTest {
         when(indexCollection.get(anyString())).thenReturn(index);
 
         doNothing().when(index).submit(anyString());
-        assertEquals(index, client.addDataToIndex("Test", "Test", null));
+        Map<String, Object> result = new HashMap<String, Object>();
+        assertEquals(result, client.addDataToIndex("Test", "Test", null));
     }
 
     @Test
@@ -730,9 +738,10 @@ public class SplunkClientTest {
 
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
+        Map<String, Object> result = new HashMap<String, Object>();
 
         doNothing().when(index).submit(eq(eventArgs), anyString());
-        assertEquals(index, client.addDataToIndex("Test", "test", args));
+        assertEquals(result, client.addDataToIndex("Test", "test", args));
     }
 
     @Test
@@ -746,7 +755,9 @@ public class SplunkClientTest {
         when(indexCollection.get(anyString())).thenReturn(index);
 
         doNothing().when(index).submit(eq(eventArgs), anyString());
-        assertEquals(index, client.addDataToIndex("Test", "test", args));
+        Map<String, Object> result = new HashMap<String, Object>();
+
+        assertEquals(result, client.addDataToIndex("Test", "test", args));
     }
 
     @Test
@@ -755,7 +766,7 @@ public class SplunkClientTest {
         when(coll.get(anyString())).thenReturn(tcpInput);
         doNothing().when(tcpInput).submit(anyString());
 
-        assertEquals(tcpInput, client.addDataToTcpInput("Test", "Test"));
+        assertEquals(true, client.addDataToTcpInput("Test", "Test"));
     }
 
     @Test
@@ -763,12 +774,7 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(tcpInput);
         doThrow(ioe).when(tcpInput).submit(anyString());
-        try {
-            client.addDataToTcpInput("Test", "Test");
-            fail("Should throw exception");
-        } catch (SplunkConnectorException e) {
-            assertEquals(ioe, e.getCause());
-        }
+        assertEquals(false, client.addDataToTcpInput("Test", "Test"));
     }
 
     @Test
@@ -776,8 +782,7 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(udpInput);
         doNothing().when(udpInput).submit(anyString());
-
-        assertEquals(udpInput, client.addDataToUdpInput("Test", "Test"));
+        assertEquals(true, client.addDataToUdpInput("Test", "Test"));
     }
 
     @Test
@@ -785,12 +790,7 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(udpInput);
         doThrow(ioe).when(udpInput).submit(anyString());
-        try {
-            client.addDataToUdpInput("Test", "Test");
-            fail("Should throw exception");
-        } catch (SplunkConnectorException e) {
-            assertEquals(ioe, e.getCause());
-        }
+        assertEquals(false, client.addDataToUdpInput("Test", "Test"));
     }
 
     @Test
@@ -798,7 +798,7 @@ public class SplunkClientTest {
         when(service.getInputs()).thenReturn(coll);
         when(coll.get(anyString())).thenReturn(input);
         when(input.remove(anyString())).thenReturn(input);
-        assertEquals(input, client.removeInput("Test"));
+        assertEquals(true, client.removeInput("Test"));
     }
 
     @Test
@@ -806,7 +806,7 @@ public class SplunkClientTest {
         when(service.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
         when(index.remove(anyString())).thenReturn(index);
-        assertEquals(index, client.removeIndex("Test"));
+        assertEquals(true, client.removeIndex("Test"));
     }
 
     @Test

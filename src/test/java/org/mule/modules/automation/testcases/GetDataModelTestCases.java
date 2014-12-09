@@ -10,7 +10,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.DataModel;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -18,6 +17,8 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -39,8 +40,8 @@ public class GetDataModelTestCases
         try {
             Object result = runFlowAndGetPayload("get-data-model");
             assertNotNull(result);
-            DataModel dataModel = (DataModel) result;
-            assertEquals(getTestRunMessageValue("dataModelName"), dataModel.getName());
+            Map<String, Object> dataModel = (Map<String, Object>) result;
+            assertEquals("internal_audit_logs", dataModel.get("modelName"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -55,9 +56,9 @@ public class GetDataModelTestCases
             upsertOnTestRunMessage("dataModelName", "");
             Object result = runFlowAndGetPayload("get-data-model");
             // expected result is a null payload.
-            assertEquals("{NullPayload}", result.toString());
+            fail("InvalidArgumentException should be thrown");
         } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
+            assertEquals("You must provide a data model name", e.getCause().getMessage());
         }
     }
 
@@ -70,10 +71,9 @@ public class GetDataModelTestCases
             upsertOnTestRunMessage("dataModelName", null);
             Object result = runFlowAndGetPayload("get-data-model");
             // expected result is a null payload.
-            assertEquals("{NullPayload}", result.toString());
+            fail("InvalidArgumentException should be thrown");
         } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
+            assertEquals("You must provide a data model name", e.getCause().getMessage());
         }
     }
-
 }

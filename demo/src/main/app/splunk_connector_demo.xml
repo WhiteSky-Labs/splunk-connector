@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      version="EE-3.5.2"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd">
+    <splunk:config name="Splunk" username="admin" password="l1m3l16ht" host="54.68.156.168" port="8089"
+                   doc:name="Splunk"/>
+    <flow name="Create_Index_Flow" doc:name="Create_Index_Flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="createindex"
+                               doc:name="HTTP"/>
+        <splunk:create-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
+                             doc:name="Create Index"/>
+    </flow>
+    <flow name="Add_Data_To_Index_Flow" doc:name="Add_Data_To_Index_Flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="adddata"
+                               doc:name="HTTP"/>
+        <splunk:add-data-to-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
+                                  stringData="#[message.inboundProperties['stringdata']]" doc:name="Add Data To Index"/>
+    </flow>
+    <flow name="Remove_Index_Flow" doc:name="Remove_Index_Flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="removeindex"
+                               doc:name="HTTP"/>
+        <splunk:remove-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
+                             doc:name="Remove Index"/>
+    </flow>
+</mule>

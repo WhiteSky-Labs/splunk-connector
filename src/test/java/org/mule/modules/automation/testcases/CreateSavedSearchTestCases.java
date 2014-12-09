@@ -10,7 +10,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.SavedSearch;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +18,8 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -62,8 +63,8 @@ public class CreateSavedSearchTestCases
         try {
             Object result = runFlowAndGetPayload("create-saved-search");
             searchCreated = true;
-            SavedSearch savedSearch = (SavedSearch) result;
-            assertEquals(searchName, savedSearch.getName());
+            Map<String, Object> savedSearch = (Map<String, Object>) result;
+            assertEquals("full", savedSearch.get("display.events.list.drilldown"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -79,14 +80,14 @@ public class CreateSavedSearchTestCases
         try {
             Object result = runFlowAndGetPayload("create-saved-search");
             duplicateSearchCreated = true;
-            SavedSearch savedSearch = (SavedSearch) result;
-            assertEquals(duplicateSearchName, savedSearch.getName());
+            Map<String, Object> savedSearch = (Map<String, Object>) result;
+            assertEquals("full", savedSearch.get("display.events.list.drilldown"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
         try {
             Object result = runFlowAndGetPayload("create-saved-search");
-            SavedSearch savedSearch = (SavedSearch) result;
+            Map<String, Object> savedSearch = (Map<String, Object>) result;
             fail("Exception should be thrown when creating an existing saved search");
         } catch (Exception e) {
             assertTrue(e.getCause().getMessage().contains("A saved search with that name already exists."));

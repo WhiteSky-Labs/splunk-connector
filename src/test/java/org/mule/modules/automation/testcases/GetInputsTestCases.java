@@ -18,6 +18,9 @@ import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 public class GetInputsTestCases
@@ -37,7 +40,7 @@ public class GetInputsTestCases
         try {
             Object result = runFlowAndGetPayload("get-inputs");
             assertNotNull(result);
-            InputCollection inputs = (InputCollection) result;
+            List<Map<String, Object>> inputs = (List<Map<String, Object>>) result;
             assertTrue(inputs.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));

@@ -10,22 +10,26 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Job;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.Timeout;
 import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class GetSavedSearchHistoryTestCases
         extends SplunkTestParent {
+    @Rule
+    public Timeout globalTimeout = new Timeout(100000);
     private String searchName;
     private final String searchQuery = "search " + searchName + " | head 100";
 
@@ -64,7 +68,7 @@ public class GetSavedSearchHistoryTestCases
     public void testGetSavedSearchHistory() {
         try {
             Object result = runFlowAndGetPayload("get-saved-search-history");
-            List<Job> jobs = (List<Job>) result;
+            List<Map<String, Object>> jobs = (List<Map<String, Object>>) result;
             assertNotNull(jobs);
             assertTrue(jobs.size() > 0);
         } catch (Exception e) {

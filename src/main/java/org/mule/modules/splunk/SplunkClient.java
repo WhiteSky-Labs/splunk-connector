@@ -14,7 +14,6 @@ import org.mule.api.ConnectionException;
 import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.callback.SourceCallback;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
-import org.mule.modules.splunk.util.SplunkUtils;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
@@ -61,38 +60,11 @@ public class SplunkClient {
             service = Service.connect(loginArgs);
         } catch (com.splunk.HttpException splunkException) {
             LOGGER.error("HTTPException Connecting to Splunk", splunkException);
-            switch (splunkException.getStatus()) {
-                case 401:
-                case 402:
-                case 403:
-                    // credentials no good
-
-                    throw new ConnectionException(
-                            ConnectionExceptionCode.INCORRECT_CREDENTIALS,
-                            Integer.toString(splunkException.getStatus()),
-                            splunkException.getMessage());
-                case 404:
-                    // can't reach
-                    throw new ConnectionException(
-                            ConnectionExceptionCode.CANNOT_REACH,
-                            Integer.toString(splunkException.getStatus()),
-                            splunkException.getMessage());
-                case 405:
-                case 409:
-                case 500:
-                case 503:
-                    throw new ConnectionException(
-                            ConnectionExceptionCode.UNKNOWN_HOST,
-                            Integer.toString(splunkException.getStatus()),
-                            splunkException.getMessage());
-                default:
-                    // unknown error
-                    throw new ConnectionException(
-                            ConnectionExceptionCode.UNKNOWN,
-                            Integer.toString(splunkException.getStatus()),
-                            splunkException.getMessage());
-            }
-
+            throw new ConnectionException(
+                    ConnectionExceptionCode.CANNOT_REACH,
+                    Integer.toString(splunkException.getStatus()),
+                    splunkException.getMessage()
+            );
         } catch (RuntimeException e) {
             LOGGER.info("Error connecting to Splunk", e);
             throw new ConnectionException(
@@ -107,10 +79,19 @@ public class SplunkClient {
     /**
      * Get All the Applications
      *
-     * @return A List of the Applicaitions installed on the splunk instance
+     * @return A List of the Applications installed on the splunk instance
      */
-    public List<Application> getApplications() {
-        return (List<Application>) service.getApplications().values();
+    public List<Map<String, Object>> getApplications() {
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        for (Application app : service.getApplications().values()) {
+            Set<Map.Entry<String, Object>> set = app.entrySet();
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : set) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            returnList.add(mapFromSet);
+        }
+        return returnList;
     }
 
     /**
@@ -120,8 +101,8 @@ public class SplunkClient {
      * @param owner The user namespace to restrict the namespace to
      * @return List of Saved Searches
      */
-    public List<SavedSearch> getSavedSearches(String app, String owner) {
-        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
+    public List<Map<String, Object>> getSavedSearches(String app, String owner) {
+        List<Map<String, Object>> savedSearchList = new ArrayList<Map<String, Object>>();
         SavedSearchCollection savedSearches;
 
         ServiceArgs namespace = new ServiceArgs();
@@ -134,7 +115,12 @@ public class SplunkClient {
         }
 
         for (SavedSearch entity : savedSearches.values()) {
-            savedSearchList.add(entity);
+            Set<Map.Entry<String, Object>> set = entity.entrySet();
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : set) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            savedSearchList.add(mapFromSet);
         }
         return savedSearchList;
     }
@@ -145,9 +131,9 @@ public class SplunkClient {
      * @param searchName  The name of query
      * @param searchQuery The query
      * @param searchArgs  Optional Map of Key-Value Pairs of Saved Search Arguments
-     * @return SavedSearch the SavedSearch object that can then be executed
+     * @return A map of the SavedSearch object
      */
-    public SavedSearch createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
+    public Map<String, Object> createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
         Validate.notEmpty(searchName, "Search Name empty.");
         Validate.notEmpty(searchQuery, "Search Query empty.");
         SavedSearch createdSearch;
@@ -156,7 +142,12 @@ public class SplunkClient {
         } else {
             createdSearch = service.getSavedSearches().create(searchName, searchQuery);
         }
-        return createdSearch;
+        Set<Map.Entry<String, Object>> set = createdSearch.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -203,15 +194,18 @@ public class SplunkClient {
      * @return The Modified Saved Search
      * @throws SplunkConnectorException when the properties aren't valid
      */
-    public SavedSearch modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
+    public Map<String, Object> modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
         Validate.notEmpty(searchName, "You must provide a search name to modify");
         Validate.notNull(searchProperties, "You must provide some properties to modify");
         Validate.notEmpty(searchProperties, "You must provide some properties to modify");
         SavedSearch savedSearch = service.getSavedSearches().get(searchName);
-
-        savedSearch = SplunkUtils.setSearchProperties(searchProperties, savedSearch);
-        savedSearch.update();
-        return savedSearch;
+        savedSearch.update(searchProperties);
+        Set<Map.Entry<String, Object>> set = savedSearch.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -220,9 +214,9 @@ public class SplunkClient {
      * @param searchName The (Optional) name of query
      * @param app        The (Optional) application of the namespace
      * @param owner      The (Optional) owner of the namespace
-     * @return List of Job
+     * @return List of Jobs as maps
      */
-    public List<Job> getSavedSearchHistory(String searchName, String app, String owner) {
+    public List<Map<String, Object>> getSavedSearchHistory(String searchName, String app, String owner) {
         List<Job> jobList = new ArrayList<Job>();
         SavedSearchCollection savedSearches;
 
@@ -244,8 +238,16 @@ public class SplunkClient {
             Validate.notNull(savedSearch, "SavedSearch doesn't exist.");
             Collections.addAll(jobList, savedSearch.history());
         }
-
-        return jobList;
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        for (Job entity : jobList) {
+            Set<Map.Entry<String, Object>> set = entity.entrySet();
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : set) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            result.add(mapFromSet);
+        }
+        return result;
     }
 
     /**
@@ -378,9 +380,16 @@ public class SplunkClient {
      * @param dataModelName The data model name to get
      * @return The Data Model requested
      */
-    public DataModel getDataModel(String dataModelName) {
+    public Map<String, Object> getDataModel(String dataModelName) {
+        Validate.notNull(dataModelName, "You must provide a data model name");
+        Validate.notEmpty(dataModelName, "You must provide a data model name");
         DataModelCollection dataModelCollection = service.getDataModels();
-        return dataModelCollection.get(dataModelName);
+        Set<Map.Entry<String, Object>> set = dataModelCollection.get(dataModelName).entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -388,8 +397,18 @@ public class SplunkClient {
      *
      * @return All Data Models available
      */
-    public DataModelCollection getDataModels() {
-        return service.getDataModels();
+    public List<Map<String, Object>> getDataModels() {
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
+        for (DataModel model : service.getDataModels().values()) {
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : model.entrySet()) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            result.add(mapFromSet);
+
+        }
+        return result;
     }
 
     /**
@@ -413,13 +432,17 @@ public class SplunkClient {
      *
      * @return A List of the current user's Job objects retrieved from the Splunk Server
      */
-    public List<Job> getJobs() {
-        JobCollection jobs = service.getJobs();
-        List<Job> jobList = new ArrayList<Job>();
-        for (Job job : jobs.values()) {
-            jobList.add(job);
+    public List<Map<String, Object>> getJobs() {
+        List<Map<String, Object>> returnList = new ArrayList<Map<String, Object>>();
+        for (Job job : service.getJobs().values()) {
+            Set<Map.Entry<String, Object>> set = job.entrySet();
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : set) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            returnList.add(mapFromSet);
         }
-        return jobList;
+        return returnList;
     }
 
     /**
@@ -433,9 +456,7 @@ public class SplunkClient {
     public void runNormalSearch(String searchQuery, Map<String, Object> searchArgs, final SourceCallback searchCallback) throws SplunkConnectorException {
         Validate.notEmpty(searchQuery, "Search Query is empty.");
         JobArgs jobArgs = new JobArgs();
-        if (searchArgs != null && !searchArgs.isEmpty()) {
-            jobArgs = SplunkUtils.setJobArgs(searchArgs);
-        }
+        jobArgs.putAll(searchArgs);
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
         Job job = service.getJobs().create(searchQuery, jobArgs);
 
@@ -470,9 +491,7 @@ public class SplunkClient {
     public Map<String, Object> runBlockingSearch(String searchQuery, Map<String, Object> searchArgs) throws SplunkConnectorException {
         Validate.notEmpty(searchQuery, "Search Query is empty.");
         JobArgs jobArgs = new JobArgs();
-        if (searchArgs != null && !searchArgs.isEmpty()) {
-            jobArgs = SplunkUtils.setJobArgs(searchArgs);
-        }
+        jobArgs.putAll(jobArgs);
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.BLOCKING);
         Job job = service.getJobs().create(searchQuery, jobArgs);
 
@@ -589,11 +608,8 @@ public class SplunkClient {
      * @return A list of the Search Results found from the export search.
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
      */
-    public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, JobExportArgs exportArgs, final SourceCallback callback) throws SplunkConnectorException {
+    public void runExportSearch(String searchQuery, String earliestTime, String latestTime, SearchMode searchMode, OutputMode outputMode, final SourceCallback callback) throws SplunkConnectorException {
         JobExportArgs newExportArgs = new JobExportArgs();
-        if (exportArgs != null) {
-            newExportArgs.putAll(exportArgs);
-        }
         newExportArgs.setEarliestTime(earliestTime);
         newExportArgs.setLatestTime(latestTime);
         if (searchMode == SearchMode.NORMAL) {
@@ -640,8 +656,19 @@ public class SplunkClient {
      *
      * @return InputCollection of all inputs available to the user
      */
-    public InputCollection getInputs() {
-        return service.getInputs();
+    public List<Map<String, Object>> getInputs() {
+
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
+        for (Input input : service.getInputs().values()) {
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : input.entrySet()) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            result.add(mapFromSet);
+
+        }
+        return result;
     }
 
 
@@ -661,15 +688,21 @@ public class SplunkClient {
      * @param inputIdentifier The name of the domain controller
      * @param kind The InputKind
      * @param args An Optional Key-Value Map of Properties to set
-     * @return An Input of that Kind
+     * @return The input
      */
-    public Input createInput(String inputIdentifier, InputKind kind, Map<String, Object> args) {
+    public Map<String, Object> createInput(String inputIdentifier, InputKind kind, Map<String, Object> args) {
         InputCollection myInputs = service.getInputs();
+        Input input;
         if ((args != null) && (!args.isEmpty())) {
-            return myInputs.create(inputIdentifier, kind, args);
+            input = myInputs.create(inputIdentifier, kind, args);
         } else {
-            return myInputs.create(inputIdentifier, kind);
+            input = myInputs.create(inputIdentifier, kind);
         }
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : input.entrySet()) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -679,12 +712,16 @@ public class SplunkClient {
      * @param inputArgs The map of properties to update
      * @return Returns the modified input.
      */
-    public Input modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
+    public Map<String, Object> modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
         Validate.notNull(inputArgs, "You must provide some properties to modify");
         Validate.notEmpty(inputArgs, "You must provide some properties to modify");
         Input input = service.getInputs().get(inputIdentifier);
         input.update(inputArgs);
-        return input;
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : input.entrySet()) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -693,8 +730,16 @@ public class SplunkClient {
      * @param inputIdentifier The identifier, for example a file path if it is a Monitor Input
      * @return The Input specified.
      */
-    public Input getInput(String inputIdentifier) {
-        return service.getInputs().get(inputIdentifier);
+    public Map<String, Object> getInput(String inputIdentifier) {
+        Validate.notNull(inputIdentifier, "You must provide a valid input identifier");
+        Validate.notEmpty(inputIdentifier, "You must provide a valid input identifier");
+        Input input = service.getInputs().get(inputIdentifier);
+        Validate.notNull(input, "You must provide a valid input identifier");
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : input.entrySet()) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -705,7 +750,7 @@ public class SplunkClient {
      * @param collectionParameters Optional Map of additional arguments to pass to the call
      * @return IndexCollection of indexes
      */
-    public IndexCollection getIndexes(String sortKey, CollectionArgs.SortDirection sortDirection, Map<String, Object> collectionParameters) {
+    public List<Map<String, Object>> getIndexes(String sortKey, CollectionArgs.SortDirection sortDirection, Map<String, Object> collectionParameters) {
         IndexCollectionArgs args = new IndexCollectionArgs();
         if ((sortKey != null) && !sortKey.isEmpty()) {
             args.setSortKey(sortKey);
@@ -716,11 +761,22 @@ public class SplunkClient {
         if ((collectionParameters != null) && (!collectionParameters.isEmpty())) {
             args.putAll(collectionParameters);
         }
+        IndexCollection coll;
         if (args.isEmpty()) {
-            return service.getIndexes();
+            coll = service.getIndexes();
         } else {
-            return service.getIndexes(args);
+            coll = service.getIndexes(args);
         }
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+        for (Index index : coll.values()) {
+            Set<Map.Entry<String, Object>> set = index.entrySet();
+            Map<String, Object> mapFromSet = new HashMap<String, Object>();
+            for (Map.Entry<String, Object> entry : set) {
+                mapFromSet.put(entry.getKey(), entry.getValue());
+            }
+            result.add(mapFromSet);
+        }
+        return result;
     }
 
     /**
@@ -730,12 +786,19 @@ public class SplunkClient {
      * @param args      Optional key-value pairs of arguments to apply on creation
      * @return the new Index
      */
-    public Index createIndex(String indexName, Map<String, Object> args) {
+    public Map<String, Object> createIndex(String indexName, Map<String, Object> args) {
+        Index index;
         if ((args != null) && !args.isEmpty()) {
-            return service.getIndexes().create(indexName, args);
+            index = service.getIndexes().create(indexName, args);
         } else {
-            return service.getIndexes().create(indexName);
+            index = service.getIndexes().create(indexName);
         }
+        Set<Map.Entry<String, Object>> set = index.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -745,12 +808,17 @@ public class SplunkClient {
      * @param indexArgs The map of arguments to update
      * @return Returns the modified index.
      */
-    public Index modifyIndex(String indexName, Map<String, Object> indexArgs) {
+    public Map<String, Object> modifyIndex(String indexName, Map<String, Object> indexArgs) {
         Validate.notNull(indexArgs, "You must provide some properties to modify");
         Validate.notEmpty(indexArgs, "You must provide some properties to modify");
         Index index = service.getIndexes().get(indexName);
         index.update(indexArgs);
-        return index;
+        Set<Map.Entry<String, Object>> set = index.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -759,8 +827,15 @@ public class SplunkClient {
      * @param indexIdentifier The identifier
      * @return The Index specified.
      */
-    public Index getIndex(String indexIdentifier) {
-        return service.getIndexes().get(indexIdentifier);
+    public Map<String, Object> getIndex(String indexIdentifier) {
+        Index index = service.getIndexes().get(indexIdentifier);
+        Validate.notNull(index, "You must provide a valid index name");
+        Set<Map.Entry<String, Object>> set = index.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -770,11 +845,17 @@ public class SplunkClient {
      * @param maxSeconds Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
      * @return the cleaned index
      */
-    public Index cleanIndex(String indexName, int maxSeconds) {
+    public Map<String, Object> cleanIndex(String indexName, int maxSeconds) {
         Validate.notNull(indexName, "You must provide an index name");
         Validate.notEmpty(indexName, "You must provide an index name");
         Index index = service.getIndexes().get(indexName);
-        return index.clean(maxSeconds);
+        index = index.clean(maxSeconds);
+        Set<Map.Entry<String, Object>> set = index.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
     /**
@@ -785,7 +866,7 @@ public class SplunkClient {
      * @param indexArgs Optional map of arguments to apply to the update
      * @return The index that has been updated
      */
-    public Index addDataToIndex(String indexName, String stringData, Map<String, Object> indexArgs) {
+    public Map<String, Object> addDataToIndex(String indexName, String stringData, Map<String, Object> indexArgs) {
         Index index = service.getIndexes().get(indexName);
         if (indexArgs != null && !indexArgs.isEmpty()) {
             Args eventArgs = new Args();
@@ -794,7 +875,12 @@ public class SplunkClient {
         } else {
             index.submit(stringData);
         }
-        return index;
+        Set<Map.Entry<String, Object>> set = index.entrySet();
+        Map<String, Object> mapFromSet = new HashMap<String, Object>();
+        for (Map.Entry<String, Object> entry : set) {
+            mapFromSet.put(entry.getKey(), entry.getValue());
+        }
+        return mapFromSet;
     }
 
 
@@ -803,18 +889,18 @@ public class SplunkClient {
      *
      * @param portNumber The TCP Port Number to use
      * @param stringData The data string to add
-     * @return The TcpInput
+     * @return Success or Failure
      */
-    public TcpInput addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
+    public Boolean addDataToTcpInput(String portNumber, String stringData) throws SplunkConnectorException {
         InputCollection coll = service.getInputs();
         TcpInput input = (TcpInput) coll.get(portNumber);
         try {
             input.submit(stringData);
+            return true;
         } catch (IOException e) {
             LOGGER.info("Unable to submit to that TCP Port", e);
-            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+            return false;
         }
-        return input;
     }
 
     /**
@@ -822,29 +908,29 @@ public class SplunkClient {
      *
      * @param portNumber The UDP Port Number to use
      * @param data       The data string to add
-     * @return The UdpInput
+     * @return Success or Failure
      */
-    public UdpInput addDataToUdpInput(String portNumber, String data) throws SplunkConnectorException {
+    public Boolean addDataToUdpInput(String portNumber, String data) throws SplunkConnectorException {
         UdpInput input = (UdpInput) service.getInputs().get(portNumber);
         try {
             input.submit(data);
+            return true;
         } catch (IOException e) {
             LOGGER.info("Unable to submit to that TCP Port", e);
-            throw new SplunkConnectorException("Error sending data to Tcp Input", e);
+            return false;
         }
-        return input;
     }
 
     /**
      * Remove an Input
      *
      * @param inputIdentifier the identifier of the input to remove, for example a port number or filename
-     * @return the Input that was removed
+     * @return Success or Failure
      */
-    public Input removeInput(String inputIdentifier) {
+    public Boolean removeInput(String inputIdentifier) {
         Input input = service.getInputs().get(inputIdentifier);
         input.remove();
-        return input;
+        return true;
     }
 
     /**
@@ -853,12 +939,12 @@ public class SplunkClient {
      * {@sample.xml ../../../doc/splunk-connector.xml.sample splunk:remove-index}
      *
      * @param indexName The name of the index to remove
-     * @return the Index that was removed
+     * @return Success or Failure
      */
-    public Index removeIndex(String indexName) {
+    public Boolean removeIndex(String indexName) {
         IndexCollection coll = service.getIndexes();
         Index index = coll.get(indexName);
         index.remove();
-        return index;
+        return true;
     }
 }

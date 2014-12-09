@@ -9,7 +9,6 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Index;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,6 +17,8 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -59,8 +60,8 @@ public class CleanIndexesTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("clean-index");
             assertNotNull(result);
-            Index index = (Index) result;
-            assertEquals(indexName, index.getName());
+            Map<String, Object> index = (Map<String, Object>) result;
+            assertEquals("main", index.get("defaultDatabase"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

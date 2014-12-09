@@ -9,9 +9,7 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.Input;
 import com.splunk.InputKind;
-import com.splunk.TcpInput;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +18,8 @@ import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
-import org.mule.transport.NullPayload;
+
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -63,8 +62,8 @@ public class GetInputTestCases extends SplunkTestParent {
             upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
             Object result = runFlowAndGetPayload("get-input");
             assertNotNull(result);
-            Input input = (Input) result;
-            assertTrue(input instanceof TcpInput);
+            Map<String, Object> input = (Map<String, Object>) result;
+            assertEquals("default", input.get("index"));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -79,9 +78,9 @@ public class GetInputTestCases extends SplunkTestParent {
             initializeTestRunMessage("getInputTestData");
             upsertOnTestRunMessage("inputIdentifier", "An Invalid Identifier");
             Object result = runFlowAndGetPayload("get-input");
-            assertTrue(result instanceof NullPayload);
+            fail("Exception should be thrown for an invalid input identifier");
         } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
+            assertEquals("You must provide a valid input identifier", e.getCause().getMessage());
         }
     }
 

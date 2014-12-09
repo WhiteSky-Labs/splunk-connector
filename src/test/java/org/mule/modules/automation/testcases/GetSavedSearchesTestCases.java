@@ -10,23 +10,27 @@
 
 package org.mule.modules.automation.testcases;
 
-import com.splunk.SavedSearch;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.rules.Timeout;
 import org.mule.modules.automation.RegressionTests;
 import org.mule.modules.automation.SmokeTests;
 import org.mule.modules.automation.SplunkTestParent;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
 public class GetSavedSearchesTestCases
         extends SplunkTestParent {
 
+    @Rule
+    public Timeout globalTimeout = new Timeout(100000);
     private String searchName;
 
     @Before
@@ -60,7 +64,7 @@ public class GetSavedSearchesTestCases
         try {
             Object result = runFlowAndGetPayload("get-saved-searches");
             assertNotNull(result);
-            List<SavedSearch> savedSearchList = (List<SavedSearch>) result;
+            List<Map<String, Object>> savedSearchList = (List<Map<String, Object>>) result;
             assertTrue(savedSearchList.size() > 0);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));

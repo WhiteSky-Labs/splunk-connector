@@ -101,20 +101,6 @@ public class RunBlockingSearchTestCases
             RegressionTests.class
     })
     @Test
-    public void testRunBlockingSearchWithInvalidSearchArgs() {
-        try {
-            initializeTestRunMessage("runBlockingSearchTestDataWithInvalidProperties");
-            Object result = runFlowAndGetPayload("run-blocking-search");
-            fail("Exception should be thrown when attempting an invalid search query");
-        } catch (Exception e) {
-            assertEquals("No matching method, check your properties are correct", e.getCause().getMessage());
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
     public void testRunBlockingSearchWithValidSearchArgs() {
         try {
             initializeTestRunMessage("runBlockingSearchTestDataWithValidProperties");
