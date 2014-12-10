@@ -4,7 +4,7 @@
         <connectivity-support>true</connectivity-support>
         <OAuth-authentication>false</OAuth-authentication>
         <metadata>static</metadata>
-        <datasense-enabled>false</datasense-enabled>
+        <datasense-enabled>true</datasense-enabled>
         <transformer>false</transformer>
     </properties>
     <global-config>
@@ -14,7 +14,7 @@
                            name="name">Splunk
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Host"
-                           use="required" name="host">54.68.156.168
+                           use="required" name="host">localhost
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Port"
                            use="required" name="port">8089
@@ -23,7 +23,7 @@
                            caption="Username" use="required" name="username">admin
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="password" group="Connection"
-                           caption="Password" use="required" name="password">l1m3l16ht
+                           caption="Password" use="required" name="password">admin
                 </attribute>
             </attributes>
         </config>
