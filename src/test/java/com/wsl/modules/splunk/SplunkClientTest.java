@@ -86,7 +86,7 @@ public class SplunkClientTest {
         this.client = spy(new SplunkClient(connector));
 
         connector.setHost("localhost");
-        connector.setPort(8089);
+        connector.setPort("8089");
         client.setService(service);
 
     }
@@ -396,10 +396,10 @@ public class SplunkClientTest {
 
     @Test
     public void testConnect() throws Exception {
-        when(connector.getPort()).thenReturn(8089);
+        when(connector.getPort()).thenReturn("8089");
         when(connector.getHost()).thenReturn("localhost");
         try {
-            client.connect("Test", "Test", "localhost", 8089);
+            client.connect("Test", "Test", "localhost", "8089");
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
             assertEquals("Connection refused", ex.getMessage());
@@ -812,6 +812,16 @@ public class SplunkClientTest {
     @Test
     public void testGetService() throws Exception {
         assertEquals(service, client.getService());
+    }
+
+    @Test
+    public void testIsInt() {
+        assertTrue(client.isInt("8089"));
+        assertTrue(client.isInt("55000"));
+        assertTrue(client.isInt("1"));
+        assertTrue(client.isInt("0"));
+        assertTrue(client.isInt("-8089"));
+        assertFalse(client.isInt("testing"));
     }
 
 }

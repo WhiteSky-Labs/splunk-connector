@@ -44,7 +44,7 @@ public class SplunkConnector {
      * The Splunk Host
      */
     @Configurable
-    private int port;
+    private String port;
 
     private SplunkClient splunkClient;
 
@@ -106,8 +106,9 @@ public class SplunkConnector {
     public String getConnectionIdentifier() {
         if (splunkClient.getService() != null) {
             return splunkClient.getService().getToken();
+        } else {
+            return "001";
         }
-        return "001";
     }
 
     /**
@@ -586,7 +587,7 @@ public class SplunkConnector {
      *
      * @return the Port of the Splunk Server
      */
-    public int getPort() {
+    public String getPort() {
         return port;
     }
 
@@ -595,7 +596,7 @@ public class SplunkConnector {
      *
      * @param port The port of the Splunk Server to set
      */
-    public void setPort(int port) {
+    public void setPort(String port) {
         this.port = port;
     }
 

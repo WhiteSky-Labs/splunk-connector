@@ -11,18 +11,19 @@
         <config name="config">
             <attributes>
                 <attribute javaType="java.lang.String" type="name" group="Basic Settings" caption="Name" use="optional"
-                           name="name"></attribute>
-                <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Host"
-                           use="required" name="host">localhost
+                           name="name">Splunk
                 </attribute>
-                <attribute prefix="splunk" javaType="int" type="integer" group="General" caption="Port" use="required"
-                           name="port">8089
+                <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Host"
+                           use="required" name="host">54.68.156.168
+                </attribute>
+                <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Port"
+                           use="required" name="port">8089
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="string" group="Connection"
                            caption="Username" use="required" name="username">admin
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="password" group="Connection"
-                           caption="Password" use="required" name="password">admin
+                           caption="Password" use="required" name="password">l1m3l16ht
                 </attribute>
             </attributes>
         </config>

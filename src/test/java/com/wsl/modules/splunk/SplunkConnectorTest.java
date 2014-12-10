@@ -48,8 +48,27 @@ public class SplunkConnectorTest {
 
         this.connector = new SplunkConnector(client);
         this.connector.setHost("localhost");
-        this.connector.setPort(8089);
+        this.connector.setPort("8089");
         this.client.setService(service);
+    }
+
+    @Test
+    public void testSetPort() {
+        this.connector.setPort("testing");
+        assertEquals("testing", this.connector.getPort());
+        this.connector.setPort("8089");
+    }
+
+    @Test
+    public void setHost() {
+        this.connector.setHost("testing");
+        assertEquals("testing", this.connector.getHost());
+        this.connector.setHost("localhost");
+    }
+
+    @Test
+    public void testGetHost() {
+        assertEquals("localhost", this.connector.getHost());
     }
 
     @Test
@@ -199,7 +218,7 @@ public class SplunkConnectorTest {
 
     @Test
     public void testGetPort() throws Exception {
-        assertEquals(8089, connector.getPort());
+        assertEquals("8089", connector.getPort());
     }
 
     @Test

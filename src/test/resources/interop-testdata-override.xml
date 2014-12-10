@@ -11,16 +11,16 @@
         <config name="config">
             <attributes>
                 <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Host"
-                           use="required" name="host">localhost
+                           use="required" name="host">54.68.156.168
                 </attribute>
-                <attribute prefix="splunk" javaType="int" type="integer" group="General" caption="Port" use="required"
-                           name="port">8089
+                <attribute prefix="splunk" javaType="java.lang.String" type="string" group="General" caption="Port"
+                           use="required" name="port">8089
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="string" group="Connection"
                            caption="Username" use="required" name="username">admin
                 </attribute>
                 <attribute prefix="splunk" javaType="java.lang.String" type="password" group="Connection"
-                           caption="Password" use="required" name="password">admin
+                           caption="Password" use="required" name="password">l1m3l16ht
                 </attribute>
             </attributes>
         </config>
@@ -42,28 +42,32 @@
         </processor>
         <processor caption="Run blocking search" xmlName="run-blocking-search" name="runBlockingSearch">
             <properties>
-                <datamapper output="Map" input="Map"/>
+                <datamapper output="Unknown" input="Map"/>
                 <auto-paging>false</auto-paging>
                 <query-support>false</query-support>
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Query"
-                           use="required" name="searchQuery"></attribute>
+                           use="required" name="searchQuery">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Run one shot search" xmlName="run-one-shot-search" name="runOneShotSearch">
             <properties>
-                <datamapper output="Map&lt;String,String&gt;" input="List&lt;Map&gt;"/>
+                <datamapper output="Map" input="List&lt;Map&gt;"/>
                 <auto-paging>false</auto-paging>
                 <query-support>false</query-support>
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Query"
-                           use="required" name="searchQuery"></attribute>
+                           use="required" name="searchQuery">Test
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Earliest Time"
-                           use="required" name="earliestTime"></attribute>
+                           use="required" name="earliestTime">rt-10m
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Latest Time"
-                           use="required" name="latestTime"></attribute>
+                           use="required" name="latestTime">rt
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Get saved searches" xmlName="get-saved-searches" name="getSavedSearches">
@@ -81,21 +85,24 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Query"
-                           use="required" name="searchQuery"></attribute>
+                           use="required" name="searchQuery">search * | head 100
+                </attribute>
             </attributes>
         </processor>
         <processor caption="View saved search properties" xmlName="view-saved-search-properties"
                    name="viewSavedSearchProperties">
             <properties>
-                <datamapper output="" input="Set&lt;Entry&gt;"/>
+                <datamapper output="" input="List&lt;Map$Entry&gt;"/>
                 <auto-paging>false</auto-paging>
                 <query-support>false</query-support>
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Modify saved search properties" xmlName="modify-saved-search-properties"
@@ -107,7 +114,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
                 <attribute javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;"
                            type="element-controller-map" group="General" caption="Search Properties" use="required"
                            name="search-properties"></attribute>
@@ -128,7 +136,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Run saved search with arguments" xmlName="run-saved-search-with-arguments"
@@ -140,7 +149,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Delete saved search" xmlName="delete-saved-search" name="deleteSavedSearch">
@@ -151,7 +161,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Search Name"
-                           use="required" name="searchName"></attribute>
+                           use="required" name="searchName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Get data model" xmlName="get-data-model" name="getDataModel">
@@ -162,7 +173,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Data Model Name"
-                           use="required" name="dataModelName"></attribute>
+                           use="required" name="dataModelName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Get data models" xmlName="get-data-models" name="getDataModels">
@@ -187,9 +199,11 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Input Identifier"
-                           use="required" name="inputIdentifier"></attribute>
+                           use="required" name="inputIdentifier">8099
+                </attribute>
                 <attribute javaType="com.splunk.InputKind" type="string" group="General" caption="Kind Reference"
-                           use="required" name="kind-ref"></attribute>
+                           use="required" name="kind-ref">TCP
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Modify input" xmlName="modify-input" name="modifyInput">
@@ -200,10 +214,12 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Input Identifier"
-                           use="required" name="inputIdentifier"></attribute>
+                           use="required" name="inputIdentifier">8099
+                </attribute>
                 <attribute javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;"
                            type="element-controller-map" group="General" caption="Input Args" use="required"
-                           name="input-args"></attribute>
+                           name="input-args">TCP
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Get input" xmlName="get-input" name="getInput">
@@ -214,7 +230,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Input Identifier"
-                           use="required" name="inputIdentifier"></attribute>
+                           use="required" name="inputIdentifier">8099
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Get indexes" xmlName="get-indexes" name="getIndexes">
@@ -232,7 +249,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Name" use="required"
-                           name="indexName"></attribute>
+                           name="indexName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Modify index" xmlName="modify-index" name="modifyIndex">
@@ -243,7 +261,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Name" use="required"
-                           name="indexName"></attribute>
+                           name="indexName">Test
+                </attribute>
                 <attribute javaType="java.util.Map&lt;java.lang.String,java.lang.Object&gt;"
                            type="element-controller-map" group="General" caption="Index Args" use="required"
                            name="index-args"></attribute>
@@ -257,7 +276,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Identifier"
-                           use="required" name="indexIdentifier"></attribute>
+                           use="required" name="indexIdentifier">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Clean index" xmlName="clean-index" name="cleanIndex">
@@ -268,7 +288,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Name" use="required"
-                           name="indexName"></attribute>
+                           name="indexName">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Add data to index" xmlName="add-data-to-index" name="addDataToIndex">
@@ -279,9 +300,11 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Name" use="required"
-                           name="indexName"></attribute>
+                           name="indexName">Test
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="String Data"
-                           use="required" name="stringData"></attribute>
+                           use="required" name="stringData">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Add data to tcp input" xmlName="add-data-to-tcp-input" name="addDataToTcpInput">
@@ -292,9 +315,11 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Port Number"
-                           use="required" name="portNumber"></attribute>
+                           use="required" name="portNumber">Test
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="String Data"
-                           use="required" name="stringData"></attribute>
+                           use="required" name="stringData">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Add data to udp input" xmlName="add-data-to-udp-input" name="addDataToUdpInput">
@@ -305,9 +330,11 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Port Number"
-                           use="required" name="portNumber"></attribute>
+                           use="required" name="portNumber">Test
+                </attribute>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="String Data"
-                           use="required" name="stringData"></attribute>
+                           use="required" name="stringData">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Remove input" xmlName="remove-input" name="removeInput">
@@ -318,7 +345,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Input Identifier"
-                           use="required" name="inputIdentifier"></attribute>
+                           use="required" name="inputIdentifier">Test
+                </attribute>
             </attributes>
         </processor>
         <processor caption="Remove index" xmlName="remove-index" name="removeIndex">
@@ -329,7 +357,8 @@
             </properties>
             <attributes>
                 <attribute javaType="java.lang.String" type="string" group="General" caption="Index Name" use="required"
-                           name="indexName"></attribute>
+                           name="indexName">Test
+                </attribute>
             </attributes>
         </processor>
     </message-processors>

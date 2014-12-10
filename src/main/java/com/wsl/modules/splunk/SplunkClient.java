@@ -48,27 +48,45 @@ public class SplunkClient {
      * @param host     The host of the splunk server
      * @param port     The port of the splunk server
      */
-    public void connect(String username, String password, String host, int port) throws ConnectionException {
+    public void connect(String username, String password, String host, String port) throws ConnectionException {
         try {
+            if (username == null
+                    || password == null
+                    || host == null
+                    || port == null
+                    || !isInt(port)) {
+                throw new ConnectionException(
+                        ConnectionExceptionCode.INCORRECT_CREDENTIALS,
+                        "00",
+                        "Invalid credentials"
+                );
+            }
             ServiceArgs loginArgs = new ServiceArgs();
             loginArgs.setUsername(username);
             loginArgs.setPassword(password);
             loginArgs.setHost(splunkConnector.getHost());
-            loginArgs.setPort(splunkConnector.getPort());
+            loginArgs.setPort(Integer.parseInt(splunkConnector.getPort()));
 
             // Create a Service instance and log in with the argument map
             service = Service.connect(loginArgs);
         } catch (com.splunk.HttpException splunkException) {
             LOGGER.error("HTTPException Connecting to Splunk", splunkException);
             throw new ConnectionException(
-                    ConnectionExceptionCode.CANNOT_REACH,
+                    ConnectionExceptionCode.UNKNOWN_HOST,
                     Integer.toString(splunkException.getStatus()),
                     splunkException.getMessage()
             );
         } catch (RuntimeException e) {
             LOGGER.info("Error connecting to Splunk", e);
             throw new ConnectionException(
-                    ConnectionExceptionCode.CANNOT_REACH,
+                    ConnectionExceptionCode.UNKNOWN_HOST,
+                    "00",
+                    e.getMessage()
+            );
+        } catch (Exception e) {
+            LOGGER.info("Error connnecting to Splunk", e);
+            throw new ConnectionException(
+                    ConnectionExceptionCode.UNKNOWN_HOST,
                     "00",
                     e.getMessage()
             );
@@ -603,7 +621,6 @@ public class SplunkClient {
      * @param latestTime   the latest time, defaults to now
      * @param searchMode   the searchmode, realtime or normal
      * @param outputMode   the output mode, XML or JSON
-     * @param exportArgs   The arguments to the search
      * @param callback     The sourcecallback to return results to
      * @return A list of the Search Results found from the export search.
      * @throws com.wsl.modules.splunk.exception.SplunkConnectorException when there is an issue running the search
@@ -946,5 +963,15 @@ public class SplunkClient {
         Index index = coll.get(indexName);
         index.remove();
         return true;
+    }
+
+    /**
+     * Check if a String value is an integer
+     *
+     * @param str A string to test if it represents an integer
+     * @return true/false
+     */
+    boolean isInt(String str) {
+        return str.matches("^-?\\d+$");
     }
 }
