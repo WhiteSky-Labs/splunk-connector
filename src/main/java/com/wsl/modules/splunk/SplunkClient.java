@@ -49,23 +49,27 @@ public class SplunkClient {
      * @param port     The port of the splunk server
      */
     public void connect(String username, String password, String host, String port) throws ConnectionException {
+        if (username == null
+                || password == null
+                || host == null
+                || port == null
+                || !isInt(port)
+                || username.isEmpty()
+                || password.isEmpty()
+                || host.isEmpty()
+                || port.isEmpty()) {
+            throw new ConnectionException(
+                    ConnectionExceptionCode.INCORRECT_CREDENTIALS,
+                    "00",
+                    "Invalid credentials"
+            );
+        }
         try {
-            if (username == null
-                    || password == null
-                    || host == null
-                    || port == null
-                    || !isInt(port)) {
-                throw new ConnectionException(
-                        ConnectionExceptionCode.INCORRECT_CREDENTIALS,
-                        "00",
-                        "Invalid credentials"
-                );
-            }
             ServiceArgs loginArgs = new ServiceArgs();
             loginArgs.setUsername(username);
             loginArgs.setPassword(password);
-            loginArgs.setHost(splunkConnector.getHost());
-            loginArgs.setPort(Integer.parseInt(splunkConnector.getPort()));
+            loginArgs.setHost(host);
+            loginArgs.setPort(Integer.parseInt(port));
 
             // Create a Service instance and log in with the argument map
             service = Service.connect(loginArgs);

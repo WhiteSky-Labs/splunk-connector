@@ -396,13 +396,31 @@ public class SplunkClientTest {
 
     @Test
     public void testConnect() throws Exception {
-        when(connector.getPort()).thenReturn("8089");
-        when(connector.getHost()).thenReturn("localhost");
         try {
             client.connect("Test", "Test", "localhost", "8089");
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
             assertEquals("Connection refused", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectWithEmptyCredentials() throws Exception {
+        try {
+            client.connect("", "", "", "");
+            fail("Exception should be thrown");
+        } catch (ConnectionException ex) {
+            assertEquals("Invalid credentials", ex.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectWithNullCredentials() throws Exception {
+        try {
+            client.connect(null, null, null, null);
+            fail("Exception should be thrown");
+        } catch (ConnectionException ex) {
+            assertEquals("Invalid credentials", ex.getMessage());
         }
     }
 
