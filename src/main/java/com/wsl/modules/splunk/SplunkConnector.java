@@ -41,7 +41,7 @@ public class SplunkConnector {
     private String host;
 
     /**
-     * The Splunk Host
+     * The Splunk Port
      */
     @Configurable
     private String port;
@@ -576,7 +576,7 @@ public class SplunkConnector {
     /**
      * Set splunk hostname
      *
-     * @param host The splunk host
+     * @param host The splunk hostname
      */
     public void setHost(String host) {
         this.host = host;
