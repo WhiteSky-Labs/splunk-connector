@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
 public class RunNormalSearchTestCases extends SplunkTestParent {
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         initializeTestRunMessage("runNormalSearchTestData");
     }
 

@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -31,26 +31,18 @@ public class ViewSavedSearchPropertiesTestCases
     private String searchQuery;
 
     @Before
-    public void setup() {
-        try {
-            initializeTestRunMessage("createSavedSearchTestData");
-            searchName = getTestRunMessageValue("searchName");
-            runFlowAndGetPayload("create-saved-search");
-            searchQuery = getTestRunMessageValue("searchQuery");
-            initializeTestRunMessage("viewSavedSearchPropertiesTestData");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+    public void setup() throws Exception {
+        initializeTestRunMessage("createSavedSearchTestData");
+        searchName = getTestRunMessageValue("searchName");
+        runFlowAndGetPayload("create-saved-search");
+        searchQuery = getTestRunMessageValue("searchQuery");
+        initializeTestRunMessage("viewSavedSearchPropertiesTestData");
     }
 
     @After
-    public void tearDown() {
-        try {
-            upsertOnTestRunMessage("searchName", searchName);
-            runFlowAndGetPayload("delete-saved-search");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+    public void tearDown() throws Exception {
+        upsertOnTestRunMessage("searchName", searchName);
+        runFlowAndGetPayload("delete-saved-search");
     }
 
     @Category({
