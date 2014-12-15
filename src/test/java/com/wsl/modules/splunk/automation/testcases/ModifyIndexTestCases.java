@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -27,26 +27,18 @@ public class ModifyIndexTestCases extends SplunkTestParent {
     private String indexName = "modify_index_testing";
 
     @Before
-    public void setup() {
-        try {
-            initializeTestRunMessage("createIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
+    public void setup() throws Exception {
+        initializeTestRunMessage("createIndexTestData");
+        upsertOnTestRunMessage("indexName", indexName);
 
-            Object result = runFlowAndGetPayload("create-index");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+        Object result = runFlowAndGetPayload("create-index");
     }
 
     @After
-    public void tearDown() {
-        try {
-            initializeTestRunMessage("removeIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
-            Object result = runFlowAndGetPayload("remove-index");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+    public void tearDown() throws Exception {
+        initializeTestRunMessage("removeIndexTestData");
+        upsertOnTestRunMessage("indexName", indexName);
+        Object result = runFlowAndGetPayload("remove-index");
     }
 
     @Category({

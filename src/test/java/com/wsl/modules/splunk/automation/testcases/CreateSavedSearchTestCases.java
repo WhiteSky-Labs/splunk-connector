@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -32,25 +32,21 @@ public class CreateSavedSearchTestCases
     private boolean duplicateSearchCreated = false;
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         initializeTestRunMessage("createSavedSearchTestData");
         searchName = getTestRunMessageValue("searchName");
     }
 
     @After
-    public void tearDown() {
-        try {
-            if ((searchName != null) && (searchName != "") && searchCreated) {
-                // ensures we didn't only run the negative cases
-                upsertOnTestRunMessage("searchName", searchName);
-                runFlowAndGetPayload("delete-saved-search");
-            }
-            if ((duplicateSearchName != null) && (duplicateSearchName != "") && duplicateSearchCreated) {
-                upsertOnTestRunMessage("searchName", duplicateSearchName);
-                runFlowAndGetPayload("delete-saved-search");
-            }
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
+    public void tearDown() throws Exception {
+        if ((searchName != null) && (searchName != "") && searchCreated) {
+            // ensures we didn't only run the negative cases
+            upsertOnTestRunMessage("searchName", searchName);
+            runFlowAndGetPayload("delete-saved-search");
+        }
+        if ((duplicateSearchName != null) && (duplicateSearchName != "") && duplicateSearchCreated) {
+            upsertOnTestRunMessage("searchName", duplicateSearchName);
+            runFlowAndGetPayload("delete-saved-search");
         }
     }
 

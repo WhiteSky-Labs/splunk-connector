@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -29,27 +29,19 @@ public class ModifyInputTestCases extends SplunkTestParent {
     private String inputIdentifier = "9908";
 
     @Before
-    public void setup() {
-        try {
-            initializeTestRunMessage("createInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-            upsertOnTestRunMessage("kind", InputKind.Tcp);
+    public void setup() throws Exception {
+        initializeTestRunMessage("createInputTestData");
+        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        upsertOnTestRunMessage("kind", InputKind.Tcp);
 
-            Object result = runFlowAndGetPayload("create-input");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+        Object result = runFlowAndGetPayload("create-input");
     }
 
     @After
-    public void tearDown() {
-        try {
-            initializeTestRunMessage("removeInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-            Object result = runFlowAndGetPayload("remove-input");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+    public void tearDown() throws Exception {
+        initializeTestRunMessage("removeInputTestData");
+        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        Object result = runFlowAndGetPayload("remove-input");
     }
 
     @Category({

@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -28,7 +28,7 @@ public class GetInputTestCases extends SplunkTestParent {
     private String inputIdentifier = "9906";
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         try {
             initializeTestRunMessage("createInputTestData");
             upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
@@ -41,7 +41,7 @@ public class GetInputTestCases extends SplunkTestParent {
     }
 
     @After
-    public void tearDown() {
+    public void tearDown() throws Exception {
         try {
             initializeTestRunMessage("removeInputTestData");
             upsertOnTestRunMessage("inputIdentifier", inputIdentifier);

@@ -1,6 +1,6 @@
 /**
  *
- * (c) 2003-2012 MuleSoft, Inc. This software is protected under international
+ * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
  * copyright law. All use of this software is subject to MuleSoft's Master
  * Subscription Agreement (or other Terms of Service) separately entered
  * into between you and MuleSoft. If such an agreement is not in
@@ -34,30 +34,22 @@ public class GetSavedSearchHistoryTestCases
     private final String searchQuery = "search " + searchName + " | head 100";
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         // create and run a saved search
-        try {
-            initializeTestRunMessage("createSavedSearchTestData");
-            searchName = getTestRunMessageValue("searchName");
-            upsertOnTestRunMessage("searchQuery", searchQuery);
-            Object result = runFlowAndGetPayload("create-saved-search");
-            initializeTestRunMessage("runSavedSearchTestData");
-            upsertOnTestRunMessage("searchName", searchName);
-            result = runFlowAndGetPayload("run-saved-search");
-            initializeTestRunMessage("getSavedSearchHistoryTestData");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+        initializeTestRunMessage("createSavedSearchTestData");
+        searchName = getTestRunMessageValue("searchName");
+        upsertOnTestRunMessage("searchQuery", searchQuery);
+        Object result = runFlowAndGetPayload("create-saved-search");
+        initializeTestRunMessage("runSavedSearchTestData");
+        upsertOnTestRunMessage("searchName", searchName);
+        result = runFlowAndGetPayload("run-saved-search");
+        initializeTestRunMessage("getSavedSearchHistoryTestData");
     }
 
     @After
-    public void tearDown() {
-        try {
-            upsertOnTestRunMessage("searchName", searchName);
-            runFlowAndGetPayload("delete-saved-search");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
+    public void tearDown() throws Exception {
+        upsertOnTestRunMessage("searchName", searchName);
+        runFlowAndGetPayload("delete-saved-search");
     }
 
     @Category({
