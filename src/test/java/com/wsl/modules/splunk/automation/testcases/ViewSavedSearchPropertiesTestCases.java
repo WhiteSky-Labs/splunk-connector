@@ -57,7 +57,7 @@ public class ViewSavedSearchPropertiesTestCases
             assertNotNull(result);
             Set<Map.Entry<String, Object>> searchProperties = (Set<Map.Entry<String, Object>>) result;
             for (Map.Entry<String, Object> property : searchProperties) {
-                if (property.getKey() == "search") {
+                if (property.getKey().equalsIgnoreCase("search")) {
                     assertEquals(searchQuery, property.getValue());
                 }
             }
