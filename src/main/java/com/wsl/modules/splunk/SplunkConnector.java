@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -51,19 +51,26 @@ public class SplunkConnector {
     private SplunkClient splunkClient;
 
     /**
+     * Get the SplunkClient instance being used to connect
+     * @return the SplunkClient instance being used
+     */
+    public SplunkClient getSplunkClient(){
+        return this.splunkClient;
+    }
+
+    /**
+     * Set the SplunkClient instance to the one provided
+     * @param splunkClient the SplunkClient to set
+     */
+    public void setSplunkClient(SplunkClient splunkClient){
+        this.splunkClient = splunkClient;
+    }
+
+    /**
      * Public Constructor to support Unit Tests
      */
     public SplunkConnector() {
 
-    }
-
-    /**
-     * Instantiate a Splunk Connector using a pre-created client
-     *
-     * @param client The Splunk Client to use
-     */
-    public SplunkConnector(SplunkClient client) {
-        this.splunkClient = client;
     }
 
     /**
