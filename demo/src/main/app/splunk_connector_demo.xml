@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:context="http://www.springframework.org/schema/context"
+<mule xmlns:spring="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
       xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns="http://www.mulesoft.org/schema/mule/core"
       version="EE-3.5.2"
-      xsi:schemaLocation="
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+      xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd">
+http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd">
     <context:property-placeholder location="credentials.properties"/>
     
     <splunk:config name="Splunk" username="${splunk.username}" password="${splunk.password}" host="${splunk.host}" port="${splunk.port}"
@@ -19,17 +20,20 @@ http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/s
                                doc:name="HTTP"/>
         <splunk:create-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
                              doc:name="Create Index"/>
+        <logger message="Splunk Index Created, payload is #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="Add_Data_To_Index_Flow" doc:name="Add_Data_To_Index_Flow">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="adddata"
                                doc:name="HTTP"/>
         <splunk:add-data-to-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
                                   stringData="#[message.inboundProperties['stringdata']]" doc:name="Add Data To Index"/>
+        <logger message="Data added to Splunk Index, payload is #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
     <flow name="Remove_Index_Flow" doc:name="Remove_Index_Flow">
         <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="removeindex"
                                doc:name="HTTP"/>
         <splunk:remove-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]"
                              doc:name="Remove Index"/>
+        <logger message="Index removed from Splunk, payload is #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
 </mule>
