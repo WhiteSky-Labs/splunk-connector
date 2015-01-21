@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -26,19 +26,19 @@ import static org.junit.Assert.*;
 
 public class RunSavedSearchTestCases
         extends SplunkTestParent {
-    private String searchName;
+
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        runFlowAndGetPayload("create-saved-search");
         initializeTestRunMessage("runSavedSearchTestData");
+        expectedBean = getBeanFromContext("runSavedSearchTestData");
+        runFlowAndGetPayload("create-saved-search");
     }
 
     @After
     public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
+        upsertOnTestRunMessage("searchName", expectedBean.get("searchName"));
         runFlowAndGetPayload("delete-saved-search");
     }
 
@@ -49,7 +49,6 @@ public class RunSavedSearchTestCases
     @Test
     public void testRunSavedSearch() {
         try {
-            upsertOnTestRunMessage("searchName", searchName);
             Object result = runFlowAndGetPayload("run-saved-search");
             assertNotNull(result);
             List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;

@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -24,21 +24,16 @@ import static org.junit.Assert.*;
 
 public class AddDataToTcpInputTestCases extends SplunkTestParent {
 
-    private String inputIdentifier = "9988";
-
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        initializeTestRunMessage("addDataToTcpInputTestData");
         upsertOnTestRunMessage("kind", InputKind.Tcp);
-        Object result = runFlowAndGetPayload("create-input");
+        runFlowAndGetPayload("create-input");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-        Object result = runFlowAndGetPayload("remove-input");
+        runFlowAndGetPayload("remove-input");
     }
 
     @Category({
@@ -48,8 +43,6 @@ public class AddDataToTcpInputTestCases extends SplunkTestParent {
     @Test
     public void testAddDataToTcpInput() {
         try {
-            initializeTestRunMessage("addDataToTcpInputTestData");
-            upsertOnTestRunMessage("portNumber", inputIdentifier);
             Object result = runFlowAndGetPayload("add-data-to-tcp-input");
             assertNotNull(result);
             Boolean success = (Boolean) result;

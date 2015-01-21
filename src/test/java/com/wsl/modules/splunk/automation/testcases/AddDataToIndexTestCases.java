@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -24,20 +24,19 @@ import static org.junit.Assert.*;
 
 public class AddDataToIndexTestCases extends SplunkTestParent {
 
-    private String indexName = "add_data_to_index_testing";
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-        Object result = runFlowAndGetPayload("create-index");
+        initializeTestRunMessage("addDataToIndexTestData");
+        expectedBean = getBeanFromContext("addDataToIndexTestData");
+        runFlowAndGetPayload("create-index");
+
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-        Object result = runFlowAndGetPayload("remove-index");
+        runFlowAndGetPayload("remove-index");
     }
 
     @Category({
@@ -47,12 +46,10 @@ public class AddDataToIndexTestCases extends SplunkTestParent {
     @Test
     public void testAddDataToIndex() {
         try {
-            initializeTestRunMessage("addDataToIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("add-data-to-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("auto", index.get("bucketRebuildMemoryHint"));
+            assertTrue(((String) index.get("homePath")).contains((String)expectedBean.get("indexName")));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -65,11 +62,10 @@ public class AddDataToIndexTestCases extends SplunkTestParent {
     public void testAddDataToIndexWithArgs() {
         try {
             initializeTestRunMessage("addDataToIndexWithArgsTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("add-data-to-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("auto", index.get("bucketRebuildMemoryHint"));
+            assertTrue(((String) index.get("homePath")).contains((String)expectedBean.get("indexName")));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

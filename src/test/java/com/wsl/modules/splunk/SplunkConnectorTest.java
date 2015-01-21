@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -46,7 +46,8 @@ public class SplunkConnectorTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        this.connector = new SplunkConnector(client);
+        this.connector = new SplunkConnector();
+        this.connector.setSplunkClient(client);
         this.connector.setHost("localhost");
         this.connector.setPort("8089");
         this.client.setService(service);

@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -23,9 +23,6 @@ import static org.junit.Assert.*;
 
 public class CreateInputsTestCases extends SplunkTestParent {
 
-    private String tcpRawPort = "9293";
-    private String tcpCookedPort = "9112";
-    private String udpPort = "9113";
     private String monitor = "/tmp";
 
     @Category({
@@ -36,17 +33,15 @@ public class CreateInputsTestCases extends SplunkTestParent {
     public void testCreateTcpRawInput() {
         try {
             initializeTestRunMessage("createInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", tcpRawPort);
             upsertOnTestRunMessage("kind", InputKind.Tcp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
             Map<String, Object> input = (Map<String, Object>) result;
             assertEquals("default", input.get("index"));
-            tearDown(tcpRawPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(tcpRawPort);
+            tearDown();
         }
     }
 
@@ -57,7 +52,6 @@ public class CreateInputsTestCases extends SplunkTestParent {
     public void testCreateTcpRawInputWithArgs() {
         try {
             initializeTestRunMessage("createInputWithArgsTestData");
-            upsertOnTestRunMessage("inputIdentifier", tcpRawPort);
             upsertOnTestRunMessage("kind", InputKind.Tcp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
@@ -66,7 +60,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(tcpRawPort);
+            tearDown();
         }
     }
 
@@ -78,7 +72,6 @@ public class CreateInputsTestCases extends SplunkTestParent {
     public void testCreateTcpCookedInput() {
         try {
             initializeTestRunMessage("createInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", tcpCookedPort);
             upsertOnTestRunMessage("kind", InputKind.TcpSplunk);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
@@ -87,7 +80,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(tcpCookedPort);
+            tearDown();
         }
     }
 
@@ -99,7 +92,6 @@ public class CreateInputsTestCases extends SplunkTestParent {
     public void testCreateUdpInput() {
         try {
             initializeTestRunMessage("createInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", udpPort);
             upsertOnTestRunMessage("kind", InputKind.Udp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
@@ -108,7 +100,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(udpPort);
+            tearDown();
         }
     }
 
@@ -119,17 +111,15 @@ public class CreateInputsTestCases extends SplunkTestParent {
     public void testCreateUdpInputWithArgs() {
         try {
             initializeTestRunMessage("createInputWithArgsTestData");
-            upsertOnTestRunMessage("inputIdentifier", udpPort);
             upsertOnTestRunMessage("kind", InputKind.Udp);
             Object result = runFlowAndGetPayload("create-input");
             assertNotNull(result);
             Map<String, Object> input = (Map<String, Object>) result;
             assertEquals("summary", input.get("index"));
-            tearDown(udpPort);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(udpPort);
+            tearDown();
         }
     }
 
@@ -150,7 +140,7 @@ public class CreateInputsTestCases extends SplunkTestParent {
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(monitor);
+            tearDown();
         }
     }
 
@@ -170,20 +160,17 @@ public class CreateInputsTestCases extends SplunkTestParent {
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         } finally {
-            tearDown(monitor);
+            tearDown();
         }
     }
 
     /**
      * Teardown values depend on input type so are invoked manually.
      *
-     * @param inputIdentifier the Input Identifier
-     * @throws Exception When there is a problem running the flow.
      */
-    private void tearDown(String inputIdentifier) {
+    private void tearDown(){
         try {
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-            Object removedResult = runFlowAndGetPayload("remove-input");
+            runFlowAndGetPayload("remove-input");
         } catch (Exception e) {
             ConnectorTestUtils.getStackTrace(e);
         }

@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
         AddDataToIndexTestCases.class,
         AddDataToTcpInputTestCases.class,
         AddDataToUdpInputTestCases.class,
-        CleanIndexesTestCases.class,
         CreateIndexTestCases.class,
         CreateInputsTestCases.class,
         CreateSavedSearchTestCases.class,
@@ -34,18 +33,8 @@ import org.junit.runner.RunWith;
         GetInputTestCases.class,
         GetJobsTestCases.class,
         GetSavedSearchesTestCases.class,
-        GetSavedSearchHistoryTestCases.class,
-        ModifyIndexTestCases.class,
-        ModifyInputTestCases.class,
-        ModifySavedSearchPropertiesTestCases.class,
         RunBlockingSearchTestCases.class,
-        RunExportSearchTestCases.class,
-        RunNormalSearchTestCases.class,
-        RunOneShotSearchTestCases.class,
-        RunRealTimeSearchTestCases.class,
         RunSavedSearchTestCases.class,
-        RunSavedSearchWithArgumentsTestCases.class,
-        ViewSavedSearchPropertiesTestCases.class
 })
 public class SmokeTestSuite {
 

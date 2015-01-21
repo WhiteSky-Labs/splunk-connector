@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -28,17 +29,13 @@ public class ModifyIndexTestCases extends SplunkTestParent {
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-
-        Object result = runFlowAndGetPayload("create-index");
+        initializeTestRunMessage("modifyIndexTestData");
+        runFlowAndGetPayload("create-index");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-        Object result = runFlowAndGetPayload("remove-index");
+        runFlowAndGetPayload("remove-index");
     }
 
     @Category({
@@ -48,8 +45,6 @@ public class ModifyIndexTestCases extends SplunkTestParent {
     @Test
     public void testModifyIndex() {
         try {
-            initializeTestRunMessage("modifyIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("modify-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
@@ -66,11 +61,12 @@ public class ModifyIndexTestCases extends SplunkTestParent {
     public void testModifyInputWithInvalidArgs() {
         try {
             initializeTestRunMessage("modifyIndexWithInvalidArgsTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("modify-index");
             fail("Error should be thrown when using invalid arguments");
-        } catch (Exception e) {
-            assertTrue(e.getCause().getMessage().contains("is not supported by this handler"));
+        } catch (MessagingException me) {
+            assertTrue(me.getCause().getMessage().contains("is not supported by this handler"));
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 }

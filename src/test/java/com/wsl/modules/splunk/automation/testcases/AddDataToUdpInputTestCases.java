@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -23,22 +23,16 @@ import static org.junit.Assert.*;
 
 public class AddDataToUdpInputTestCases extends SplunkTestParent {
 
-    private String inputIdentifier = "9988";
-
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        initializeTestRunMessage("addDataToUdpInputTestData");
         upsertOnTestRunMessage("kind", InputKind.Udp);
-
-        Object result = runFlowAndGetPayload("create-input");
+        runFlowAndGetPayload("create-input");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-        Object result = runFlowAndGetPayload("remove-input");
+        runFlowAndGetPayload("remove-input");
     }
 
     @Category({
@@ -49,7 +43,6 @@ public class AddDataToUdpInputTestCases extends SplunkTestParent {
     public void testAddDataToUdpInput() {
         try {
             initializeTestRunMessage("addDataToUdpInputTestData");
-            upsertOnTestRunMessage("portNumber", inputIdentifier);
             Object result = runFlowAndGetPayload("add-data-to-udp-input");
             assertNotNull(result);
             Boolean success = (Boolean) result;

@@ -1,9 +1,9 @@
 /**
  *
- * (c) 2003-2015 MuleSoft, Inc. This software is protected under international
- * copyright law. All use of this software is subject to MuleSoft's Master
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
  * Subscription Agreement (or other Terms of Service) separately entered
- * into between you and MuleSoft. If such an agreement is not in
+ * into between you and WhiteSky Labs. If such an agreement is not in
  * place, you may not use the software.
  */
 
@@ -13,9 +13,11 @@ package com.wsl.modules.splunk.automation.testcases;
 import com.wsl.modules.splunk.automation.RegressionTests;
 import com.wsl.modules.splunk.automation.SmokeTests;
 import com.wsl.modules.splunk.automation.SplunkTestParent;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import static org.junit.Assert.*;
@@ -23,13 +25,8 @@ import static org.junit.Assert.*;
 public class DeleteSavedSearchTestCases
         extends SplunkTestParent {
 
-    private String searchName = "";
-
     @Before
     public void setup() throws Exception {
-            initializeTestRunMessage("createSavedSearchTestData");
-            Object result = runFlowAndGetPayload("create-saved-search");
-            searchName = getTestRunMessageValue("searchName");
             initializeTestRunMessage("deleteSavedSearchTestData");
     }
 
@@ -40,7 +37,7 @@ public class DeleteSavedSearchTestCases
     @Test
     public void testDeleteSavedSearch() {
         try {
-            upsertOnTestRunMessage("searchName", searchName);
+            runFlowAndGetPayload("create-saved-search");
             Object result = runFlowAndGetPayload("delete-saved-search");
             assertNotNull(result);
             assertEquals(true, result);
@@ -58,8 +55,10 @@ public class DeleteSavedSearchTestCases
             upsertOnTestRunMessage("searchName", "");
             Object result = runFlowAndGetPayload("delete-saved-search");
             fail("Exception should be thrown when using an empty name to delete a Saved Search");
-        } catch (Exception e) {
-            assertEquals(null, e.getCause().getMessage());
+        } catch (MessagingException me) {
+            assertEquals(null, me.getCause().getMessage());
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 
@@ -69,11 +68,14 @@ public class DeleteSavedSearchTestCases
     @Test
     public void testDeleteSavedSearchWithNullName() {
         try {
+            initializeTestRunMessage("deleteSavedSearchTestData");
             upsertOnTestRunMessage("searchName", null);
-            Object result = runFlowAndGetPayload("delete-saved-search");
+            runFlowAndGetPayload("delete-saved-search");
             fail("Exception should be thrown when using an null name to delete a Saved Search");
-        } catch (Exception e) {
-            assertEquals(null, e.getCause().getMessage());
+        } catch (MessagingException me) {
+            assertEquals(null, me.getCause().getMessage());
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 
