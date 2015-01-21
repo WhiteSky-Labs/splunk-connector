@@ -16,6 +16,7 @@ import com.wsl.modules.splunk.automation.SplunkTestParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -57,8 +58,10 @@ public class GetDataModelTestCases
             Object result = runFlowAndGetPayload("get-data-model");
             // expected result is a null payload.
             fail("InvalidArgumentException should be thrown");
-        } catch (Exception e) {
-            assertEquals("You must provide a data model name", e.getCause().getMessage());
+        } catch (MessagingException me) {
+            assertEquals("You must provide a data model name", me.getCause().getMessage());
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 
@@ -72,8 +75,10 @@ public class GetDataModelTestCases
             Object result = runFlowAndGetPayload("get-data-model");
             // expected result is a null payload.
             fail("InvalidArgumentException should be thrown");
-        } catch (Exception e) {
-            assertEquals("You must provide a data model name", e.getCause().getMessage());
+        } catch (MessagingException me) {
+            assertEquals("You must provide a data model name", me.getCause().getMessage());
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 }

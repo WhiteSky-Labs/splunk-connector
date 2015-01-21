@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -24,21 +25,19 @@ import static org.junit.Assert.*;
 
 public class GetIndexTestCases extends SplunkTestParent {
 
-    private String indexName = "get_index_testing";
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-
-        Object result = runFlowAndGetPayload("create-index");
+        initializeTestRunMessage("getIndexTestData");
+        expectedBean = getBeanFromContext("getIndexTestData");
+        runFlowAndGetPayload("create-index");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-        Object result = runFlowAndGetPayload("remove-index");
+        upsertOnTestRunMessage("indexIdentifier", expectedBean.get("indexIdentifier"));
+        runFlowAndGetPayload("remove-index");
     }
 
     @Category({
@@ -48,12 +47,10 @@ public class GetIndexTestCases extends SplunkTestParent {
     @Test
     public void testGetIndex() {
         try {
-            initializeTestRunMessage("getIndexTestData");
-            upsertOnTestRunMessage("indexIdentifier", indexName);
             Object result = runFlowAndGetPayload("get-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("main", index.get("defaultDatabase"));
+            assertTrue(((String) index.get("homePath")).contains((String) expectedBean.get("indexName")));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -65,12 +62,13 @@ public class GetIndexTestCases extends SplunkTestParent {
     @Test
     public void testGetInvalidIndex() {
         try {
-            initializeTestRunMessage("getIndexTestData");
             upsertOnTestRunMessage("indexIdentifier", "Not a real index");
             Object result = runFlowAndGetPayload("get-index");
             fail("Should throw exception for invalid index name");
-        } catch (Exception e) {
-            assertTrue(e.getCause().getMessage().contains("You must provide a valid index name"));
+        } catch (MessagingException me) {
+            assertTrue(me.getCause().getMessage().contains("You must provide a valid index name"));
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 }

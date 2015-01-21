@@ -17,6 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
+import org.mule.api.annotations.Connect;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -27,21 +29,18 @@ import static org.junit.Assert.*;
 public class ViewSavedSearchPropertiesTestCases
         extends SplunkTestParent {
 
-    private String searchName;
-    private String searchQuery;
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        runFlowAndGetPayload("create-saved-search");
-        searchQuery = getTestRunMessageValue("searchQuery");
         initializeTestRunMessage("viewSavedSearchPropertiesTestData");
+        expectedBean = getBeanFromContext("viewSavedSearchPropertiesTestData");
+        runFlowAndGetPayload("create-saved-search");
     }
 
     @After
     public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
+        upsertOnTestRunMessage("searchName", expectedBean.get("searchName"));
         runFlowAndGetPayload("delete-saved-search");
     }
 
@@ -52,13 +51,12 @@ public class ViewSavedSearchPropertiesTestCases
     @Test
     public void testViewSavedSearchProperties() {
         try {
-            upsertOnTestRunMessage("searchName", searchName);
             Object result = runFlowAndGetPayload("view-saved-search-properties");
             assertNotNull(result);
             Set<Map.Entry<String, Object>> searchProperties = (Set<Map.Entry<String, Object>>) result;
             for (Map.Entry<String, Object> property : searchProperties) {
                 if (property.getKey().equalsIgnoreCase("search")) {
-                    assertEquals(searchQuery, property.getValue());
+                    assertEquals(expectedBean.get("searchQuery"), property.getValue());
                 }
             }
         } catch (Exception e) {
@@ -75,8 +73,10 @@ public class ViewSavedSearchPropertiesTestCases
             upsertOnTestRunMessage("searchName", "Invalid Saved Search Name");
             Object result = runFlowAndGetPayload("view-saved-search-properties");
             fail("Exception should be thrown when getting properties for an invalid saved search");
-        } catch (Exception e) {
-            assertTrue(e.getCause() instanceof NullPointerException);
+        } catch (MessagingException me) {
+            assertTrue(me.getCause() instanceof NullPointerException);
+        } catch(Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 }

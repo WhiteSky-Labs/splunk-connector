@@ -26,11 +26,6 @@ import static org.junit.Assert.*;
 public class GetDataModelsTestCases
         extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("getDataModelsTestData");
-    }
-
     @Category({
             RegressionTests.class,
             SmokeTests.class

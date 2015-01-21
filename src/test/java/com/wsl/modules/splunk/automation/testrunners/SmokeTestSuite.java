@@ -20,7 +20,6 @@ import org.junit.runner.RunWith;
         AddDataToIndexTestCases.class,
         AddDataToTcpInputTestCases.class,
         AddDataToUdpInputTestCases.class,
-        CleanIndexesTestCases.class,
         CreateIndexTestCases.class,
         CreateInputsTestCases.class,
         CreateSavedSearchTestCases.class,
@@ -34,18 +33,8 @@ import org.junit.runner.RunWith;
         GetInputTestCases.class,
         GetJobsTestCases.class,
         GetSavedSearchesTestCases.class,
-        GetSavedSearchHistoryTestCases.class,
-        ModifyIndexTestCases.class,
-        ModifyInputTestCases.class,
-        ModifySavedSearchPropertiesTestCases.class,
         RunBlockingSearchTestCases.class,
-        RunExportSearchTestCases.class,
-        RunNormalSearchTestCases.class,
-        RunOneShotSearchTestCases.class,
-        RunRealTimeSearchTestCases.class,
         RunSavedSearchTestCases.class,
-        RunSavedSearchWithArgumentsTestCases.class,
-        ViewSavedSearchPropertiesTestCases.class
 })
 public class SmokeTestSuite {
 

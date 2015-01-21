@@ -42,8 +42,6 @@ public class RunRealTimeSearchTestCases extends SplunkTestParent {
             flow.start();
 
             Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
-
-
             assertNotNull(payload);
             List<SearchResults> results = (List<SearchResults>) payload;
             assertNotNull(results);

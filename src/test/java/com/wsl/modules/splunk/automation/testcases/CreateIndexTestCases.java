@@ -12,8 +12,10 @@ package com.wsl.modules.splunk.automation.testcases;
 import com.wsl.modules.splunk.automation.RegressionTests;
 import com.wsl.modules.splunk.automation.SmokeTests;
 import com.wsl.modules.splunk.automation.SplunkTestParent;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -22,7 +24,12 @@ import static org.junit.Assert.*;
 
 public class CreateIndexTestCases extends SplunkTestParent {
 
-    private String indexName = "integration_testing_index";
+    private Map<String, Object> expectedBean;
+
+    @Before
+    public void setup() throws Exception{
+        expectedBean = getBeanFromContext("createIndexTestData");
+    }
 
     @Category({
             RegressionTests.class,
@@ -32,12 +39,11 @@ public class CreateIndexTestCases extends SplunkTestParent {
     public void testCreateIndex() {
         try {
             initializeTestRunMessage("createIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("create-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("main", index.get("defaultDatabase"));
-            tearDown(indexName);
+            assertTrue(((String) index.get("homePath")).contains((String) expectedBean.get("indexName")));
+            tearDown();
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -50,12 +56,11 @@ public class CreateIndexTestCases extends SplunkTestParent {
     public void testCreateIndexWithArgs() {
         try {
             initializeTestRunMessage("createIndexWithArgsTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("create-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("main", index.get("defaultDatabase"));
-            tearDown(indexName);
+            assertTrue(((String) index.get("homePath")).contains((String) expectedBean.get("indexName")));
+            tearDown();
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -68,18 +73,17 @@ public class CreateIndexTestCases extends SplunkTestParent {
     public void testCreateIndexWithInvalidArgs() {
         try {
             initializeTestRunMessage("createIndexWithInvalidArgsTestData");
-            upsertOnTestRunMessage("indexName", indexName);
-            Object result = runFlowAndGetPayload("create-index");
+            runFlowAndGetPayload("create-index");
             fail("Error should be thrown with invalid args");
+        } catch (MessagingException me){
+            assertTrue(me.getCause().getMessage().contains("is not supported by this handler"));
         } catch (Exception e) {
-            assertTrue(e.getCause().getMessage().contains("is not supported by this handler"));
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 
-    private void tearDown(String indexName) throws Exception {
-        initializeTestRunMessage("removeIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-        Object removedResult = runFlowAndGetPayload("remove-index");
+    private void tearDown() throws Exception {
+        runFlowAndGetPayload("remove-index");
     }
 
 }

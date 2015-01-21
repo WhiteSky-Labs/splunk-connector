@@ -30,20 +30,16 @@ public class GetSavedSearchesTestCases
         extends SplunkTestParent {
 
     @Rule
-    public Timeout globalTimeout = new Timeout(100000);
-    private String searchName;
+    public Timeout globalTimeout = new Timeout(200000);
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        Object result = runFlowAndGetPayload("create-saved-search");
         initializeTestRunMessage("getSavedSearchesTestData");
+        runFlowAndGetPayload("create-saved-search");
     }
 
     @After
     public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
         runFlowAndGetPayload("delete-saved-search");
     }
 

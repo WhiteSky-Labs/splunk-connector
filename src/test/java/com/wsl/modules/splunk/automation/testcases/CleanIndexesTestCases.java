@@ -16,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -24,20 +25,18 @@ import static org.junit.Assert.*;
 
 public class CleanIndexesTestCases extends SplunkTestParent {
 
-    private String indexName = "clean_index_testing";
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
-
-        Object result = runFlowAndGetPayload("create-index");
+        initializeTestRunMessage("cleanIndexTestData");
+        expectedBean = getBeanFromContext("cleanIndexTestData");
+        runFlowAndGetPayload("create-index");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeIndexTestData");
-        upsertOnTestRunMessage("indexName", indexName);
+        upsertOnTestRunMessage("indexName", expectedBean.get("indexName"));
         Object result = runFlowAndGetPayload("remove-index");
     }
 
@@ -48,12 +47,10 @@ public class CleanIndexesTestCases extends SplunkTestParent {
     @Test
     public void testCleanIndex() {
         try {
-            initializeTestRunMessage("cleanIndexTestData");
-            upsertOnTestRunMessage("indexName", indexName);
             Object result = runFlowAndGetPayload("clean-index");
             assertNotNull(result);
             Map<String, Object> index = (Map<String, Object>) result;
-            assertEquals("main", index.get("defaultDatabase"));
+            assertTrue(((String) index.get("homePath")).contains((String) expectedBean.get("indexName")));
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -65,12 +62,13 @@ public class CleanIndexesTestCases extends SplunkTestParent {
     @Test
     public void testCleanInvalidIndex() {
         try {
-            initializeTestRunMessage("getIndexTestData");
             upsertOnTestRunMessage("indexName", "Not a real index");
-            Object result = runFlowAndGetPayload("clean-index");
+            runFlowAndGetPayload("clean-index");
             fail("Error should be thrown cleaning an invalid index");
+        } catch (MessagingException me){
+            assertTrue(me.getCause() instanceof NullPointerException);
         } catch (Exception e) {
-            assertTrue(e.getCause() instanceof NullPointerException);
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 }

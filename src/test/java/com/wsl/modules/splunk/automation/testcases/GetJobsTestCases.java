@@ -28,11 +28,6 @@ public class GetJobsTestCases
         extends SplunkTestParent {
 
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("getJobsTestData");
-    }
-
     @Category({
             RegressionTests.class,
             SmokeTests.class

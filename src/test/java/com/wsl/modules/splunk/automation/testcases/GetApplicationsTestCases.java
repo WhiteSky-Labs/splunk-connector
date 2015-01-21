@@ -28,11 +28,6 @@ import static org.junit.Assert.fail;
 public class GetApplicationsTestCases
         extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("getApplicationsTestData");
-    }
-
     @Category({
             RegressionTests.class,
             SmokeTests.class
@@ -48,6 +43,5 @@ public class GetApplicationsTestCases
             fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
-
 
 }

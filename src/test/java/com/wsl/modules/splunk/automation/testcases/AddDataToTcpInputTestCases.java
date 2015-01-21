@@ -24,21 +24,16 @@ import static org.junit.Assert.*;
 
 public class AddDataToTcpInputTestCases extends SplunkTestParent {
 
-    private String inputIdentifier = "9988";
-
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        initializeTestRunMessage("addDataToTcpInputTestData");
         upsertOnTestRunMessage("kind", InputKind.Tcp);
-        Object result = runFlowAndGetPayload("create-input");
+        runFlowAndGetPayload("create-input");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-        Object result = runFlowAndGetPayload("remove-input");
+        runFlowAndGetPayload("remove-input");
     }
 
     @Category({
@@ -48,8 +43,6 @@ public class AddDataToTcpInputTestCases extends SplunkTestParent {
     @Test
     public void testAddDataToTcpInput() {
         try {
-            initializeTestRunMessage("addDataToTcpInputTestData");
-            upsertOnTestRunMessage("portNumber", inputIdentifier);
             Object result = runFlowAndGetPayload("add-data-to-tcp-input");
             assertNotNull(result);
             Boolean success = (Boolean) result;

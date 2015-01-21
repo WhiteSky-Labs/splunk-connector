@@ -29,26 +29,18 @@ import static org.junit.Assert.*;
 public class GetSavedSearchHistoryTestCases
         extends SplunkTestParent {
     @Rule
-    public Timeout globalTimeout = new Timeout(100000);
-    private String searchName;
-    private final String searchQuery = "search " + searchName + " | head 100";
+    public Timeout globalTimeout = new Timeout(200000);
 
     @Before
     public void setup() throws Exception {
         // create and run a saved search
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        upsertOnTestRunMessage("searchQuery", searchQuery);
-        Object result = runFlowAndGetPayload("create-saved-search");
-        initializeTestRunMessage("runSavedSearchTestData");
-        upsertOnTestRunMessage("searchName", searchName);
-        result = runFlowAndGetPayload("run-saved-search");
         initializeTestRunMessage("getSavedSearchHistoryTestData");
+        runFlowAndGetPayload("create-saved-search");
+        runFlowAndGetPayload("run-saved-search");
     }
 
     @After
     public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
         runFlowAndGetPayload("delete-saved-search");
     }
 

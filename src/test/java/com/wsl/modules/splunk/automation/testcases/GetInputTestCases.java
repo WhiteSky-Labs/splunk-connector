@@ -25,16 +25,15 @@ import static org.junit.Assert.*;
 
 public class GetInputTestCases extends SplunkTestParent {
 
-    private String inputIdentifier = "9906";
+    private Map<String, Object> expectedBean;
 
     @Before
     public void setup() throws Exception {
         try {
-            initializeTestRunMessage("createInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+            initializeTestRunMessage("getInputTestData");
             upsertOnTestRunMessage("kind", InputKind.Tcp);
-
-            Object result = runFlowAndGetPayload("create-input");
+            expectedBean = getBeanFromContext("getInputTestData");
+            runFlowAndGetPayload("create-input");
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -43,9 +42,8 @@ public class GetInputTestCases extends SplunkTestParent {
     @After
     public void tearDown() throws Exception {
         try {
-            initializeTestRunMessage("removeInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-            Object result = runFlowAndGetPayload("remove-input");
+            upsertOnTestRunMessage("inputIdentifier", expectedBean.get("inputIdentifier"));
+            runFlowAndGetPayload("remove-input");
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
@@ -58,8 +56,6 @@ public class GetInputTestCases extends SplunkTestParent {
     @Test
     public void testGetInput() {
         try {
-            initializeTestRunMessage("getInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
             Object result = runFlowAndGetPayload("get-input");
             assertNotNull(result);
             Map<String, Object> input = (Map<String, Object>) result;

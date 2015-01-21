@@ -16,16 +16,7 @@
           factory-method="generateRandomShortString" scope="prototype"/>
     <util:constant static-field="com.wsl.modules.splunk.SearchMode.NORMAL" id="searchModeNormal"/>
     <util:constant static-field="com.wsl.modules.splunk.OutputMode.XML" id="outputModeXML"/>
-
-    <!--getApplications-->
-    <util:map id="getApplicationsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
-              value-type="java.lang.Object">
-    </util:map>
-    <!--getJobs-->
-    <util:map id="getJobsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
-              value-type="java.lang.Object">
-    </util:map>
-    <!--runBlockingSearch-->
+    <!--runBlockingSearchTestData-->
     <util:map id="invalidBlockingSearchArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="invalid" value="invalid value"/>
@@ -41,12 +32,6 @@
               value-type="java.lang.Object">
         <entry key="searchQuery" value="search * | head 100"/>
         <entry key="search-args" value=""/>
-    </util:map>
-    <util:map id="runBlockingSearchTestDataWithInvalidProperties" key-type="java.lang.String"
-              map-class="java.util.HashMap" scope="prototype"
-              value-type="java.lang.Object">
-        <entry key="searchQuery" value="search * | head 100"/>
-        <entry key="searchArgs" value-ref="invalidBlockingSearchArgs"/>
     </util:map>
     <util:map id="runBlockingSearchTestDataWithValidProperties" key-type="java.lang.String"
               map-class="java.util.HashMap" scope="prototype"
@@ -65,7 +50,6 @@
         <entry key="invalid" value="invalid value"/>
     </util:map>
 
-
     <util:map id="runOneShotSearchTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
         <entry key="searchQuery" value="search * | head 100"/>
@@ -82,34 +66,31 @@
         <entry key="args" value-ref="invalidOneshotArgs"/>
     </util:map>
 
-    <!--getSavedSearches-->
+    <!--getSavedSearchesTestData-->
     <util:map id="getSavedSearchesTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
+        <entry key="searchName" value="get_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
         <entry key="app" value="search"/>
         <entry key="owner" value="admin"/>
     </util:map>
-    <!--createSavedSearch-->
+    <!--createSavedSearchTestData-->
     <util:map id="createSavedSearchTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
-        <entry key="searchName" value-ref="randomShortString"/>
-        <entry key="searchQuery" value="search * | head 100"/>
-        <entry key="search-args" value=""/>
-    </util:map>
-    <util:map id="createDuplicateSavedSearchTestData" key-type="java.lang.String" map-class="java.util.HashMap"
-              scope="prototype"
-              value-type="java.lang.Object">
-        <entry key="searchName" value-ref="secondRandomShortString"/>
+        <entry key="searchName" value="create_saved_search_test_search"/>
         <entry key="searchQuery" value="search * | head 100"/>
         <entry key="search-args" value=""/>
     </util:map>
     <!--viewSavedSearchProperties-->
     <util:map id="viewSavedSearchPropertiesTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="view_saved_search_properties_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
         <entry key="app" value="search"/>
         <entry key="owner" value="admin"/>
     </util:map>
-    <!--modifySavedSearchProperties-->
+    <!--modifySavedSearchPropertiesTestData-->
     <util:map id="searchPropertiesMap" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="description" value="Sample Description"/>
@@ -118,7 +99,9 @@
     </util:map>
     <util:map id="modifySavedSearchPropertiesTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="modify_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
         <entry key="searchPropertiesRef" value-ref="searchPropertiesMap"/>
     </util:map>
     <util:map id="invalidSearchPropertiesMap" map-class="java.util.HashMap"
@@ -129,7 +112,9 @@
     </util:map>
     <util:map id="modifySavedSearchPropertiesInvalidTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="modify_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
         <entry key="searchPropertiesRef" value-ref="invalidSearchPropertiesMap"/>
     </util:map>
     <util:map id="emptySearchPropertiesMap" map-class="java.util.HashMap"
@@ -137,20 +122,26 @@
     </util:map>
     <util:map id="modifySavedSearchPropertiesEmptyTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="modify_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
         <entry key="searchPropertiesRef" value-ref="emptySearchPropertiesMap"/>
     </util:map>
     <!--getSavedSearchHistory-->
     <util:map id="getSavedSearchHistoryTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="get_saved_search_history"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
         <entry key="app" value="search"/>
         <entry key="owner" value="admin"/>
     </util:map>
-    <!--runSavedSearch-->
+    <!--runSavedSearchTestData-->
     <util:map id="runSavedSearchTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="run_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
     </util:map>
     <!--runSavedSearchWithArguments-->
     <util:map id="savedSearchCustomArgsMap" map-class="java.util.HashMap"
@@ -172,31 +163,31 @@
     </util:map>
     <util:map id="runSavedSearchWithArgumentsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="run_saved_search_with_arguments_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
         <entry key="custom-args" value-ref="savedSearchCustomArgsMap"/>
         <entry key="search-dispatch-args" value-ref="savedSearchDispatchArgsMap"/>
     </util:map>
     <util:map id="runSavedSearchWithInvalidArgumentsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype" value-type="java.lang.Object">
-        <entry key="searchName" value="Test Search"/>
+        <entry key="searchName" value="run_saved_search_with_arguments_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
         <entry key="custom-args" value-ref="invalidSavedSearchCustomArgsMap"/>
         <entry key="search-dispatch-args" value-ref="invalidSavedSearchDispatchArgsMap"/>
     </util:map>
     <!--deleteSavedSearch-->
     <util:map id="deleteSavedSearchTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
-        <entry key="searchName" value-ref="randomShortString"/>
+        <entry key="searchName" value="delete_saved_search_test_search"/>
+        <entry key="searchQuery" value="search * | head 100"/>
+        <entry key="search-args" value=""/>
     </util:map>
-    <!--getDataModel-->
+    <!--getDataModelTestData-->
     <util:map id="getDataModelTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
               value-type="java.lang.Object">
         <entry key="dataModelName" value="internal_audit_logs"/>
     </util:map>
-    <!--getDataModels-->
-    <util:map id="getDataModelsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
-              value-type="java.lang.Object">
-    </util:map>
-    <!--runExportSearch-->
+    <!--runExportSearchTestData-->
     <util:map id="exportSearchArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="description" value="Sample Description"/>
@@ -224,11 +215,7 @@
         <entry key="searchQuery" value="search index=_internal | head 10"/>
         <entry key="searchArgs" value-ref="normalSearchArgs"/>
     </util:map>
-    <!--getInputs-->
-    <util:map id="getInputsTestData" key-type="java.lang.String" map-class="java.util.HashMap" scope="prototype"
-              value-type="java.lang.Object">
-    </util:map>
-    <!-- createInputs -->
+    <!-- createInputsTestData -->
     <util:map id="createInputArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="index" value="summary"/>
@@ -236,17 +223,17 @@
     <util:map id="createInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="Test"/>
+        <entry key="inputIdentifier" value="9293"/>
         <entry key="kind" value="Tcp"/>
     </util:map>
     <util:map id="createInputWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="Test"/>
+        <entry key="inputIdentifier" value="9293"/>
         <entry key="kind" value="Tcp"/>
         <entry key="args" value-ref="createInputArgs"/>
     </util:map>
-    <!--modifyInput-->
+    <!--modifyInputTestData-->
     <util:map id="invalidModifyInputArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="invalid" value="not valid"/>
@@ -258,30 +245,25 @@
     <util:map id="modifyInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="inputIdentifier" value="9908"/>
         <entry key="inputArgs" value-ref="modifyInputArgs"/>
     </util:map>
     <util:map id="modifyInputWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="inputIdentifier" value="9908"/>
         <entry key="inputArgs" value-ref="invalidModifyInputArgs"/>
     </util:map>
-    <!--getInput-->
+    <!--getInputTestData-->
     <util:map id="getInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
         <entry key="inputIdentifier" value="9906"/>
     </util:map>
-    <!--getIndexes-->
+    <!--getIndexesTestData-->
     <util:map id="invalidCollectionParameters" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="invalidparameter" value="true"/>
-    </util:map>
-
-    <util:map id="getIndexesTestData" key-type="java.lang.String" map-class="java.util.HashMap"
-              scope="prototype"
-              value-type="java.lang.Object">
     </util:map>
     <util:map id="getIndexesWithParametersTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
@@ -302,7 +284,6 @@
         <entry key="sortKey" value="totalEventCount"/>
         <entry key="sortDirection" value="NOTHING"/>
     </util:map>
-
     <!-- removeInputTestData -->
     <util:map id="removeInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
@@ -323,18 +304,19 @@
     <util:map id="createIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value-ref="randomShortString"/>
+        <entry key="indexName" value="create_index_test_index"/>
     </util:map>
     <util:map id="createIndexWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="IntegrationTestIndex"/>
+        <entry key="indexName" value="create_index_test_index"/>
         <entry key="args" value-ref="createIndexArgs"/>
     </util:map>
     <util:map id="createIndexWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="inputIdentifier" value="Placeholder"/>
+        <entry key="inputIdentifier" value="createIndexInvalidArgsInputIdentifier"/>
+        <entry key="indexName" value="create_index_test_index"/>
         <entry key="args" value-ref="invalidCreateIndexArgs"/>
     </util:map>
 
@@ -349,10 +331,10 @@
     <util:map id="getIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexIdentifier" value="TestIndex"/>
+        <entry key="indexIdentifier" value="get_index_test_index"/>
+        <entry key="indexName" value="get_index_test_index"/>
     </util:map>
-
-    <!--modifyIndex-->
+    <!--modifyIndexTestData-->
     <util:map id="invalidModifyIndexArgs" map-class="java.util.HashMap"
               key-type="java.lang.String" value-type="java.lang.Object">
         <entry key="invalid" value="not valid"/>
@@ -364,20 +346,20 @@
     <util:map id="modifyIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="Placeholder"/>
+        <entry key="indexName" value="modify_index_test_index"/>
         <entry key="indexArgs" value-ref="modifyIndexArgs"/>
     </util:map>
     <util:map id="modifyIndexWithInvalidArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="Placeholder"/>
+        <entry key="indexName" value="modify_index_test_index"/>
         <entry key="indexArgs" value-ref="invalidModifyIndexArgs"/>
     </util:map>
     <!-- getIndexTestData -->
     <util:map id="cleanIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="TestIndex"/>
+        <entry key="indexName" value="clean_index_test_index"/>
         <entry key="maxSeconds" value="180"/>
     </util:map>
     <!-- addDataToIndexTestData -->
@@ -389,29 +371,35 @@
     <util:map id="addDataToIndexTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="TestIndex"/>
-        <entry key="stringData" value="Testing Data"/>
+        <entry key="indexName" value="add_data_to_index_test_index"/>
+        <entry key="stringData" value="addDataToIndexStringData"/>
     </util:map>
     <util:map id="addDataToIndexWithArgsTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="indexName" value="TestIndex"/>
-        <entry key="stringData" value="Testing Data"/>
+        <entry key="indexName" value="add_data_to_index_test_index"/>
+        <entry key="stringData" value="addDataToIndexStringData"/>
         <entry key="indexArgs" value-ref="addDataToIndexArgs"/>
     </util:map>
+
     <!-- addDataToTcpInputTestData -->
     <util:map id="addDataToTcpInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="portNumber" value="TestIndex"/>
-        <entry key="stringData" value="Testing Data"/>
+        <entry key="indexName" value="summary"/>
+        <entry key="portNumber" value="9988"/>
+        <entry key="stringData" value="addDataToTcpInputTestDataString"/>
+        <entry key="inputIdentifier" value="9988"/>
     </util:map>
+
     <!-- addDataToUdpInputTestData -->
     <util:map id="addDataToUdpInputTestData" key-type="java.lang.String" map-class="java.util.HashMap"
               scope="prototype"
               value-type="java.lang.Object">
-        <entry key="portNumber" value="TestIndex"/>
-        <entry key="stringData" value="Testing Data"/>
+        <entry key="indexName" value="summary"/>
+        <entry key="portNumber" value="9988"/>
+        <entry key="stringData" value="addDataToUdpInputTestDataString"/>
+        <entry key="inputIdentifier" value="9988"/>
     </util:map>
 </beans>
 

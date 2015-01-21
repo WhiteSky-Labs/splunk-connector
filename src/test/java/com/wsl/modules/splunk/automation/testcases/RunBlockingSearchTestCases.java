@@ -28,7 +28,6 @@ import static org.junit.Assert.*;
 public class RunBlockingSearchTestCases
         extends SplunkTestParent {
 
-
     @Before
     public void setup() throws Exception {
         initializeTestRunMessage("runBlockingSearchTestData");

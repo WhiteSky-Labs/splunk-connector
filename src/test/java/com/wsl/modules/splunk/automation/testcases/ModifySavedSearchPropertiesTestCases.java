@@ -17,6 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
+import org.mule.api.annotations.Connector;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.HashMap;
@@ -27,20 +29,14 @@ import static org.junit.Assert.*;
 public class ModifySavedSearchPropertiesTestCases
         extends SplunkTestParent {
 
-    private String searchName;
-
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createSavedSearchTestData");
-        searchName = getTestRunMessageValue("searchName");
-        Object result = runFlowAndGetPayload("create-saved-search");
-
         initializeTestRunMessage("modifySavedSearchPropertiesTestData");
+        runFlowAndGetPayload("create-saved-search");
     }
 
     @After
     public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", searchName);
         runFlowAndGetPayload("delete-saved-search");
     }
 
@@ -51,7 +47,6 @@ public class ModifySavedSearchPropertiesTestCases
     @Test
     public void testModifySavedSearchProperties() {
         try {
-            upsertOnTestRunMessage("searchName", searchName);
             Object result = runFlowAndGetPayload("modify-saved-search-properties");
             assertNotNull(result);
             Map<String, Object> savedSearch = (Map<String, Object>) result;
@@ -70,11 +65,12 @@ public class ModifySavedSearchPropertiesTestCases
     public void testModifySearchPropertiesWithEmptyProperties() {
         try {
             initializeTestRunMessage("modifySavedSearchPropertiesEmptyTestData");
-            upsertOnTestRunMessage("searchName", searchName);
             Object result = runFlowAndGetPayload("modify-saved-search-properties");
             fail("Should throw exception when modifying invalid properties");
-        } catch (Exception e) {
-            assertEquals("You must provide some properties to modify", e.getCause().getMessage());
+        } catch (MessagingException me) {
+            assertEquals("You must provide some properties to modify", me.getCause().getMessage());
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 

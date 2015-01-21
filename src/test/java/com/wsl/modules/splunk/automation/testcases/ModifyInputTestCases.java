@@ -18,6 +18,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.mule.api.MessagingException;
 import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
@@ -30,18 +31,14 @@ public class ModifyInputTestCases extends SplunkTestParent {
 
     @Before
     public void setup() throws Exception {
-        initializeTestRunMessage("createInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
+        initializeTestRunMessage("modifyInputTestData");
         upsertOnTestRunMessage("kind", InputKind.Tcp);
-
-        Object result = runFlowAndGetPayload("create-input");
+        runFlowAndGetPayload("create-input");
     }
 
     @After
     public void tearDown() throws Exception {
-        initializeTestRunMessage("removeInputTestData");
-        upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-        Object result = runFlowAndGetPayload("remove-input");
+        runFlowAndGetPayload("remove-input");
     }
 
     @Category({
@@ -51,8 +48,6 @@ public class ModifyInputTestCases extends SplunkTestParent {
     @Test
     public void testModifyInput() {
         try {
-            initializeTestRunMessage("modifyInputTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
             Object result = runFlowAndGetPayload("modify-input");
             assertNotNull(result);
             Map<String, Object> input = (Map<String, Object>) result;
@@ -69,12 +64,12 @@ public class ModifyInputTestCases extends SplunkTestParent {
     public void testModifyInputWithInvalidArgs() {
         try {
             initializeTestRunMessage("modifyInputWithInvalidArgsTestData");
-            upsertOnTestRunMessage("inputIdentifier", inputIdentifier);
-            Object result = runFlowAndGetPayload("modify-input");
+            runFlowAndGetPayload("modify-input");
             fail("Error should be thrown when using invalid arguments");
-
-        } catch (Exception e) {
-            assertTrue(e.getCause().getMessage().contains("is not supported by this handler"));
+        } catch (MessagingException me) {
+            assertTrue(me.getCause().getMessage().contains("is not supported by this handler"));
+        } catch (Exception e){
+            fail(ConnectorTestUtils.getStackTrace(e));
         }
     }
 
