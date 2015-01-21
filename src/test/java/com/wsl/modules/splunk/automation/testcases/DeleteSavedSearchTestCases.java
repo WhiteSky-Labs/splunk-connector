@@ -68,7 +68,6 @@ public class DeleteSavedSearchTestCases
     @Test
     public void testDeleteSavedSearchWithNullName() {
         try {
-            initializeTestRunMessage("deleteSavedSearchTestData");
             upsertOnTestRunMessage("searchName", null);
             runFlowAndGetPayload("delete-saved-search");
             fail("Exception should be thrown when using an null name to delete a Saved Search");

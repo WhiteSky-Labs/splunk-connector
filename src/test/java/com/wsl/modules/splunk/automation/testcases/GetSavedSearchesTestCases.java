@@ -29,12 +29,16 @@ import static org.junit.Assert.*;
 public class GetSavedSearchesTestCases
         extends SplunkTestParent {
 
+    private Map<String, Object> expectedBean;
+
+
     @Rule
     public Timeout globalTimeout = new Timeout(200000);
 
     @Before
     public void setup() throws Exception {
         initializeTestRunMessage("getSavedSearchesTestData");
+        expectedBean = getBeanFromContext("getSavedSearchesTestData");
         runFlowAndGetPayload("create-saved-search");
     }
 
@@ -53,7 +57,19 @@ public class GetSavedSearchesTestCases
             Object result = runFlowAndGetPayload("get-saved-searches");
             assertNotNull(result);
             List<Map<String, Object>> savedSearchList = (List<Map<String, Object>>) result;
+            boolean foundSavedSearch = false;
+            for (Map<String, Object> map : savedSearchList) {
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    if (entry.getKey().equalsIgnoreCase("search")){
+                        if (((String)entry.getValue()).equalsIgnoreCase((String)expectedBean.get("searchQuery"))){
+                            foundSavedSearch = true;
+                        }
+                    }
+                }
+            }
+
             assertTrue(savedSearchList.size() > 0);
+            assertTrue(foundSavedSearch);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }
