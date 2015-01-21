@@ -28,6 +28,9 @@ import static org.junit.Assert.*;
 
 public class GetSavedSearchHistoryTestCases
         extends SplunkTestParent {
+
+    private Map<String, Object> expectedBean;
+
     @Rule
     public Timeout globalTimeout = new Timeout(200000);
 
@@ -35,6 +38,7 @@ public class GetSavedSearchHistoryTestCases
     public void setup() throws Exception {
         // create and run a saved search
         initializeTestRunMessage("getSavedSearchHistoryTestData");
+        expectedBean = getBeanFromContext("getSavedSearchHistoryTestData");
         runFlowAndGetPayload("create-saved-search");
         runFlowAndGetPayload("run-saved-search");
     }
@@ -55,6 +59,17 @@ public class GetSavedSearchHistoryTestCases
             List<Map<String, Object>> jobs = (List<Map<String, Object>>) result;
             assertNotNull(jobs);
             assertTrue(jobs.size() > 0);
+            boolean foundSavedSearch = false;
+            for (Map<String, Object> map : jobs) {
+                for (Map.Entry<String, Object> entry : map.entrySet()) {
+                    if (entry.getKey().equalsIgnoreCase("eventSearch")){
+                        if (((String)entry.getValue()).contains((String)expectedBean.get("searchName"))){
+                            foundSavedSearch = true;
+                        }
+                    }
+                }
+            }
+            assertTrue(foundSavedSearch);
         } catch (Exception e) {
             fail(ConnectorTestUtils.getStackTrace(e));
         }

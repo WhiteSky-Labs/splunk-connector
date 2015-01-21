@@ -17,23 +17,13 @@ import org.junit.runner.RunWith;
 @RunWith(org.junit.experimental.categories.Categories.class)
 @org.junit.experimental.categories.Categories.IncludeCategory(SmokeTests.class)
 @org.junit.runners.Suite.SuiteClasses({
-        AddDataToIndexTestCases.class,
-        AddDataToTcpInputTestCases.class,
-        AddDataToUdpInputTestCases.class,
         CreateIndexTestCases.class,
         CreateInputsTestCases.class,
         CreateSavedSearchTestCases.class,
         DeleteSavedSearchTestCases.class,
-        GetApplicationsTestCases.class,
-        GetDataModelsTestCases.class,
-        GetDataModelTestCases.class,
-        GetIndexesTestCases.class,
         GetIndexTestCases.class,
-        GetInputsTestCases.class,
         GetInputTestCases.class,
-        GetJobsTestCases.class,
         GetSavedSearchesTestCases.class,
-        RunBlockingSearchTestCases.class,
         RunSavedSearchTestCases.class,
 })
 public class SmokeTestSuite {

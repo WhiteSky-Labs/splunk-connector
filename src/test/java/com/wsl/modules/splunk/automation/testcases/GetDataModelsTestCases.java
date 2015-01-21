@@ -31,7 +31,7 @@ public class GetDataModelsTestCases
             SmokeTests.class
     })
     @Test
-    public void testGetDataModel() {
+    public void testGetDataModels() {
         try {
             Object result = runFlowAndGetPayload("get-data-models");
             assertNotNull(result);
