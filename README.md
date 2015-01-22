@@ -12,8 +12,9 @@ Collect and index any machine-generated data from virtually any source or locati
 Installation and Usage
 ----------------------
 
-For information about usage and installation you can review the documentation at http://www.whiteskylabs.com/splunk-connector/documentation.
+For information about usage and installation you can review the documentation at http://whitesky-labs.github.io/splunk-connector/documentation.
 
+API Documentation is available at http://whitesky-labs.github.io/splunk-connector/apidocs
 
 Compatibility
 ----------------------
