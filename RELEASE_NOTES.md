@@ -1,5 +1,6 @@
 ---
 title: Splunk Connector Release Notes
+layout: post
 ---
 
 Splunk Connector Release Notes
