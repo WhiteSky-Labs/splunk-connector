@@ -49,7 +49,7 @@
     <header class="site-header px2 px-responsive">
   <div class="mt2 wrap">
     <div class="measure">
-      <a href="http://whitesky-labs.github.io" class="site-title">Splunk Connector</a>
+      <a href="http://whitesky-labs.github.io//splunk-connector" class="site-title">Splunk Connector</a>
       <nav class="site-nav right">
         <a href="/splunk-connector/about/">About</a>
 <a href="mailto:support@whiteskylabs.com">Contact</a>
@@ -69,7 +69,7 @@
   
   <div class="post">
     <h1 class="post-title">
-      <a href="/2015/01/22/splunk-connector/">
+      <a href="http://whitesky-labs.github.io//splunk-connector/2015/01/22/splunk-connector/">
         Splunk Connector v1.0.0
       </a>
     </h1>
@@ -152,12 +152,12 @@
 <li>Next to the Work with: field of the Install wizard, choose the &ldquo;Add:&rdquo; button. Choose &ldquo;Archive&rdquo; and navigate to the installation zip file provided to you by WhiteSky Labs. Finally, give the site a name (e.g. &ldquo;Splunk Connector Installer&rdquo;) and choose OK.</li>
 <li><p>In the table below the Filter field (see image below), click to expand the Standard folder, then select Mule Splunk Connector. Click Next.</p>
 
-<p><img src="images/InstallConnector.png" alt="Install Splunk Connector"></p></li>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/InstallConnector.png" alt="Install Splunk Connector"></p></li>
 <li><p>Review the details, then click <em>Next</em>.</p></li>
 <li><p>Click to accept the terms and conditions, then click <em>Finish</em>.</p></li>
 <li><p>Click <em>Restart Now</em> to complete the installation. Once you have installed the connector and restarted Studio you will see several the Splunk Connector available in the palette, under the Connectors category.</p>
 
-<p><img src="images/splunkpalette.png" alt="Splunk Connector Palette"></p></li>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/splunkpalette.png" alt="Splunk Connector Palette"></p></li>
 </ol>
 
 <h2 id="configuring">Configuring</h2>
@@ -176,7 +176,7 @@
 <li>Use the filter to locate, then select, Splunk, then click OK.</li>
 <li><p>Configure the global connector&rsquo;s parameters according to the table below.</p>
 
-<p><img src="images/globalparameters.png" alt="Splunk Global Parameters"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/globalparameters.png" alt="Splunk Global Parameters"></p>
 
 <table>
 <tr>
@@ -197,7 +197,7 @@
 <li><p>Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.</p></li>
 <li><p>Configure the connector&rsquo;s parameters according to the table below.</p>
 
-<p><img src="images/connectorparameters.png" alt="Splunk Connector Instance Parameters"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/connectorparameters.png" alt="Splunk Connector Instance Parameters"></p>
 
 <table>
 <tr>
@@ -217,9 +217,9 @@
 
 <p>It&rsquo;s time to build the flows which creates an Index, sends some data to the index via HTTP, and removes the index.</p>
 
-<p><img src="images/createindex.png" alt="Create Index flow"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/createindex.png" alt="Create Index flow"></p>
 
-<p><img src="images/addandremoveindex.png" alt="Add Data and Remove Index flows"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/addandremoveindex.png" alt="Add Data and Remove Index flows"></p>
 
 <p><strong>Create Index flow:</strong> This is the flow which creates an index on the Splunk Server. Start by dragging an HTTP endpoint from the palette onto the flow.</p>
 
@@ -233,7 +233,7 @@
 
 <p>Click okay.</p>
 
-<p><img src="images/createIndexDetail.png" alt="Create Index Flow"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/createIndexDetail.png" alt="Create Index Flow"></p>
 
 <p>This completes the Create Index flow.</p>
 
@@ -254,12 +254,12 @@ This is the URL you will call to start the flow.</p>
 
 <p>Click OK.</p>
 
-<p><img src="images/adddata.png" alt="Send Data to Index Flow"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/adddata.png" alt="Send Data to Index Flow"></p>
 
 <p><strong>Remove Index flow:</strong> This is the flow which removes the index you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to &ldquo;localhost&rdquo;, &ldquo;8081&rdquo;, and &ldquo;removeindex&rdquo;, respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to &ldquo;Remove Index&rdquo;, and set the Index Name field to &ldquo;#[message.inboundProperties[&lsquo;indexname&rsquo;]]&rdquo;. Click OK.</p>
 
-<p><img src="images/removeindex.png" alt="Remove Index Flow"></p>
+<p><img src="http://whitesky-labs.github.io//splunk-connector/images/removeindex.png" alt="Remove Index Flow"></p>
 
 <p><strong>Flow XML</strong></p>
 
