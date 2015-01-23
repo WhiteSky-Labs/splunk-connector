@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Splunk Connector for MuleSoft AnyPoint Platform
+redirect_from: "/documentation/"
 permalink: /about/
 ---
 
