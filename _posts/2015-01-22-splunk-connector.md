@@ -76,13 +76,13 @@ To install the Splunk Connector:
 2. Next to the Work with: field of the Install wizard, choose the "Add:" button. Choose "Archive" and navigate to the installation zip file provided to you by WhiteSky Labs. Finally, give the site a name (e.g. "Splunk Connector Installer") and choose OK.
 3. In the table below the Filter field (see image below), click to expand the Standard folder, then select Mule Splunk Connector. Click Next.
 
-    ![Install Splunk Connector](/{{ site.baseurl }}/images/InstallConnector.png)
+    ![Install Splunk Connector]({{ site.url }}/{{ site.baseurl }}/images/InstallConnector.png)
 
 4. Review the details, then click *Next*.
 5. Click to accept the terms and conditions, then click *Finish*.
 6. Click *Restart Now* to complete the installation. Once you have installed the connector and restarted Studio you will see several the Splunk Connector available in the palette, under the Connectors category.
 
-    ![Splunk Connector Palette](/{{ site.baseurl }}/images/splunkpalette.png)
+    ![Splunk Connector Palette]({{ site.url }}/{{ site.baseurl }}/images/splunkpalette.png)
 
 ## Configuring
 
@@ -97,7 +97,7 @@ To create a global Splunk connector configuration, follow these steps:
 2. Use the filter to locate, then select, Splunk, then click OK.
 3. Configure the global connector's parameters according to the table below.
 
-    ![Splunk Global Parameters](/{{ site.baseurl }}/images/globalparameters.png)
+    ![Splunk Global Parameters]({{ site.url }}/{{ site.baseurl }}/images/globalparameters.png)
 
     <table>
     <tr>
@@ -119,7 +119,7 @@ To create a global Splunk connector configuration, follow these steps:
 8. Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.
 9. Configure the connector's parameters according to the table below.
 
-    ![Splunk Connector Instance Parameters](/{{ site.baseurl }}/images/connectorparameters.png)
+    ![Splunk Connector Instance Parameters]({{ site.url }}/{{ site.baseurl }}/images/connectorparameters.png)
 
     <table>
     <tr>
@@ -139,9 +139,9 @@ To create a global Splunk connector configuration, follow these steps:
 
 It's time to build the flows which creates an Index, sends some data to the index via HTTP, and removes the index.
 
-![Create Index flow](/{{ site.baseurl }}/images/createindex.png)
+![Create Index flow]({{ site.url }}/{{ site.baseurl }}/images/createindex.png)
 
-![Add Data and Remove Index flows]({{ site.url }}/{{ site.baseurl }}/images/addandremoveindex.png)
+![Add Data and Remove Index flows]({{ site.url }}{{ site.url }}/{{ site.baseurl }}/images/addandremoveindex.png)
 
 **Create Index flow:** This is the flow which creates an index on the Splunk Server. Start by dragging an HTTP endpoint from the palette onto the flow.
 
@@ -155,7 +155,7 @@ Set the Operation to "Create Index", and set the Index Name to
 
 Click okay.
 
-![Create Index Flow](/{{ site.baseurl }}/images/createIndexDetail.png)
+![Create Index Flow]({{ site.url }}/{{ site.baseurl }}/images/createIndexDetail.png)
 
 This completes the Create Index flow.
 
@@ -176,12 +176,12 @@ Set the "String Data" field to
 
 Click OK.
 
-![Send Data to Index Flow](/{{ site.baseurl }}/images/adddata.png)
+![Send Data to Index Flow]({{ site.url }}/{{ site.baseurl }}/images/adddata.png)
 
 **Remove Index flow:** This is the flow which removes the index you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to "localhost", "8081", and "removeindex", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Remove Index", and set the Index Name field to "#[message.inboundProperties['indexname']]". Click OK.
 
-![Remove Index Flow](/{{ site.baseurl }}/images/removeindex.png)
+![Remove Index Flow]({{ site.url }}/{{ site.baseurl }}/images/removeindex.png)
 
 **Flow XML**
 
