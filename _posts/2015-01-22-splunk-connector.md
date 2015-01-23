@@ -232,7 +232,7 @@ There is currently no procedure for upgrading as only one version of the Connect
 
 # Go Further
 
-* (Release Notes)[http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/]
+* [Release Notes](http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/)
 * [Splunk SDK for Java Documentation](http://dev.splunk.com/view/java-sdk/SP-CAAAEFH)
 * API Documentation is available at [http://whitesky-labs.github.io/splunk-connector/apidocs](http://whitesky-labs.github.io/splunk-connector/apidocs)
 * Read more about [http://www.mulesoft.org/documentation/display/current/Anypoint+Connectors](AnyPoint Connectors)
