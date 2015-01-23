@@ -1,77 +1,40 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Splunk Connector by WhiteSky-Labs</title>
+---
+layout: default
+---
+<div class="home">
+<div class="posts">
+  {% for post in paginator.posts %}
+  <div class="post">
+    <h1 class="post-title">
+      <a href="{{ post.url }}">
+        {{ post.title }}
+      </a>
+    </h1>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Splunk Connector</h1>
-        <p>Mule Connector for Splunk</p>
+    <span class="post-date">{{ post.date | date_to_string }}</span>
 
-        <p class="view"><a href="https://github.com/WhiteSky-Labs/splunk-connector">View the Project on GitHub <small>WhiteSky-Labs/splunk-connector</small></a></p>
+    {{ post.content }}
+  </div>
+  {% endfor %}
+</div>
 
+  {% include pagination.html %}
 
-        <ul>
-          <li><a href="https://github.com/WhiteSky-Labs/splunk-connector/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/WhiteSky-Labs/splunk-connector/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/WhiteSky-Labs/splunk-connector">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>
-<a id="splunk-connector" class="anchor" href="#splunk-connector" aria-hidden="true"><span class="octicon octicon-link"></span></a>Splunk Connector</h1>
+</div>
 
-<p>By <a href="http://www.whiteskylabs.com">WhiteSky Labs</a></p>
+<!--<div class="home">
 
-<p>The Industry-leading Platform for Operational Intelligence</p>
+  <div class="posts">
+    {% for post in paginator.posts %}
+      <div class="post">
+        <a href="{{ post.url | prepend: site.baseurl }}" class="post-link">
+          <p class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</p>
+          <h3 class="h2 post-title">{{ post.title }}</h3>
+          <p class="post-summary">{{ post.summary }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
 
-<p>Collect and index any machine-generated data from virtually any source or location in real time. This includes data streaming from packaged and custom applications, application servers, web servers, databases, wire data from networks, virtual machines, telecoms equipment, operating systems, sensors and much more. Just point Splunk Enterprise at your data and it will immediately start collecting and indexing—so you can start searching and analyzing.</p>
-
-<h2>
-<a id="installation-and-usage" class="anchor" href="#installation-and-usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation and Usage</h2>
-
-<p>For information about usage and installation you can review the documentation at <a href="http://whitesky-labs.github.io/splunk-connector/documentation/">http://whitesky-labs.github.io/splunk-connector/documentation/</a>.</p>
-
-<h2>
-<a id="compatibility" class="anchor" href="#compatibility" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compatibility</h2>
-
-<p>The Splunk Connector is certified to be compatible with:</p>
-
-<ul>
-<li>Mule ESB v3.5.2</li>
-<li>CloudHub Runtime v3.5.2</li>
-</ul>
-
-<p>The Splunk Connector has been tested compatible with:</p>
-
-<ul>
-<li>Splunk Enterprise v6.2</li>
-<li>Splunk SDK for Java v1.3.0</li>
-</ul>
-
-<p>If you are interested in support for other versions of MuleSoft's platforms or Splunk, please contact <a href="mailto:support@whiteskylabs.com">support@whiteskylabs.com</a>.</p>
-
-<h2>
-<a id="reporting-issues" class="anchor" href="#reporting-issues" aria-hidden="true"><span class="octicon octicon-link"></span></a>Reporting Issues</h2>
-
-<p>You can report new issues by emailing <a href="mailto:support@whiteskylabs.com">support@whiteskylabs.com</a>.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/WhiteSky-Labs">WhiteSky-Labs</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-    
-  </body>
-</html>
+  {% include pagination.html %}
+</div>--

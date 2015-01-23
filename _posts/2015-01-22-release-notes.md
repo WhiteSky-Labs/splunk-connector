@@ -81,6 +81,7 @@ First Release
 
 ## Support Resources
 
+* [Overview Documentation](http://whitesky-labs.github.io/splunk-connector/2015/01/22/splunk-connector/)
 * [Splunk SDK for Java Documentation](http://dev.splunk.com/view/java-sdk/SP-CAAAEFH)
 * API Documentation is available at [http://whitesky-labs.github.io/splunk-connector/apidocs](http://whitesky-labs.github.io/splunk-connector/apidocs)
 * You can report new issues by emailing [support@whiteskylabs.com](mailto:support@whiteskylabs.com).
