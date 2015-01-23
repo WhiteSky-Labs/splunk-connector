@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Splunk Connector 1.0.0 Release Notes
+redirect_from: "/release-notes/"
 ---
 
 
