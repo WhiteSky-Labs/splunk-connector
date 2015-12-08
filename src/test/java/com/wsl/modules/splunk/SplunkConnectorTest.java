@@ -302,9 +302,11 @@ public class SplunkConnectorTest {
     public void testIsConnected() throws Exception {
         when(client.getService()).thenReturn(service);
         when(service.getToken()).thenReturn("Token");
+        when(service.getApp()).thenReturn("-");
         assertTrue(connector.isConnected());
         when(client.getService()).thenReturn(service);
         when(service.getToken()).thenReturn(null);
+        when(service.getApp()).thenReturn(null);
         assertFalse(connector.isConnected());
 
         client.setService(null);
