@@ -103,7 +103,7 @@ public class SplunkConnector {
      */
     @ValidateConnection
     public boolean isConnected() {
-        return splunkClient != null && splunkClient.getService().getToken() != null;
+        return splunkClient != null && splunkClient.getService().getToken() != null && splunkClient.getService().login() != null;
     }
 
     /**

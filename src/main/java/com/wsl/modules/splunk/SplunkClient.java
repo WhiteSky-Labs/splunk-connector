@@ -67,11 +67,12 @@ public class SplunkClient {
             );
         }
         try {
-            ServiceArgs loginArgs = new ServiceArgs();
+        	ServiceArgs loginArgs = new ServiceArgs();
             loginArgs.setUsername(username);
             loginArgs.setPassword(password);
             loginArgs.setHost(host);
             loginArgs.setPort(Integer.parseInt(port));
+            HttpService.setSslSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
 
             // Create a Service instance and log in with the argument map
             service = Service.connect(loginArgs);

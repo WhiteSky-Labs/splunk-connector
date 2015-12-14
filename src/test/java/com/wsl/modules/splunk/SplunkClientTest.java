@@ -400,7 +400,7 @@ public class SplunkClientTest {
             client.connect("Test", "Test", "localhost", "8089");
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
-            assertEquals("Connection refused", ex.getMessage());
+            assertEquals("HTTP 401 -- Login failed", ex.getMessage());
         }
     }
 
