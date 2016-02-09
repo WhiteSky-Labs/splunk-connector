@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.api.MessagingException;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
 
@@ -27,58 +27,58 @@ public class GetDataModelTestCases
         extends SplunkTestParent {
 
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("getDataModelTestData");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testGetDataModel() {
-        try {
-            Object result = runFlowAndGetPayload("get-data-model");
-            assertNotNull(result);
-            Map<String, Object> dataModel = (Map<String, Object>) result;
-            assertEquals("internal_audit_logs", dataModel.get("modelName"));
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testGetDataModelWithEmptyName() {
-        try {
-            upsertOnTestRunMessage("dataModelName", "");
-            Object result = runFlowAndGetPayload("get-data-model");
-            // expected result is a null payload.
-            fail("InvalidArgumentException should be thrown");
-        } catch (MessagingException me) {
-            assertEquals("You must provide a data model name", me.getCause().getMessage());
-        } catch (Exception e){
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testGetDataModelWithNullName() {
-        try {
-            upsertOnTestRunMessage("dataModelName", null);
-            Object result = runFlowAndGetPayload("get-data-model");
-            // expected result is a null payload.
-            fail("InvalidArgumentException should be thrown");
-        } catch (MessagingException me) {
-            assertEquals("You must provide a data model name", me.getCause().getMessage());
-        } catch (Exception e){
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("getDataModelTestData");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testGetDataModel() {
+//        try {
+//            Object result = runFlowAndGetPayload("get-data-model");
+//            assertNotNull(result);
+//            Map<String, Object> dataModel = (Map<String, Object>) result;
+//            assertEquals("internal_audit_logs", dataModel.get("modelName"));
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @Category({
+//            RegressionTests.class
+//    })
+//    @Test
+//    public void testGetDataModelWithEmptyName() {
+//        try {
+//            upsertOnTestRunMessage("dataModelName", "");
+//            Object result = runFlowAndGetPayload("get-data-model");
+//            // expected result is a null payload.
+//            fail("InvalidArgumentException should be thrown");
+//        } catch (MessagingException me) {
+//            assertEquals("You must provide a data model name", me.getCause().getMessage());
+//        } catch (Exception e){
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @Category({
+//            RegressionTests.class
+//    })
+//    @Test
+//    public void testGetDataModelWithNullName() {
+//        try {
+//            upsertOnTestRunMessage("dataModelName", null);
+//            Object result = runFlowAndGetPayload("get-data-model");
+//            // expected result is a null payload.
+//            fail("InvalidArgumentException should be thrown");
+//        } catch (MessagingException me) {
+//            assertEquals("You must provide a data model name", me.getCause().getMessage());
+//        } catch (Exception e){
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

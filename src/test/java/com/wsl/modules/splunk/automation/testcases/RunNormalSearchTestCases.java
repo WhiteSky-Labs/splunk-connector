@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.construct.Flow;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.HashMap;
 
@@ -24,31 +24,31 @@ import static org.junit.Assert.*;
 
 public class RunNormalSearchTestCases extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("runNormalSearchTestData");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testRunExportSearch() {
-        try {
-            Flow flow = muleContext.getRegistry().get("run-normal-search");
-            flow.start();
-
-            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
-
-            assertNotNull(payload);
-            HashMap<String, Object> results = (HashMap<String, Object>) payload;
-            assertTrue(results.size() > 0);
-            assertNotNull(results.get("events"));
-            assertNotNull(results.get("job"));
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("runNormalSearchTestData");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testRunExportSearch() {
+//        try {
+//            Flow flow = muleContext.getRegistry().get("run-normal-search");
+//            flow.start();
+//
+//            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
+//
+//            assertNotNull(payload);
+//            HashMap<String, Object> results = (HashMap<String, Object>) payload;
+//            assertTrue(results.size() > 0);
+//            assertNotNull(results.get("events"));
+//            assertNotNull(results.get("job"));
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 
 }

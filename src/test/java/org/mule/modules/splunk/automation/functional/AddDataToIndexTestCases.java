@@ -7,38 +7,26 @@
  * place, you may not use the software.
  */
 
-package com.wsl.modules.splunk.automation.testcases;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+package org.mule.modules.splunk.automation.functional;
 
 import java.util.Map;
 
-import org.apache.http.entity.ContentType;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.categories.Category;
 
-import com.wsl.modules.splunk.automation.RegressionTests;
-import com.wsl.modules.splunk.automation.SmokeTests;
-import com.wsl.modules.splunk.automation.SplunkTestParent;
 
-public class AddDataToIndexTestCases extends SplunkTestParent {
+public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
 
     private Map<String, Object> expectedBean;
 
-//    @Before
-//    public void setup() throws Exception {
+    @Before
+    public void setup() throws Exception {
+    	TestDataBuilder builder = new TestDataBuilder();
+    	
 //        initializeTestRunMessage("addDataToIndexTestData");
 //        expectedBean = getBeanFromContext("addDataToIndexTestData");
 //        runFlowAndGetPayload("create-index");
-//
-//        expectedBean = connector.createJob(OperationEnum.insert, "Account", "Id", ContentType.XML, ConcurrencyMode.Parallel);
-//
-//    }
-//
+    }
+
 //    @After
 //    public void tearDown() throws Exception {
 //        runFlowAndGetPayload("remove-index");
@@ -75,6 +63,6 @@ public class AddDataToIndexTestCases extends SplunkTestParent {
 //            fail(ConnectorTestUtils.getStackTrace(e));
 //        }
 //    }
-
+//
 
 }

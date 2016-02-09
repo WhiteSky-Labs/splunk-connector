@@ -9,8 +9,15 @@
 
 package com.wsl.modules.splunk;
 
-import com.splunk.*;
-import com.wsl.modules.splunk.exception.SplunkConnectorException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.apache.commons.lang.Validate;
 import org.modeshape.common.text.Inflector;
 import org.mule.api.ConnectionException;
@@ -18,9 +25,40 @@ import org.mule.api.ConnectionExceptionCode;
 import org.mule.api.callback.SourceCallback;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
+import com.splunk.Application;
+import com.splunk.Args;
+import com.splunk.CollectionArgs;
+import com.splunk.DataModel;
+import com.splunk.DataModelCollection;
+import com.splunk.HttpException;
+import com.splunk.HttpService;
+import com.splunk.Index;
+import com.splunk.IndexCollection;
+import com.splunk.IndexCollectionArgs;
+import com.splunk.Input;
+import com.splunk.InputCollection;
+import com.splunk.InputKind;
+import com.splunk.Job;
+import com.splunk.JobArgs;
+import com.splunk.JobExportArgs;
+import com.splunk.JobResultsArgs;
+import com.splunk.JobResultsPreviewArgs;
+import com.splunk.MultiResultsReaderJson;
+import com.splunk.MultiResultsReaderXml;
+import com.splunk.ResultsReader;
+import com.splunk.ResultsReaderJson;
+import com.splunk.ResultsReaderXml;
+import com.splunk.SSLSecurityProtocol;
+import com.splunk.SavedSearch;
+import com.splunk.SavedSearchCollection;
+import com.splunk.SavedSearchDispatchArgs;
+import com.splunk.SearchResults;
+import com.splunk.Service;
+import com.splunk.ServiceArgs;
+import com.splunk.TcpInput;
+import com.splunk.UdpInput;
+import com.wsl.modules.config.ConnectorConfig;
+import com.wsl.modules.splunk.exception.SplunkConnectorException;
 
 /**
  * Class SplunkClient, implements the Splunk Connector
@@ -29,20 +67,20 @@ public class SplunkClient {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SplunkClient.class);
 
-    private SplunkConnector splunkConnector;
+    private SplunkConnector connector;
 
     private Service service;
 
     /**
      * Instantiate a SplunkClient, with a SplunkConnector object containing the configurable host and port.
      *
-     * @param splunkConnector The instantiated SplunkConnector with hostname and port
+     * @param connector The instantiated SplunkConnector with hostname and port
      */
-    public SplunkClient(SplunkConnector splunkConnector) {
-        this.splunkConnector = splunkConnector;
+    public SplunkClient(SplunkConnector connector) {
+        this.connector = connector;
     }
 
-    /**
+	/**
      * Connect to splunk instance
      *
      * @param username The username to connect to
@@ -50,16 +88,9 @@ public class SplunkClient {
      * @param host     The host of the splunk server
      * @param port     The port of the splunk server
      */
-    public void connect(String username, String password, String host, String port) throws ConnectionException {
-        if (username == null
-                || password == null
-                || host == null
-                || port == null
-                || !isInt(port)
-                || username.isEmpty()
-                || password.isEmpty()
-                || host.isEmpty()
-                || port.isEmpty()) {
+    public void connect(String username, String password) throws ConnectionException {
+        ConnectorConfig config = getConnector().getConfig();
+        if (!isValid(username) || !isValid(password) || !config.isValid()) {
             throw new ConnectionException(
                     ConnectionExceptionCode.INCORRECT_CREDENTIALS,
                     "00",
@@ -67,11 +98,11 @@ public class SplunkClient {
             );
         }
         try {
-        	ServiceArgs loginArgs = new ServiceArgs();
+            ServiceArgs loginArgs = new ServiceArgs();
             loginArgs.setUsername(username);
             loginArgs.setPassword(password);
-            loginArgs.setHost(host);
-            loginArgs.setPort(Integer.parseInt(port));
+            loginArgs.setHost(config.getHost());
+            loginArgs.setPort(config.getIntPort());
             HttpService.setSslSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
 
             // Create a Service instance and log in with the argument map
@@ -316,11 +347,9 @@ public class SplunkClient {
             notNullSearchDispatchArgs.putAll(searchDispatchArgs);
         }
         if (customArgs != null) {
-            String queryParams = "";
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue().toString();
-                queryParams += " " + key + "=$args." + key + "$";
                 notNullSearchDispatchArgs.add("args." + key, value);
             }
         }
@@ -542,7 +571,7 @@ public class SplunkClient {
         oneshotSearchArgs.put("earliest_time", earliestTime);
         oneshotSearchArgs.put("latest_time", latestTime);
         if (args != null) {
-            for (Map.Entry entry : args.entrySet()) {
+            for (Map.Entry<String, String> entry : args.entrySet()) {
                 oneshotSearchArgs.put((String) entry.getKey(), entry.getValue());
             }
         }
@@ -972,13 +1001,19 @@ public class SplunkClient {
         return true;
     }
 
-    /**
-     * Check if a String value is an integer
-     *
-     * @param str A string to test if it represents an integer
-     * @return true/false
-     */
-    boolean isInt(String str) {
-        return str.matches("^-?\\d+$");
+    public SplunkConnector getConnector() {
+        return connector;
+	}
+
+    public void setConnector(SplunkConnector connector) {
+        this.connector = connector;
+	}
+
+//    private boolean isCredentialsValid(String username, String password) {
+//        return (isValid(username) || isValid(password)) ? false : true;
+//    }
+    
+    private boolean isValid(String value) {
+        return (value == null || value.isEmpty()) ? false : true;
     }
 }

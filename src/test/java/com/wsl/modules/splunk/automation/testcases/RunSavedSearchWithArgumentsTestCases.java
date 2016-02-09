@@ -19,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.Timeout;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -34,56 +34,56 @@ public class RunSavedSearchWithArgumentsTestCases
 
     private String searchName;
 
-    @Before
-    public void setup() {
-        try {
-            initializeTestRunMessage("runSavedSearchWithArgumentsTestData");
-            runFlowAndGetPayload("create-saved-search");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @After
-    public void tearDown() {
-        try {
-            runFlowAndGetPayload("delete-saved-search");
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testRunSavedSearchWithArguments() {
-        try {
-            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
-            assertNotNull(result);
-            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
-            assertTrue(listResponse.size() > 0);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testRunSavedSearchWithInvalidArguments() {
-        try {
-            initializeTestRunMessage("runSavedSearchWithInvalidArgumentsTestData");
-            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
-            // invalid arguments are ignored by saved searches, should be successful
-            assertNotNull(result);
-            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
-            assertTrue(listResponse.size() > 0);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() {
+//        try {
+//            initializeTestRunMessage("runSavedSearchWithArgumentsTestData");
+//            runFlowAndGetPayload("create-saved-search");
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @After
+//    public void tearDown() {
+//        try {
+//            runFlowAndGetPayload("delete-saved-search");
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testRunSavedSearchWithArguments() {
+//        try {
+//            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
+//            assertNotNull(result);
+//            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
+//            assertTrue(listResponse.size() > 0);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @Category({
+//            RegressionTests.class
+//    })
+//    @Test
+//    public void testRunSavedSearchWithInvalidArguments() {
+//        try {
+//            initializeTestRunMessage("runSavedSearchWithInvalidArgumentsTestData");
+//            Object result = runFlowAndGetPayload("run-saved-search-with-arguments");
+//            // invalid arguments are ignored by saved searches, should be successful
+//            assertNotNull(result);
+//            List<Map<String, Object>> listResponse = (List<Map<String, Object>>) result;
+//            assertTrue(listResponse.size() > 0);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 
 }

@@ -10,9 +10,9 @@
 
 package com.wsl.modules.splunk.automation;
 
-import org.mule.modules.tests.ConnectorTestCase;
+//import org.mule.modules.tests.ConnectorTestCase;
 
-public class SplunkTestParent
-        extends ConnectorTestCase {
+public class SplunkTestParent{
+        //extends ConnectorTestCase {
 
 }

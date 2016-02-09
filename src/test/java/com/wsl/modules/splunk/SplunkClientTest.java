@@ -9,14 +9,19 @@
 
 package com.wsl.modules.splunk;
 
-import com.splunk.*;
-import org.apache.commons.io.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mule.api.ConnectionException;
-import org.mule.api.callback.SourceCallback;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +30,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import org.apache.commons.io.IOUtils;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mule.api.ConnectionException;
+import org.mule.api.callback.SourceCallback;
+
+import com.splunk.Application;
+import com.splunk.Args;
+import com.splunk.CollectionArgs;
+import com.splunk.DataModel;
+import com.splunk.DataModelCollection;
+import com.splunk.EntityCollection;
+import com.splunk.Event;
+import com.splunk.HttpException;
+import com.splunk.Index;
+import com.splunk.IndexCollection;
+import com.splunk.IndexCollectionArgs;
+import com.splunk.Input;
+import com.splunk.InputCollection;
+import com.splunk.InputKind;
+import com.splunk.Job;
+import com.splunk.JobArgs;
+import com.splunk.JobCollection;
+import com.splunk.JobExportArgs;
+import com.splunk.JobResultsArgs;
+import com.splunk.ResultsReaderJson;
+import com.splunk.ResultsReaderXml;
+import com.splunk.SavedSearch;
+import com.splunk.SavedSearchCollection;
+import com.splunk.SavedSearchDispatchArgs;
+import com.splunk.Service;
+import com.splunk.ServiceArgs;
+import com.splunk.TcpInput;
+import com.splunk.UdpInput;
+import com.wsl.modules.config.ConnectorConfig;
 
 /**
  * Test {@link com.wsl.modules.splunk.SplunkConnector} internals
@@ -39,6 +79,8 @@ public class SplunkClientTest {
     Service service;
     @Mock
     SplunkConnector connector;
+    @Mock
+    ConnectorConfig config;
     @Mock
     EntityCollection<Application> apps;
     @Mock
@@ -84,9 +126,6 @@ public class SplunkClientTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         this.client = spy(new SplunkClient(connector));
-
-        connector.setHost("localhost");
-        connector.setPort("8089");
         client.setService(service);
 
     }
@@ -337,11 +376,9 @@ public class SplunkClientTest {
         searchArgs.setForceDispatch(true);
 
         List<Map<String, Object>> searchResult = new ArrayList<Map<String, Object>>();
-        String queryParams = "";
         for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue().toString();
-            queryParams += " " + key + "=$args." + key + "$";
             searchArgs.add("args." + key, value);
         }
 
@@ -396,8 +433,14 @@ public class SplunkClientTest {
 
     @Test
     public void testConnect() throws Exception {
-        try {
-            client.connect("Test", "Test", "localhost", "8089");
+    	
+        when(connector.getConfig()).thenReturn(config);
+        when(config.isValid()).thenReturn(true);
+        when(config.getHost()).thenReturn("localhost");
+        when(config.getIntPort()).thenReturn(8089);
+    	
+    	try {
+            client.connect("Test", "Test");
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
             assertEquals("HTTP 401 -- Login failed", ex.getMessage());
@@ -407,7 +450,7 @@ public class SplunkClientTest {
     @Test
     public void testConnectWithEmptyCredentials() throws Exception {
         try {
-            client.connect("", "", "", "");
+            client.connect("", "");
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
             assertEquals("Invalid credentials", ex.getMessage());
@@ -417,7 +460,7 @@ public class SplunkClientTest {
     @Test
     public void testConnectWithNullCredentials() throws Exception {
         try {
-            client.connect(null, null, null, null);
+            client.connect(null, null);
             fail("Exception should be thrown");
         } catch (ConnectionException ex) {
             assertEquals("Invalid credentials", ex.getMessage());
@@ -832,14 +875,14 @@ public class SplunkClientTest {
         assertEquals(service, client.getService());
     }
 
-    @Test
-    public void testIsInt() {
-        assertTrue(client.isInt("8089"));
-        assertTrue(client.isInt("55000"));
-        assertTrue(client.isInt("1"));
-        assertTrue(client.isInt("0"));
-        assertTrue(client.isInt("-8089"));
-        assertFalse(client.isInt("testing"));
-    }
+//    @Test
+//    public void testIsInt() {
+//        assertTrue(client.isInt("8089"));
+//        assertTrue(client.isInt("55000"));
+//        assertTrue(client.isInt("1"));
+//        assertTrue(client.isInt("0"));
+//        assertTrue(client.isInt("-8089"));
+//        assertFalse(client.isInt("testing"));
+//    }
 
 }

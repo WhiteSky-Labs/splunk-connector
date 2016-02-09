@@ -19,7 +19,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.api.MessagingException;
 import org.mule.api.annotations.Connect;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.Map;
 import java.util.Set;
@@ -31,52 +31,52 @@ public class ViewSavedSearchPropertiesTestCases
 
     private Map<String, Object> expectedBean;
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("viewSavedSearchPropertiesTestData");
-        expectedBean = getBeanFromContext("viewSavedSearchPropertiesTestData");
-        runFlowAndGetPayload("create-saved-search");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        upsertOnTestRunMessage("searchName", expectedBean.get("searchName"));
-        runFlowAndGetPayload("delete-saved-search");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testViewSavedSearchProperties() {
-        try {
-            Object result = runFlowAndGetPayload("view-saved-search-properties");
-            assertNotNull(result);
-            Set<Map.Entry<String, Object>> searchProperties = (Set<Map.Entry<String, Object>>) result;
-            for (Map.Entry<String, Object> property : searchProperties) {
-                if (property.getKey().equalsIgnoreCase("search")) {
-                    assertEquals(expectedBean.get("searchQuery"), property.getValue());
-                }
-            }
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
-
-    @Category({
-            RegressionTests.class
-    })
-    @Test
-    public void testViewSavedSearchPropertiesForInvalidSavedSearch() {
-        try {
-            upsertOnTestRunMessage("searchName", "Invalid Saved Search Name");
-            Object result = runFlowAndGetPayload("view-saved-search-properties");
-            fail("Exception should be thrown when getting properties for an invalid saved search");
-        } catch (MessagingException me) {
-            assertTrue(me.getCause() instanceof NullPointerException);
-        } catch(Exception e){
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("viewSavedSearchPropertiesTestData");
+//        expectedBean = getBeanFromContext("viewSavedSearchPropertiesTestData");
+//        runFlowAndGetPayload("create-saved-search");
+//    }
+//
+//    @After
+//    public void tearDown() throws Exception {
+//        upsertOnTestRunMessage("searchName", expectedBean.get("searchName"));
+//        runFlowAndGetPayload("delete-saved-search");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testViewSavedSearchProperties() {
+//        try {
+//            Object result = runFlowAndGetPayload("view-saved-search-properties");
+//            assertNotNull(result);
+//            Set<Map.Entry<String, Object>> searchProperties = (Set<Map.Entry<String, Object>>) result;
+//            for (Map.Entry<String, Object> property : searchProperties) {
+//                if (property.getKey().equalsIgnoreCase("search")) {
+//                    assertEquals(expectedBean.get("searchQuery"), property.getValue());
+//                }
+//            }
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
+//
+//    @Category({
+//            RegressionTests.class
+//    })
+//    @Test
+//    public void testViewSavedSearchPropertiesForInvalidSavedSearch() {
+//        try {
+//            upsertOnTestRunMessage("searchName", "Invalid Saved Search Name");
+//            Object result = runFlowAndGetPayload("view-saved-search-properties");
+//            fail("Exception should be thrown when getting properties for an invalid saved search");
+//        } catch (MessagingException me) {
+//            assertTrue(me.getCause() instanceof NullPointerException);
+//        } catch(Exception e){
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

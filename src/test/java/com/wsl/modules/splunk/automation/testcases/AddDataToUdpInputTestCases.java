@@ -17,38 +17,38 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import static org.junit.Assert.*;
 
 public class AddDataToUdpInputTestCases extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("addDataToUdpInputTestData");
-        upsertOnTestRunMessage("kind", InputKind.Udp);
-        runFlowAndGetPayload("create-input");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        runFlowAndGetPayload("remove-input");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testAddDataToUdpInput() {
-        try {
-            initializeTestRunMessage("addDataToUdpInputTestData");
-            Object result = runFlowAndGetPayload("add-data-to-udp-input");
-            assertNotNull(result);
-            Boolean success = (Boolean) result;
-            assertEquals(true, success);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("addDataToUdpInputTestData");
+//        upsertOnTestRunMessage("kind", InputKind.Udp);
+//        runFlowAndGetPayload("create-input");
+//    }
+//
+//    @After
+//    public void tearDown() throws Exception {
+//        runFlowAndGetPayload("remove-input");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testAddDataToUdpInput() {
+//        try {
+//            initializeTestRunMessage("addDataToUdpInputTestData");
+//            Object result = runFlowAndGetPayload("add-data-to-udp-input");
+//            assertNotNull(result);
+//            Boolean success = (Boolean) result;
+//            assertEquals(true, success);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

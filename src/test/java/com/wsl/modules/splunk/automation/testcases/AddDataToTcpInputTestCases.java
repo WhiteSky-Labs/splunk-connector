@@ -17,38 +17,38 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import static org.junit.Assert.*;
 
 
 public class AddDataToTcpInputTestCases extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("addDataToTcpInputTestData");
-        upsertOnTestRunMessage("kind", InputKind.Tcp);
-        runFlowAndGetPayload("create-input");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        runFlowAndGetPayload("remove-input");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testAddDataToTcpInput() {
-        try {
-            Object result = runFlowAndGetPayload("add-data-to-tcp-input");
-            assertNotNull(result);
-            Boolean success = (Boolean) result;
-            assertEquals(true, success);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("addDataToTcpInputTestData");
+//        upsertOnTestRunMessage("kind", InputKind.Tcp);
+//        runFlowAndGetPayload("create-input");
+//    }
+//
+//    @After
+//    public void tearDown() throws Exception {
+//        runFlowAndGetPayload("remove-input");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testAddDataToTcpInput() {
+//        try {
+//            Object result = runFlowAndGetPayload("add-data-to-tcp-input");
+//            assertNotNull(result);
+//            Boolean success = (Boolean) result;
+//            assertEquals(true, success);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

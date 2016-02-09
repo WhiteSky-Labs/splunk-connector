@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.mule.construct.Flow;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 
@@ -26,27 +26,27 @@ import static org.junit.Assert.fail;
 
 public class RunRealTimeSearchTestCases extends SplunkTestParent {
 
-    @Before
-    public void setup() throws Exception {
-        initializeTestRunMessage("runExportSearchTestData");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testRunRealTimeSearch() {
-        try {
-            Flow flow = muleContext.getRegistry().get("run-real-time-search");
-            flow.start();
-
-            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
-            assertNotNull(payload);
-            List<SearchResults> results = (List<SearchResults>) payload;
-            assertNotNull(results);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        initializeTestRunMessage("runExportSearchTestData");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testRunRealTimeSearch() {
+//        try {
+//            Flow flow = muleContext.getRegistry().get("run-real-time-search");
+//            flow.start();
+//
+//            Object payload = muleContext.getClient().request("vm://receive", 100000).getPayload();
+//            assertNotNull(payload);
+//            List<SearchResults> results = (List<SearchResults>) payload;
+//            assertNotNull(results);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

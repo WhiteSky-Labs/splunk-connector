@@ -16,7 +16,7 @@ import com.wsl.modules.splunk.automation.SplunkTestParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -26,19 +26,19 @@ import static org.junit.Assert.*;
 public class GetDataModelsTestCases
         extends SplunkTestParent {
 
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testGetDataModels() {
-        try {
-            Object result = runFlowAndGetPayload("get-data-models");
-            assertNotNull(result);
-            List<Map<String, Object>> dataModels = (List<Map<String, Object>>) result;
-            assertTrue(dataModels.size() > 0);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testGetDataModels() {
+//        try {
+//            Object result = runFlowAndGetPayload("get-data-models");
+//            assertNotNull(result);
+//            List<Map<String, Object>> dataModels = (List<Map<String, Object>>) result;
+//            assertTrue(dataModels.size() > 0);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 }

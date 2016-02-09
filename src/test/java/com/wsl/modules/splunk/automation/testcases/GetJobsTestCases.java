@@ -16,7 +16,7 @@ import com.wsl.modules.splunk.automation.SplunkTestParent;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,20 +28,20 @@ public class GetJobsTestCases
         extends SplunkTestParent {
 
 
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testGetJobs() {
-        try {
-            Object result = runFlowAndGetPayload("get-jobs");
-            assertNotNull(result);
-            List<Map<String, Object>> jobList = (List<Map<String, Object>>) result;
-            assertNotNull(jobList);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testGetJobs() {
+//        try {
+//            Object result = runFlowAndGetPayload("get-jobs");
+//            assertNotNull(result);
+//            List<Map<String, Object>> jobList = (List<Map<String, Object>>) result;
+//            assertNotNull(jobList);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 
 }

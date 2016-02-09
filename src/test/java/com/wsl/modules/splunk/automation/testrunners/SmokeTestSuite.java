@@ -12,6 +12,7 @@ package com.wsl.modules.splunk.automation.testrunners;
 
 import com.wsl.modules.splunk.automation.SmokeTests;
 import com.wsl.modules.splunk.automation.testcases.*;
+
 import org.junit.runner.RunWith;
 
 @RunWith(org.junit.experimental.categories.Categories.class)

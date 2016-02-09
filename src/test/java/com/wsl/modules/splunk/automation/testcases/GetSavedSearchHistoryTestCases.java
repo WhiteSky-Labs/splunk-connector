@@ -19,7 +19,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.Timeout;
-import org.mule.modules.tests.ConnectorTestUtils;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -34,45 +34,45 @@ public class GetSavedSearchHistoryTestCases
     @Rule
     public Timeout globalTimeout = new Timeout(200000);
 
-    @Before
-    public void setup() throws Exception {
-        // create and run a saved search
-        initializeTestRunMessage("getSavedSearchHistoryTestData");
-        expectedBean = getBeanFromContext("getSavedSearchHistoryTestData");
-        runFlowAndGetPayload("create-saved-search");
-        runFlowAndGetPayload("run-saved-search");
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        runFlowAndGetPayload("delete-saved-search");
-    }
-
-    @Category({
-            RegressionTests.class,
-            SmokeTests.class
-    })
-    @Test
-    public void testGetSavedSearchHistory() {
-        try {
-            Object result = runFlowAndGetPayload("get-saved-search-history");
-            List<Map<String, Object>> jobs = (List<Map<String, Object>>) result;
-            assertNotNull(jobs);
-            assertTrue(jobs.size() > 0);
-            boolean foundSavedSearch = false;
-            for (Map<String, Object> map : jobs) {
-                for (Map.Entry<String, Object> entry : map.entrySet()) {
-                    if (entry.getKey().equalsIgnoreCase("eventSearch")){
-                        if (((String)entry.getValue()).contains((String)expectedBean.get("searchName"))){
-                            foundSavedSearch = true;
-                        }
-                    }
-                }
-            }
-            assertTrue(foundSavedSearch);
-        } catch (Exception e) {
-            fail(ConnectorTestUtils.getStackTrace(e));
-        }
-    }
+//    @Before
+//    public void setup() throws Exception {
+//        // create and run a saved search
+//        initializeTestRunMessage("getSavedSearchHistoryTestData");
+//        expectedBean = getBeanFromContext("getSavedSearchHistoryTestData");
+//        runFlowAndGetPayload("create-saved-search");
+//        runFlowAndGetPayload("run-saved-search");
+//    }
+//
+//    @After
+//    public void tearDown() throws Exception {
+//        runFlowAndGetPayload("delete-saved-search");
+//    }
+//
+//    @Category({
+//            RegressionTests.class,
+//            SmokeTests.class
+//    })
+//    @Test
+//    public void testGetSavedSearchHistory() {
+//        try {
+//            Object result = runFlowAndGetPayload("get-saved-search-history");
+//            List<Map<String, Object>> jobs = (List<Map<String, Object>>) result;
+//            assertNotNull(jobs);
+//            assertTrue(jobs.size() > 0);
+//            boolean foundSavedSearch = false;
+//            for (Map<String, Object> map : jobs) {
+//                for (Map.Entry<String, Object> entry : map.entrySet()) {
+//                    if (entry.getKey().equalsIgnoreCase("eventSearch")){
+//                        if (((String)entry.getValue()).contains((String)expectedBean.get("searchName"))){
+//                            foundSavedSearch = true;
+//                        }
+//                    }
+//                }
+//            }
+//            assertTrue(foundSavedSearch);
+//        } catch (Exception e) {
+//            fail(ConnectorTestUtils.getStackTrace(e));
+//        }
+//    }
 
 }
