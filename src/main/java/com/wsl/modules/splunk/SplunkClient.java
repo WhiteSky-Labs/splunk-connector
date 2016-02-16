@@ -31,7 +31,6 @@ import com.splunk.CollectionArgs;
 import com.splunk.DataModel;
 import com.splunk.DataModelCollection;
 import com.splunk.HttpException;
-import com.splunk.HttpService;
 import com.splunk.Index;
 import com.splunk.IndexCollection;
 import com.splunk.IndexCollectionArgs;
@@ -57,8 +56,8 @@ import com.splunk.Service;
 import com.splunk.ServiceArgs;
 import com.splunk.TcpInput;
 import com.splunk.UdpInput;
-import com.wsl.modules.config.ConnectorConfig;
 import com.wsl.modules.splunk.exception.SplunkConnectorException;
+import com.wsl.modules.strategy.ConnectionManagementStrategy;
 
 /**
  * Class SplunkClient, implements the Splunk Connector
@@ -67,18 +66,7 @@ public class SplunkClient {
 
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(SplunkClient.class);
 
-    private SplunkConnector connector;
-
     private Service service;
-
-    /**
-     * Instantiate a SplunkClient, with a SplunkConnector object containing the configurable host and port.
-     *
-     * @param connector The instantiated SplunkConnector with hostname and port
-     */
-    public SplunkClient(SplunkConnector connector) {
-        this.connector = connector;
-    }
 
 	/**
      * Connect to splunk instance
@@ -87,10 +75,10 @@ public class SplunkClient {
      * @param password The password to use for connection
      * @param host     The host of the splunk server
      * @param port     The port of the splunk server
+	 * @throws ConnectionException 
      */
-    public void connect(String username, String password) throws ConnectionException {
-        ConnectorConfig config = getConnector().getConfig();
-        if (!isValid(username) || !isValid(password) || !config.isValid()) {
+    public void connect(ConnectionManagementStrategy strategy) throws ConnectionException {
+        if (strategy == null || !strategy.isValid()) {
             throw new ConnectionException(
                     ConnectionExceptionCode.INCORRECT_CREDENTIALS,
                     "00",
@@ -99,11 +87,12 @@ public class SplunkClient {
         }
         try {
             ServiceArgs loginArgs = new ServiceArgs();
-            loginArgs.setUsername(username);
-            loginArgs.setPassword(password);
-            loginArgs.setHost(config.getHost());
-            loginArgs.setPort(config.getIntPort());
-            HttpService.setSslSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
+            loginArgs.setUsername(strategy.getUsername());
+            loginArgs.setPassword(strategy.getPassword());
+            loginArgs.setHost(strategy.getHost());
+            loginArgs.setPort(strategy.getIntPort());
+            //loginArgs.setSSLSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
+            Service.setSslSecurityProtocol(SSLSecurityProtocol.TLSv1_2);
 
             // Create a Service instance and log in with the argument map
             service = Service.connect(loginArgs);
@@ -129,7 +118,6 @@ public class SplunkClient {
                     e.getMessage()
             );
         }
-
     }
 
     /**
@@ -1001,19 +989,4 @@ public class SplunkClient {
         return true;
     }
 
-    public SplunkConnector getConnector() {
-        return connector;
-	}
-
-    public void setConnector(SplunkConnector connector) {
-        this.connector = connector;
-	}
-
-//    private boolean isCredentialsValid(String username, String password) {
-//        return (isValid(username) || isValid(password)) ? false : true;
-//    }
-    
-    private boolean isValid(String value) {
-        return (value == null || value.isEmpty()) ? false : true;
-    }
 }
