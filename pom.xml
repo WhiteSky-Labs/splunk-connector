@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.mule.modules</groupId>
 	<artifactId>mule-module-splunk</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<packaging>mule-module</packaging>
 	<name>Mule Splunk Connector</name>
 
@@ -57,15 +57,19 @@
 			<version>${splunk.version}</version>
 		</dependency>
 		<!--dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz</artifactId> 
-			<version>2.2.1</version> </dependency> <dependency> <groupId>com.google.code.gson</groupId> 
-			<artifactId>gson</artifactId> <version>2.3</version> </dependency -->
-
-		<dependency>
+			<version>2.2.1</version> </dependency-->
+        <dependency>
+         <groupId>com.google.code.gson</groupId>
+         <artifactId>gson</artifactId>
+         <version>2.3</version>
+         <scope>provided</scope>
+        </dependency>
+		<!--dependency>
 			<groupId>org.modeshape</groupId>
 			<artifactId>modeshape-common</artifactId>
 			<version>3.8.0.Final</version>
 			<scope>provided</scope>
-		</dependency>
+		</dependency-->
 		<!--dependency> <groupId>xalan</groupId> <artifactId>xalan</artifactId> 
 			<version>2.7.0</version> <scope>test</scope> </dependency -->
 	</dependencies>
@@ -88,11 +92,11 @@
 		</plugins>
 	</build>
 
-	<scm>
+	<!--scm>
 		<connection>scm:git:git://github.com:mulesoft/splunk-connector.git</connection>
 		<developerConnection>scm:git:git@github.com:mulesoft/splunk-connector.git</developerConnection>
 		<url>http://github.com/mulesoft/splunk-connector</url>
-	</scm>
+	</scm-->
 
 	<repositories>
 		<repository>
@@ -101,13 +105,13 @@
 			<url>http://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
 		</repository>
-		<repository>
+		<!--repository>
 			<id>splunk-artifactory</id>
 			<name>Splunk Releases</name>
 			<url>http://splunk.artifactoryonline.com/splunk/ext-releases-local</url>
-		</repository>
+		</repository-->
 	</repositories>
-	<!--distributionManagement>
+	<distributionManagement>
 		<repository>
 			<id>mule-ee-releases</id>
 			<name>MuleEE Releases Repository</name>
@@ -119,6 +123,6 @@
 			<url>https://repository-master.mulesoft.org/nexus/content/repositories/ci-snapshots/</url>
 			<uniqueVersion>false</uniqueVersion>
 		</snapshotRepository>
-	</distributionManagement-->
+	</distributionManagement>
 
 </project>

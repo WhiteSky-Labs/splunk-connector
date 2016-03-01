@@ -11,17 +11,18 @@ package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
-import java.util.HashMap;
 import java.util.Map;
+//import org.mule.modules.tests.ConnectorTestUtils;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
+public class GetIndexTestCases extends SplunkAbstractTestCase {
 
-	private static final String INDEX_NAME = "add_data_to_index_test_index";
+	private static final String INDEX_NAME = "get_index_test_index";
 
 	@Before
 	public void setup() {
@@ -34,21 +35,22 @@ public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
 	}
 
 	@Test
-	public void testAddDataToIndex() {
-		Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME,
-				"addDataToIndexStringData", null);
+	public void testGetIndex() {
+		Map<String, Object> result = getConnector().getIndex(INDEX_NAME);
 		assertNotNull(result);
 		assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
 	}
 
 	@Test
-	public void testAddDataToIndexWithArgs() {
-		Map<String, Object> args = new HashMap<>();
-		args.put("maxDataSize", "750");
-		Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME,
-				"addDataToIndexStringData", args);
-		assertNotNull(result);
-		assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
+	public void testGetInvalidIndex() {
+		try {
+			getConnector().getIndex("Not a real index");
+			fail("Should throw exception for invalid index name");
+		} catch (IllegalArgumentException e) {
+			assertTrue(e.getMessage().contains(
+					"You must provide a valid index name"));
+		} catch (Exception e) {
+			fail("Exception not expected: " + e.getMessage());
+		}
 	}
-
 }

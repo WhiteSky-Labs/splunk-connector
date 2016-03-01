@@ -1,1 +1,270 @@
-dummy
+:imagesdir: images
+
+---
+
+= Splunk Connector
+
+Make it easy to send data from your third party applications directly into the Splunk Index, and perform searches directly on the Splunk Enterprise Server from your system of choice.
+
+*Release Notes:* link:release-notes.adoc[Link to Release Notes]
+
+---
+
+== Contents:
+
+. Introduction
+.. Prerequisites
+.. Requirements
+.. Dependencies
+... Versions
+... Consumers
+
+. Installing & Configuring
+.. Installing
+.. Configuring
+.. Upgrading from a Previous Version
+
+. Using the Connector
+.. Use Cases and Demos
+.. Best Practices
+.. Tips
+.. Integration Patterns
+.. Adding to a Flow
+.. Query Types
+.. Increasing Performance
+
+. Example Use Case
+..  Anypoint™ Studio Visual Editor | XML Editor
+.. Example Code
+. Demo
+. F.A.Q
+. See Also
+
+---
+
+== Introduction
+
+The Splunk Connector facilitates connections between Mule integration applications and Splunk Enterprise Server via its Java SDK. It is a Premium Connector, meaning that you can deploy it into production if you have an Mule Enterprise License or a CloudHub account, as well as a license to use the Connector from WhiteSky Labs, Pty Ltd.
+
+The Splunk Connector provides access to 30 different APIs on Splunk Enterprise Server. It allows you to perform a large set of actions including creating, scheduling and running Searches, as well as managing indexes and sending data to the Splunk Server directly from Mule ESB.
+
+=== Prerequisites
+
+This document assumes that you are familiar with Mule, Anypoint™ Connectors, and the Anypoint Studio interface. To increase your familiarity with Studio, consider completing one or more Anypoint Studio Tutorials. Further, this page assumes that you have a basic understanding of Mule flows and Mule Global Elements.
+
+This document describes implementation examples within the context of Anypoint Studio, Mule ESB’s graphical user interface, and, in parallel, includes configuration details for doing the same in the XML Editor.
+
+=== Requirements
+
+There are no hardware, software or technical requirements in addition to those required to run the AnyPoint Platform.
+
+You will require a valid CloudHub Subcription or Mule ESB Enterprise License in order to use the Connector, as well as a valid agreement with WhiteSky Labs to use the Splunk Connector.
+
+=== Dependencies
+
+The Splunk Connector requires AnyPoint Studio 4.1.1 or greater with Mule EE ESB Runtime 3.5.2 or newer.
+
+*Versions* +
+
+The Connector was developed and tested using ESB 3.7.0 and AnyPoint Studio 5.4.2, using the Splunk SDK for Java version 1.5.0. The Connector supports Splunk Enterprise Server 6.3.
+
+*Consumers* +
+The Connector requires Splunk Enterprise Server v6.2 or newer.
+
+=== Compatibility Matrix
+[cols="2*", options="header"]
+|===
+|Application/Service
+|Version
+
+|Mule Runtime
+|Mule EE 3.5.2 and above
+
+|Splunk SDK for Java
+|v1.5.0
+
+---
+
+== Installing and Configuring
+
+You can “test drive” the Splunk Connector by installing it in Anypoint Studio. Follow the instructions to download and launch Anypoint Studio, then follow the steps below to install the Splunk Connector.
+
+However, to use the Splunk Connector in a production environment, you must have either:
+
+* an Enterprise license to use Mule
+* a CloudHub Starter, Professional, or Enterprise account
+* Contact the MuleSoft Sales Team to obtain either of these.
+
+=== Installing
+
+To install the Splunk Connector:
+
+1. Under the Help menu in Anypoint Studio, select Install New Software.
+
+2. Next to the Work with: field of the Install wizard, choose the “Add:” button. Choose “Archive” and navigate to the installation zip file provided to you by WhiteSky Labs. Finally, give the site a name (e.g. “Splunk Connector Installer”) and choose OK.
+
+3. In the table below the Filter field (see image below), click to expand the Standard folder, then select Mule Splunk Connector. Click Next.
+
+image::installsplunk.png
+
+4. Review the details, then click Next.
+
+5. Click to accept the terms and conditions, then click Finish.
+
+6. Click Restart Now to complete the installation. Once you have installed the connector and restarted Studio you will see the Splunk Connector available in the palette, under the Connectors category.
+
+image::splunkpalette.png
+
+=== Configuring
+
+To use the Splunk Connector, you must configure two things:
+
+* an instance of the connector in your application
+
+* a global Splunk connector configuration
+
+To create a global Splunk connector configuration, follow these steps:
+
+1. Click the Global Elements tab at the base of the canvas, then click Create.
+
+2. Use the filter to locate, then select, Splunk, then click OK.
+
+3. Configure the global connector’s parameters according to the table below.
+
+image::globalparameters.png
+
+[cols="3*", options="header"]
+|===
+|Parameter
+|Description
+|Example
+
+|Name
+|Name for the global element
+|Splunk
+
+|Username
+|Username for connecting to Splunk Enterprise
+|admin
+
+|Password
+|Password for connecting to Splunk Enterprise
+|changeme
+
+|Host
+|The hostname of the Splunk Enterprise Server
+|localhost
+
+|Port
+|The administration port (not the web port) of the Splunk Enterprise Server
+|8089
+4. Access the Pooling Profile tab to configure any settings relevant to managing multiple connections via a connection pool.
+
+5. Access the Reconnection tab to configure any settings relevant to reconnection strategies that Mule should execute if it loses its connection to Splunk.
+
+6. Click Test Connection to confirm that the parameters of your global Splunk connector are accurate, and that Mule is able to successfully connect to your instance of Splunk.
+
+7. Click OK to save the global connector configurations.
+
+8. Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.
+
+9. Configure the connector’s parameters according to the table below.
+
+image::connectorparameters.png
+
+[cols="3*", options="header"]
+|===
+|Field
+|Description
+|Default
+
+|Display Name
+|A human-readable name for the Connector operation
+|Splunk Connector
+
+|Config Reference
+|The global configuration for the Connector to connect to Splunk Enterprise Server
+|Splunk
+
+|Operation
+|The operation to perform
+|Create Index
+
+|Index Name
+|A parameter for the operation chosen
+|#[payload]
+
+10. Click blank space on the canvas to save your Splunk connector configurations.
+
+=== Updating From an Older Version
+
+Please follow the same procedure indicated in the installation section. 
+
+---
+
+== Using This Connector
+
+Outbound, inbound, streaming outbound  +
+
+=== Use Cases and Demos
+List use cases for this connector, including a demo for every use case. +
+
+
+=== Best Practices
+To take full advantage of the functionality … +
+
+=== Tips
+* <Information from Support>
+
+=== Integration Patterns
+
+___ recognizes these integration patterns for connecting with other systems…
+
+=== Adding to a Flow
+
+Use a ____ Connector in your application -> flowchart +
+
+=== Query Types
+
+If talking to a database, what queries are allowed by this connector? +
+
+=== Increasing Performance
+
+What can you set in the connector to increase performance?
+
+---
+
+== Example Use Case
+
+Explain what this example is for.
+
+It should contain a fully functional Mule application as a demo, where the use case is considered. The demo needs to be simple and only considering a single use case.
+
+===  Anypoint Studio Visual Editor | XML Editor
+
+Explain how to create this case with  Anypoint Studio  visual editor and XML editor +
+
+[tabs]
+-----
+[tab,title="Studio Visual Editor"]
+....
+[tab content goes here]
+....
+[tab,title="XML Editor"]
+....
+[tab content goes here]
+....
+-----
+
+=== Code Example
+
+Number code example lines and explain blocks of lines
+
+---
+=== F.A.Q
+
+* Add here all the items you consider useful.
+
+=== See Also
+
+* Access the link:/release-notes/xyz-connector-release-notes[XYZ Connector Release Notes].
