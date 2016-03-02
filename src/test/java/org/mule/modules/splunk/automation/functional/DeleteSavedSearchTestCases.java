@@ -35,7 +35,7 @@ public class DeleteSavedSearchTestCases extends SplunkAbstractTestCase {
 		} catch (NullPointerException e) {
 			assertEquals(null, e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -47,7 +47,7 @@ public class DeleteSavedSearchTestCases extends SplunkAbstractTestCase {
 		} catch (NullPointerException e) {
 			assertEquals(null, e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

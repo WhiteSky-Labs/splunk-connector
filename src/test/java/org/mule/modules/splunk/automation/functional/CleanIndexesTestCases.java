@@ -30,6 +30,10 @@ public class CleanIndexesTestCases extends SplunkAbstractTestCase {
 	@After
 	public void tearDown() {
 		getConnector().removeIndex(INDEX_NAME);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Test
@@ -46,7 +50,7 @@ public class CleanIndexesTestCases extends SplunkAbstractTestCase {
 		} catch (NullPointerException e) {
 			assertTrue(e instanceof NullPointerException);
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 }

@@ -31,6 +31,10 @@ public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
 	@After
 	public void tearDown() {
 		getConnector().removeIndex(INDEX_NAME);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Test

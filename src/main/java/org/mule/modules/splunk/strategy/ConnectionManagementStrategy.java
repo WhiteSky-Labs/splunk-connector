@@ -1,3 +1,12 @@
+/**
+ *
+ * (c) 2015 WhiteSky Labs, Pty Ltd. This software is protected under international
+ * copyright law. All use of this software is subject to WhiteSky Labs' Master
+ * Subscription Agreement (or other Terms of Service) separately entered
+ * into between you and WhiteSky Labs. If such an agreement is not in
+ * place, you may not use the software.
+ */
+
 package org.mule.modules.splunk.strategy;
 
 import org.mule.api.ConnectionException;
@@ -59,7 +68,6 @@ public class ConnectionManagementStrategy {
         setClient(new SplunkClient());
         setUsername(username);
         setPassword(password);
-        System.out.println(this.toString());
         client.connect(this);
     }
 
@@ -170,13 +178,6 @@ public class ConnectionManagementStrategy {
 	
 	private boolean isEmpty(String value) {
         return value == null || value.isEmpty() ? true : false;
-	}
-
-	@Override
-	public String toString() {
-		return "ConnectionManagementStrategy [username=" + username
-				+ ", password=" + password + ", host=" + host + ", port="
-				+ port + "]";
 	}
 	
 }

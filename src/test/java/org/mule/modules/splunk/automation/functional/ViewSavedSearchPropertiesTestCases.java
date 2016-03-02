@@ -57,7 +57,7 @@ public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
 		} catch (NullPointerException e) {
 			assertTrue(e instanceof NullPointerException);
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 }

@@ -43,7 +43,7 @@ public class GetInputTestCases extends SplunkAbstractTestCase {
 			assertEquals("You must provide a valid input identifier",
 					e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

@@ -48,7 +48,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
 			assertTrue(e.getMessage().contains("Unknown search command"));
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

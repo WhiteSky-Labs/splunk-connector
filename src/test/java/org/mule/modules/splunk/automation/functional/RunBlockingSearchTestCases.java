@@ -51,7 +51,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		} catch (HttpException e) {
 			assertTrue(e.getMessage().contains("Unknown search command"));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -63,7 +63,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Search Query is empty.", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -75,7 +75,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Search Query is empty.", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

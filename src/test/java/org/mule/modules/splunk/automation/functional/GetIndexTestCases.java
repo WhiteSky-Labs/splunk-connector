@@ -16,6 +16,7 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 //import org.mule.modules.tests.ConnectorTestUtils;
 
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,10 @@ public class GetIndexTestCases extends SplunkAbstractTestCase {
 	@After
 	public void tearDown() {
 		getConnector().removeIndex(INDEX_NAME);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Test
@@ -50,7 +55,7 @@ public class GetIndexTestCases extends SplunkAbstractTestCase {
 			assertTrue(e.getMessage().contains(
 					"You must provide a valid index name"));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 }

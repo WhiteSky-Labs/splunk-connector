@@ -64,7 +64,7 @@ public class ModifySavedSearchPropertiesTestCases extends
 			assertEquals("You must provide some properties to modify",
 					e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

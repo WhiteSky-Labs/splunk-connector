@@ -35,7 +35,7 @@ public class GetDataModelTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("You must provide a data model name", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -48,7 +48,7 @@ public class GetDataModelTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("You must provide a data model name", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 }

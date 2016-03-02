@@ -53,7 +53,7 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
 			assertTrue(me.getMessage().contains(
 					"A saved search with that name already exists."));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -65,7 +65,7 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Search Name empty.", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
@@ -77,7 +77,7 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
 		} catch (IllegalArgumentException e) {
 			assertEquals("Search Name empty.", e.getMessage());
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

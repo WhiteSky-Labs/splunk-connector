@@ -31,6 +31,7 @@ public class CreateIndexTestCases extends SplunkAbstractTestCase {
 		if (doTearDown) {
 			try {
 				getConnector().removeIndex(INDEX_NAME);
+				Thread.sleep(2000);
 			} catch (Exception e) {
 				fail("Cleanup failed with exception: " + e.getMessage());
 			}
@@ -68,7 +69,7 @@ public class CreateIndexTestCases extends SplunkAbstractTestCase {
 			assertTrue(e.getMessage().contains(
 					"is not supported by this handler"));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 

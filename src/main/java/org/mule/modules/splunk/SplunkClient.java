@@ -938,6 +938,7 @@ public class SplunkClient {
             return true;
         } catch (IOException e) {
             LOGGER.info("Unable to submit to that TCP Port", e);
+            e.printStackTrace();
             return false;
         }
     }

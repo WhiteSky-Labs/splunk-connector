@@ -37,6 +37,10 @@ public class ModifyIndexTestCases extends SplunkAbstractTestCase {
 	@After
 	public void tearDown() {
 		getConnector().removeIndex(INDEX_NAME);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Test
@@ -58,7 +62,7 @@ public class ModifyIndexTestCases extends SplunkAbstractTestCase {
 			assertTrue(e.getMessage().contains(
 					"is not supported by this handler"));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 }

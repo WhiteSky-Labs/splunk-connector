@@ -52,7 +52,7 @@ public class GetIndexesTestCases extends SplunkAbstractTestCase {
 			assertTrue(e.getMessage().contains(
 					"is not supported by this handler"));
 		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
+			fail("Exception type not expected: " + e.getMessage());
 		}
 	}
 
