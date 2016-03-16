@@ -16,13 +16,14 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
 public class GetInputTestCases extends SplunkAbstractTestCase {
 
 	@Test
-	public void testGetInput() {
+	public void testGetInput() throws SplunkConnectorException {
 		//setup
 		getConnector().createInput("9906", InputKind.Tcp, null);
 		

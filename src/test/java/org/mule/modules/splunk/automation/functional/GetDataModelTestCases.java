@@ -16,11 +16,12 @@ import static org.junit.Assert.fail;
 import java.util.Map;
 
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class GetDataModelTestCases extends SplunkAbstractTestCase {
 
 	@Test
-	public void testGetDataModel() {
+	public void testGetDataModel() throws SplunkConnectorException {
 		Map<String, Object> result = getConnector().getDataModel(
 				"internal_audit_logs");
 		assertNotNull(result);

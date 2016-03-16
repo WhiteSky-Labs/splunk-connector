@@ -49,29 +49,16 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- dependency> <groupId>org.mule.transports</groupId> <artifactId>mule-transport-vm</artifactId> 
-			<version>${mule.version}</version> </dependency -->
 		<dependency>
 			<groupId>com.splunk</groupId>
 			<artifactId>splunk</artifactId>
 			<version>${splunk.version}</version>
 		</dependency>
-		<!--dependency> <groupId>org.quartz-scheduler</groupId> <artifactId>quartz</artifactId> 
-			<version>2.2.1</version> </dependency-->
-        <!--dependency>
-         <groupId>com.google.code.gson</groupId>
-         <artifactId>gson</artifactId>
-         <version>2.3</version>
-         <scope>provided</scope>
-        </dependency-->
-		<!--dependency>
-			<groupId>org.modeshape</groupId>
-			<artifactId>modeshape-common</artifactId>
-			<version>3.8.0.Final</version>
-			<scope>provided</scope>
-		</dependency-->
-		<!--dependency> <groupId>xalan</groupId> <artifactId>xalan</artifactId> 
-			<version>2.7.0</version> <scope>test</scope> </dependency -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -92,13 +79,8 @@
 		</plugins>
 	</build>
 
-	<!--scm>
-		<connection>scm:git:git://github.com:mulesoft/splunk-connector.git</connection>
-		<developerConnection>scm:git:git@github.com:mulesoft/splunk-connector.git</developerConnection>
-		<url>http://github.com/mulesoft/splunk-connector</url>
-	</scm-->
-
 	<repositories>
+		<!-- To be removed once splunk jars have been pushed to the mule repository -->
 		<repository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>

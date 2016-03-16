@@ -519,44 +519,11 @@ public class SplunkClientTest {
     }
 
     @Test
-    public void testGetSavedSearch() {
-        ServiceArgs namespace = new ServiceArgs();
-        namespace.setApp("search");
-        namespace.setOwner("admin");
-        when(service.getSavedSearches(namespace)).thenReturn(searchCollection);
-        when(searchCollection.get("Test")).thenReturn(search);
-        assertEquals(search, client.getSavedSearch("Test", "search", "admin"));
-    }
-
-
-    @Test
     public void testParseEvents() throws Exception {
         List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
         assertEquals(entries, client.parseEvents(this.jsonreader));
         assertEquals(entries, client.parseEvents(this.xmlreader));
     }
-
-
-    /*
-    * Currently disabled since there is no obvious way to test an infinite loop.
-    @Test
-    public void testRunRealTimeSearch() throws Exception {
-        when(job.isReady()).thenReturn(true);
-        when(service.search(anyString(), any(JobArgs.class))).thenReturn(job);
-
-        InputStream stubInputStream =
-                IOUtils.toInputStream("['test':'test']");
-        when(job.getResultsPreview(any(JobResultsPreviewArgs.class))).thenReturn(stubInputStream);
-        when(cb.process(any())).thenReturn(new Object());
-        doReturn(null).when(client).parseEvents(any(ResultsReaderJson.class));
-
-        try{
-            client.runRealTimeSearch("Test", "rt-10m", "rt", 0, 0, cb);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }*/
 
     @Test
     public void testRunExportSearch() throws Exception {
@@ -1029,7 +996,7 @@ public class SplunkClientTest {
 			client.runRealTimeSearch(anyString(), anyString(), anyString(), anyInt(), anyInt(), any(SourceCallback.class));
 			fail("Exception should be thrown");
 		} catch (SplunkConnectorException e) {
-			assertEquals("Underlying input stream returned zero bytes",
+			assertEquals("Search Query is empty.",
 					e.getMessage());
 		}
 	}

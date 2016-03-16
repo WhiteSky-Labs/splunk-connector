@@ -17,38 +17,40 @@ import org.junit.Test;
 
 public class DeleteSavedSearchTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testDeleteSavedSearch() {
-		getConnector().createSavedSearch("delete_saved_search_test_search",
-				"search * | head 100", null);
+    @Test
+    public void testDeleteSavedSearch() {
+        try {
+            getConnector().createSavedSearch("delete_saved_search_test_search", "search * | head 100", null);
 
-		boolean result = getConnector().deleteSavedSearch(
-				"delete_saved_search_test_search");
-		assertTrue(result);
-	}
+            boolean result = getConnector().deleteSavedSearch("delete_saved_search_test_search");
+            assertTrue(result);
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testDeleteSavedSearchWithEmptyName() {
-		try {
-			getConnector().deleteSavedSearch("");
-			fail("Exception should be thrown when using an empty name to delete a Saved Search");
-		} catch (NullPointerException e) {
-			assertEquals(null, e.getMessage());
-		} catch (Exception e) {
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testDeleteSavedSearchWithEmptyName() {
+        try {
+            getConnector().deleteSavedSearch("");
+            fail("Exception should be thrown when using an empty name to delete a Saved Search");
+        } catch (NullPointerException e) {
+            assertEquals(null, e.getMessage());
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testDeleteSavedSearchWithNullName() {
-		try {
-			getConnector().deleteSavedSearch("");
-			fail("Exception should be thrown when using an null name to delete a Saved Search");
-		} catch (NullPointerException e) {
-			assertEquals(null, e.getMessage());
-		} catch (Exception e) {
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testDeleteSavedSearchWithNullName() {
+        try {
+            getConnector().deleteSavedSearch("");
+            fail("Exception should be thrown when using an null name to delete a Saved Search");
+        } catch (NullPointerException e) {
+            assertEquals(null, e.getMessage());
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 
 }

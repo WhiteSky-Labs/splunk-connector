@@ -10,9 +10,6 @@
 package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Before;
@@ -24,7 +21,7 @@ import com.splunk.InputKind;
 public class AddDataToTcpInputTestCases extends SplunkAbstractTestCase {
 
 	@Before
-	public void setup() {
+	public void setup() throws SplunkConnectorException {
 		getConnector().createInput("9988", InputKind.Tcp, null);
 	}
 
@@ -35,12 +32,8 @@ public class AddDataToTcpInputTestCases extends SplunkAbstractTestCase {
 
 	@Test
 	public void testAddDataToTcpInput() {
-		try {
-			boolean result = getConnector().addDataToTcpInput("9988",
-					"addDataToTcpInputTestDataString");
-			assertTrue(result);
-		} catch (SplunkConnectorException e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
+		boolean result = getConnector().addDataToTcpInput("9988",
+				"addDataToTcpInputTestDataString");
+		assertTrue(result);
 	}
 }

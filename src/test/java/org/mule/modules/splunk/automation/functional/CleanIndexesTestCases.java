@@ -17,40 +17,45 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class CleanIndexesTestCases extends SplunkAbstractTestCase {
 
-	private static final String INDEX_NAME = "clean_index_test_index";
+    private static final String INDEX_NAME = "clean_index_test_index";
 
-	@Before
-	public void setup() {
-		getConnector().createIndex(INDEX_NAME, null);
-	}
+    @Before
+    public void setup() throws SplunkConnectorException {
+        getConnector().createIndex(INDEX_NAME, null);
+    }
 
-	@After
-	public void tearDown() {
-		getConnector().removeIndex(INDEX_NAME);
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-		}
-	}
+    @After
+    public void tearDown() {
+        getConnector().removeIndex(INDEX_NAME);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+    }
 
-	@Test
-	public void testCleanIndex() {
-		Map<String, Object> index = getConnector().cleanIndex(INDEX_NAME, 180);
-		assertTrue(((String) index.get("homePath")).contains(INDEX_NAME));
-	}
+    @Test
+    public void testCleanIndex() {
+        try {
+            Map<String, Object> index = getConnector().cleanIndex(INDEX_NAME, 180);
+            assertTrue(((String) index.get("homePath")).contains(INDEX_NAME));
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testCleanInvalidIndex() {
-		try {
-			getConnector().cleanIndex("Not a real index", 180);
-			fail("Error should be thrown cleaning an invalid index");
-		} catch (NullPointerException e) {
-			assertTrue(e instanceof NullPointerException);
-		} catch (Exception e) {
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testCleanInvalidIndex() {
+        try {
+            getConnector().cleanIndex("Not a real index", 180);
+            fail("Error should be thrown cleaning an invalid index");
+        } catch (NullPointerException e) {
+            assertTrue(e instanceof NullPointerException);
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 }

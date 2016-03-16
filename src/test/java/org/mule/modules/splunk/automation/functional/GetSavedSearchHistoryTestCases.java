@@ -44,6 +44,10 @@ public class GetSavedSearchHistoryTestCases extends SplunkAbstractTestCase {
 	@After
 	public void tearDown() {
 		getConnector().deleteSavedSearch(SEARCH_NAME);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+		}
 	}
 
 	@Test

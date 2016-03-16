@@ -11,6 +11,7 @@ package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,41 +19,48 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
 
-	private static final String INDEX_NAME = "add_data_to_index_test_index";
+    private static final String INDEX_NAME = "add_data_to_index_test_index";
 
-	@Before
-	public void setup() {
-		getConnector().createIndex(INDEX_NAME, null);
-	}
+    @Before
+    public void setup() throws SplunkConnectorException {
+        getConnector().createIndex(INDEX_NAME, null);
+    }
 
-	@After
-	public void tearDown() {
-		getConnector().removeIndex(INDEX_NAME);
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-		}
-	}
+    @After
+    public void tearDown() {
+        getConnector().removeIndex(INDEX_NAME);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+    }
 
-	@Test
-	public void testAddDataToIndex() {
-		Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME,
-				"addDataToIndexStringData", null);
-		assertNotNull(result);
-		assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
-	}
+    @Test
+    public void testAddDataToIndex() {
+        try {
+            Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME, "addDataToIndexStringData", null);
+            assertNotNull(result);
+            assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
+        } catch (SplunkConnectorException e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testAddDataToIndexWithArgs() {
-		Map<String, Object> args = new HashMap<>();
-		args.put("maxDataSize", "750");
-		Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME,
-				"addDataToIndexStringData", args);
-		assertNotNull(result);
-		assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
-	}
+    @Test
+    public void testAddDataToIndexWithArgs() {
+        try {
+            Map<String, Object> args = new HashMap<>();
+            args.put("maxDataSize", "750");
+            Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME, "addDataToIndexStringData", args);
+            assertNotNull(result);
+            assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
+        } catch (SplunkConnectorException e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
 }

@@ -10,7 +10,6 @@
 package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.Before;
@@ -19,11 +18,10 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
-
 public class AddDataToUdpInputTestCases extends SplunkAbstractTestCase {
 
 	@Before
-	public void setup() {
+	public void setup() throws SplunkConnectorException {
 		getConnector().createInput("9988", InputKind.Udp, null);
 	}
 
@@ -34,12 +32,8 @@ public class AddDataToUdpInputTestCases extends SplunkAbstractTestCase {
 
 	@Test
 	public void testAddDataToUdpInput() {
-		try {
-			boolean result = getConnector().addDataToUdpInput("9988",
-					"addDataToUdpInputTestDataString");
-			assertTrue(result);
-		} catch (SplunkConnectorException e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
+		boolean result = getConnector().addDataToUdpInput("9988",
+				"addDataToUdpInputTestDataString");
+		assertTrue(result);
 	}
 }
