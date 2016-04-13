@@ -58,7 +58,8 @@ public class JobServiceTest {
         when(clientService.getJobs()).thenReturn(jobCollection);
         when(jobCollection.values()).thenReturn(jobs);
         when(job.entrySet()).thenReturn(entry.entrySet());
-        assertTrue(service.getJobs().size() == 1);
+        assertTrue(service.getJobs()
+                .size() == 1);
     }
 
     @Test
@@ -98,7 +99,8 @@ public class JobServiceTest {
     public void testProcessSet() {
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
-        assertTrue(service.processSet(entry.entrySet()).size() == 1);
+        assertTrue(service.processSet(entry.entrySet())
+                .size() == 1);
     }
 
 }

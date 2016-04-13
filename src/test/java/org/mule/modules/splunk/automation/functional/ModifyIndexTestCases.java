@@ -22,8 +22,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-import com.splunk.HttpException;
-
 public class ModifyIndexTestCases extends SplunkAbstractTestCase {
 
     private static final String INDEX_NAME = "modify_index_test_index";
@@ -63,7 +61,8 @@ public class ModifyIndexTestCases extends SplunkAbstractTestCase {
             getConnector().modifyIndex(INDEX_NAME, args);
             fail("Error should be thrown when using invalid arguments");
         } catch (SplunkConnectorException sce) {
-            assertTrue(sce.getMessage().contains("is not supported by this handler"));
+            assertTrue(sce.getMessage()
+                    .contains("is not supported by this handler"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

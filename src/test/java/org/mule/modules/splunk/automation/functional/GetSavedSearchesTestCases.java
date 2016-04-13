@@ -45,7 +45,8 @@ public class GetSavedSearchesTestCases extends SplunkAbstractTestCase {
         boolean foundSavedSearch = false;
         for (Map<String, Object> map : result) {
             for (Map.Entry<String, Object> entry : map.entrySet()) {
-                if (entry.getKey().equalsIgnoreCase("search")) {
+                if (entry.getKey()
+                        .equalsIgnoreCase("search")) {
                     if (((String) entry.getValue()).equalsIgnoreCase("search get_saved_search_test_search | head 100")) {
                         foundSavedSearch = true;
                     }

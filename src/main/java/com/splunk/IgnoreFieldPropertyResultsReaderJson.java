@@ -20,7 +20,7 @@ public class IgnoreFieldPropertyResultsReaderJson extends ResultsReaderJson {
     public IgnoreFieldPropertyResultsReaderJson(InputStream inputStream) throws IOException {
         super(inputStream, true);
     }
-    
+
     @JsonIgnore
     @Override
     public Collection<String> getFields() {

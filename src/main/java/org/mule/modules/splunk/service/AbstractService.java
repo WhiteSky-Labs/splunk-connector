@@ -59,8 +59,7 @@ public abstract class AbstractService {
      *
      * @param key
      *            - the String key to convert to the java convention (camelCase)
-     * @return A string converted from javascript (naming_conventions) to Java
-     *         namingConventions
+     * @return A string converted from javascript (naming_conventions) to Java namingConventions
      */
     protected String convertToJavaConvention(String key) {
         String result = key.startsWith("_") ? key.substring(1) : key;
@@ -142,7 +141,8 @@ public abstract class AbstractService {
         if (customArgs != null) {
             for (Map.Entry<String, Object> entry : customArgs.entrySet()) {
                 String key = entry.getKey();
-                String value = entry.getValue().toString();
+                String value = entry.getValue()
+                        .toString();
                 searchDispatchArgs.add("args." + key, value);
             }
         }

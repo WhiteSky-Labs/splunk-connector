@@ -35,42 +35,42 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
 
 @RunWith(Suite.class)
 @org.junit.runners.Suite.SuiteClasses({
-    AddDataToIndexTestCases.class,
-    AddDataToTcpInputTestCases.class,
-    AddDataToUdpInputTestCases.class,
-    CleanIndexesTestCases.class,
-    CreateIndexTestCases.class,
-    CreateInputsTestCases.class,
-    CreateSavedSearchTestCases.class,
-    DeleteSavedSearchTestCases.class,
-    GetApplicationsTestCases.class,
-    GetDataModelsTestCases.class,
-    GetDataModelTestCases.class,
-    GetIndexesTestCases.class,
-    GetIndexTestCases.class,
-    GetInputsTestCases.class,
-    GetInputTestCases.class,
-    GetJobsTestCases.class,
-    GetSavedSearchesTestCases.class,
-    GetSavedSearchHistoryTestCases.class,
-    ModifyIndexTestCases.class,
-    ModifyInputTestCases.class,
-    ModifySavedSearchPropertiesTestCases.class,
-    RunBlockingSearchTestCases.class,
-    RunOneShotSearchTestCases.class,
-    RunSavedSearchTestCases.class,
-    RunSavedSearchWithArgumentsTestCases.class,
-    ViewSavedSearchPropertiesTestCases.class,
+        AddDataToIndexTestCases.class,
+        AddDataToTcpInputTestCases.class,
+        AddDataToUdpInputTestCases.class,
+        CleanIndexesTestCases.class,
+        CreateIndexTestCases.class,
+        CreateInputsTestCases.class,
+        CreateSavedSearchTestCases.class,
+        DeleteSavedSearchTestCases.class,
+        GetApplicationsTestCases.class,
+        GetDataModelsTestCases.class,
+        GetDataModelTestCases.class,
+        GetIndexesTestCases.class,
+        GetIndexTestCases.class,
+        GetInputsTestCases.class,
+        GetInputTestCases.class,
+        GetJobsTestCases.class,
+        GetSavedSearchesTestCases.class,
+        GetSavedSearchHistoryTestCases.class,
+        ModifyIndexTestCases.class,
+        ModifyInputTestCases.class,
+        ModifySavedSearchPropertiesTestCases.class,
+        RunBlockingSearchTestCases.class,
+        RunOneShotSearchTestCases.class,
+        RunSavedSearchTestCases.class,
+        RunSavedSearchWithArgumentsTestCases.class,
+        ViewSavedSearchPropertiesTestCases.class,
 })
 public class FunctionalTestSuite {
 
-	@BeforeClass
-	public static void initialiseSuite() {
-		ConnectorTestContext.initialize(SplunkConnector.class);
-	}
+    @BeforeClass
+    public static void initialiseSuite() {
+        ConnectorTestContext.initialize(SplunkConnector.class);
+    }
 
-	@AfterClass
-	public static void shutdownSuite() throws Exception {
-		ConnectorTestContext.shutDown();
-	}
+    @AfterClass
+    public static void shutdownSuite() throws Exception {
+        ConnectorTestContext.shutDown();
+    }
 }

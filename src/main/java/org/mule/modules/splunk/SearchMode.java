@@ -13,5 +13,6 @@ package org.mule.modules.splunk;
  * Enum defines the possible search modes the connector supports (where relevant), currently limited to realtime and normal.
  */
 public enum SearchMode {
-    NORMAL, REALTIME
+    NORMAL,
+    REALTIME
 }

@@ -32,7 +32,7 @@ public class ApplicationServiceTest {
     Application application;
     @Mock
     EntityCollection<Application> apps;
-    
+
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
@@ -46,7 +46,7 @@ public class ApplicationServiceTest {
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
         Set<Map.Entry<String, Object>> set = entry.entrySet();
-        
+
         when(service.getService()).thenReturn(clientService);
         when(clientService.getApplications()).thenReturn(apps);
         when(apps.values()).thenReturn(applist);

@@ -22,65 +22,66 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testRunOneShotSearch() {
-		try {
-			Map<String, String> args = new HashMap<>();
-			args.put("description", "Sample Description");
-			List<Map<String, Object>> results = getConnector()
-					.runOneShotSearch("search * | head 100", "-10d", "now",
-							args);
-			assertNotNull(results);
-			assertTrue(results.size() > 0);
-		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testRunOneShotSearch() {
+        try {
+            Map<String, String> args = new HashMap<>();
+            args.put("description", "Sample Description");
+            List<Map<String, Object>> results = getConnector()
+                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                            args);
+            assertNotNull(results);
+            assertTrue(results.size() > 0);
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testRunOneShotSearchWithInvalidQuery() {
-		try {
-			getConnector().runOneShotSearch("Invalid search query", "-10d",
-					"now", null);
-			fail("An invalid search query should throw an exception");
-		} catch (SplunkConnectorException sce) {
-			assertTrue(sce.getMessage().contains("Unknown search command"));
-		} catch (Exception e) {
-			e.printStackTrace();
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testRunOneShotSearchWithInvalidQuery() {
+        try {
+            getConnector().runOneShotSearch("Invalid search query", "-10d",
+                    "now", null);
+            fail("An invalid search query should throw an exception");
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce.getMessage()
+                    .contains("Unknown search command"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testRunOneShotSearchWithInvalidSearchArgs() {
-		try {
-			Map<String, String> args = new HashMap<>();
-			args.put("invalid", "invalid value");
-			List<Map<String, Object>> results = getConnector()
-					.runOneShotSearch("search * | head 100", "-10d", "now",
-							args);
-			// invalid search args are ignored for a one-shot search, should
-			// return successfully
-			assertNotNull(results);
-			assertTrue(results.size() > 0);
-		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testRunOneShotSearchWithInvalidSearchArgs() {
+        try {
+            Map<String, String> args = new HashMap<>();
+            args.put("invalid", "invalid value");
+            List<Map<String, Object>> results = getConnector()
+                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                            args);
+            // invalid search args are ignored for a one-shot search, should
+            // return successfully
+            assertNotNull(results);
+            assertTrue(results.size() > 0);
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testRunOneShotSearchWithoutSearchArgs() {
-		try {
-			List<Map<String, Object>> results = getConnector()
-					.runOneShotSearch("search * | head 100", "-10d", "now",
-							null);
-			// missing search args are ignored for a one-shot search, should
-			// return successfully
-			assertNotNull(results);
-			assertTrue(results.size() > 0);
-		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testRunOneShotSearchWithoutSearchArgs() {
+        try {
+            List<Map<String, Object>> results = getConnector()
+                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                            null);
+            // missing search args are ignored for a one-shot search, should
+            // return successfully
+            assertNotNull(results);
+            assertTrue(results.size() > 0);
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
 }

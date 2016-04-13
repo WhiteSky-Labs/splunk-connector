@@ -10,7 +10,6 @@
 package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -23,7 +22,11 @@ public class RunNormalSearchTestCases extends SplunkAbstractTestCase {
 
     @Before
     public void setup() throws Throwable {
-        Object[] signature = { "search index=_internal | head 10", null, null };
+        Object[] signature = {
+                "search index=_internal | head 10",
+                null,
+                null
+        };
         getDispatcher().initializeSource("runNormalSearch", signature);
     }
 
@@ -37,7 +40,8 @@ public class RunNormalSearchTestCases extends SplunkAbstractTestCase {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
+            Thread.currentThread()
+                    .interrupt();
         }
         List<Object> events = getDispatcher().getSourceMessages("runNormalSearch");
         assertNotNull(events);

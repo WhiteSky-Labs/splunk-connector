@@ -25,37 +25,37 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class RunSavedSearchTestCases extends SplunkAbstractTestCase {
 
-	private static final String SEARCH_NAME = "run_saved_search_test_search";
+    private static final String SEARCH_NAME = "run_saved_search_test_search";
 
-	@Before
-	public void setup() throws Exception {
-		getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100",
-				null);
-	}
+    @Before
+    public void setup() throws Exception {
+        getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100",
+                null);
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		getConnector().deleteSavedSearch(SEARCH_NAME);
-	}
+    @After
+    public void tearDown() throws Exception {
+        getConnector().deleteSavedSearch(SEARCH_NAME);
+    }
 
-	@Test
-	public void testRunSavedSearch() {
-		try {
-			List<Map<String, Object>> result = getConnector().runSavedSearch(
-					SEARCH_NAME);
-			assertNotNull(result);
-		} catch (Exception e) {
-			fail("Exception not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testRunSavedSearch() {
+        try {
+            List<Map<String, Object>> result = getConnector().runSavedSearch(
+                    SEARCH_NAME);
+            assertNotNull(result);
+        } catch (Exception e) {
+            fail("Exception not expected: " + e.getMessage());
+        }
+    }
 
-	@Test
-	public void testRunMissingSavedSearch() {
-		try {
-			getConnector().runSavedSearch("Not a valid search name");
-			fail("Running a saved search that doesn't exist should throw an error");
-		} catch (Exception e) {
-			assertTrue(e instanceof SplunkConnectorException);
-		}
-	}
+    @Test
+    public void testRunMissingSavedSearch() {
+        try {
+            getConnector().runSavedSearch("Not a valid search name");
+            fail("Running a saved search that doesn't exist should throw an error");
+        } catch (Exception e) {
+            assertTrue(e instanceof SplunkConnectorException);
+        }
+    }
 }

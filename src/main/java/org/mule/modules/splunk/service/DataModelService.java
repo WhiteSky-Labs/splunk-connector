@@ -30,7 +30,8 @@ public class DataModelService extends AbstractService {
         DataModelCollection dataModelCollection = getService().getDataModels();
         Map<String, Object> mapFromSet = new HashMap<String, Object>();
         if (dataModelCollection.get(dataModelName) != null) {
-            mapFromSet = processSet(dataModelCollection.get(dataModelName).entrySet());
+            mapFromSet = processSet(dataModelCollection.get(dataModelName)
+                    .entrySet());
         }
         return mapFromSet;
     }

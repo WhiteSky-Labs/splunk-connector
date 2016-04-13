@@ -23,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mule.modules.splunk.SplunkClient;
 
-import com.splunk.DataModel;
 import com.splunk.Input;
 import com.splunk.InputCollection;
 import com.splunk.InputKind;
@@ -59,7 +58,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get(anyString())).thenReturn(tcpInput);
-        doNothing().when(tcpInput).submit(anyString());
+        doNothing().when(tcpInput)
+                .submit(anyString());
         assertEquals(true, service.addDataToTcpInput("8888", "stringData"));
     }
 
@@ -68,7 +68,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get(anyString())).thenReturn(tcpInput);
-        doThrow(new IOException()).when(tcpInput).submit(anyString());
+        doThrow(new IOException()).when(tcpInput)
+                .submit(anyString());
         assertEquals(false, service.addDataToTcpInput("8888", "stringData"));
     }
 
@@ -77,7 +78,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get(anyString())).thenReturn(udpInput);
-        doNothing().when(udpInput).submit(anyString());
+        doNothing().when(udpInput)
+                .submit(anyString());
         assertEquals(true, service.addDataToUdpInput("Test", "Test"));
     }
 
@@ -86,7 +88,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get(anyString())).thenReturn(udpInput);
-        doThrow(new IOException()).when(udpInput).submit(anyString());
+        doThrow(new IOException()).when(udpInput)
+                .submit(anyString());
         assertEquals(false, service.addDataToTcpInput("8888", "stringData"));
     }
 
@@ -122,7 +125,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get("inputIdentifier")).thenReturn(input);
-        assertTrue(service.getInput("inputIdentifier").size() == 0);
+        assertTrue(service.getInput("inputIdentifier")
+                .size() == 0);
     }
 
     @Test
@@ -132,7 +136,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.values()).thenReturn(inputs);
-        assertTrue(service.getInputs().size() == 1);
+        assertTrue(service.getInputs()
+                .size() == 1);
     }
 
     @Test
@@ -142,9 +147,11 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get("inputIdentifier")).thenReturn(input);
-        doNothing().when(input).update(entry);
+        doNothing().when(input)
+                .update(entry);
         when(input.entrySet()).thenReturn(entry.entrySet());
-        assertTrue(service.modifyInput("inputIdentifier", entry).size() == 1);
+        assertTrue(service.modifyInput("inputIdentifier", entry)
+                .size() == 1);
     }
 
     @Test
@@ -152,7 +159,8 @@ public class InputServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
         when(inputCollection.get("inputIdentifier")).thenReturn(input);
-        doNothing().when(input).remove();
+        doNothing().when(input)
+                .remove();
         assertTrue(service.removeInput("inputIdentifier"));
     }
 

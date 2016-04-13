@@ -21,7 +21,14 @@ public class RunRealTimeSearchTestCases extends SplunkAbstractTestCase {
 
     @Before
     public void setup() throws Throwable {
-        Object[] signature = { "search index=_internal | head 10", "rt", "rt", 300, 100, null };
+        Object[] signature = {
+                "search index=_internal | head 10",
+                "rt",
+                "rt",
+                300,
+                100,
+                null
+        };
         getDispatcher().initializeSource("runRealTimeSearch", signature);
     }
 
@@ -35,7 +42,8 @@ public class RunRealTimeSearchTestCases extends SplunkAbstractTestCase {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
+            Thread.currentThread()
+                    .interrupt();
         }
         List<Object> events = getDispatcher().getSourceMessages("runRealTimeSearch");
         assertNotNull(events);

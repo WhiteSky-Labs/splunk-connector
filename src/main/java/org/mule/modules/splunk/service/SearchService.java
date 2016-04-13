@@ -46,7 +46,8 @@ public class SearchService extends AbstractService {
             jobArgs.putAll(searchArgs);
         }
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.NORMAL);
-        Job job = getService().getJobs().create(searchQuery, jobArgs);
+        Job job = getService().getJobs()
+                .create(searchQuery, jobArgs);
 
         while (!job.isDone()) {
             Thread.sleep(500);
@@ -59,8 +60,7 @@ public class SearchService extends AbstractService {
     }
 
     /**
-     * Run a blocking search, which returns synchronously after waiting for the
-     * search to complete (blocking the Splunk Server)
+     * Run a blocking search, which returns synchronously after waiting for the search to complete (blocking the Splunk Server)
      *
      * @param searchQuery
      *            The query string
@@ -76,7 +76,8 @@ public class SearchService extends AbstractService {
             jobArgs.putAll(searchArgs);
         }
         jobArgs.setExecutionMode(JobArgs.ExecutionMode.BLOCKING);
-        Job job = getService().getJobs().create(searchQuery, jobArgs);
+        Job job = getService().getJobs()
+                .create(searchQuery, jobArgs);
         Map<String, Object> searchResponse = new HashMap<String, Object>();
         searchResponse.put("job", job);
         searchResponse.put("events", populateEventResponse(job));
@@ -89,8 +90,7 @@ public class SearchService extends AbstractService {
      * @param searchQuery
      *            the search query to run
      * @param earliestTime
-     *            the earliest time for the search, defaults for an hour before
-     *            now
+     *            the earliest time for the search, defaults for an hour before now
      * @param latestTime
      *            the latest time, defaults to now
      * @param searchMode
@@ -143,8 +143,7 @@ public class SearchService extends AbstractService {
     }
 
     /**
-     * Run a realtime search and process the response returns via a
-     * sourcecallback
+     * Run a realtime search and process the response returns via a sourcecallback
      *
      * @param searchQuery
      *            The query to run in realtime

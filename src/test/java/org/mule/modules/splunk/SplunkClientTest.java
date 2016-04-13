@@ -676,7 +676,8 @@ public class SplunkClientTest {
     @Test
     public void testRunExportSearch() throws Exception {
         when(client.getSearchService()).thenReturn(searchService);
-        doNothing().when(searchService).runExportSearch("searchName", "-1h", "now", SearchMode.NORMAL, OutputMode.JSON, null);
+        doNothing().when(searchService)
+                .runExportSearch("searchName", "-1h", "now", SearchMode.NORMAL, OutputMode.JSON, null);
         client.runExportSearch("searchName", "-1h", "now", SearchMode.NORMAL, OutputMode.JSON, null);
     }
 
@@ -707,7 +708,8 @@ public class SplunkClientTest {
     @Test
     public void testRunNormalSearch() throws Exception {
         when(client.getSearchService()).thenReturn(searchService);
-        doNothing().when(searchService).runNormalSearch("searchName", null, null);
+        doNothing().when(searchService)
+                .runNormalSearch("searchName", null, null);
         client.runNormalSearch("searchName", null, null);
     }
 
@@ -727,7 +729,8 @@ public class SplunkClientTest {
     public void testRunNormalSearchError() {
         when(client.getSearchService()).thenReturn(searchService);
         try {
-            doThrow(new InterruptedException()).when(searchService).runNormalSearch("searchName", null, null);
+            doThrow(new InterruptedException()).when(searchService)
+                    .runNormalSearch("searchName", null, null);
             client.runNormalSearch("searchName", null, null);
             fail("Exception expected.");
         } catch (SplunkConnectorException e) {
@@ -787,7 +790,8 @@ public class SplunkClientTest {
     @Test
     public void testRunRealTimeSearch() throws Exception {
         when(client.getSearchService()).thenReturn(searchService);
-        doNothing().when(searchService).runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
+        doNothing().when(searchService)
+                .runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
         client.runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
     }
 

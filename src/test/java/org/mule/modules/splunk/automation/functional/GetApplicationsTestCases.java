@@ -18,10 +18,10 @@ import org.junit.Test;
 
 public class GetApplicationsTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetApplications() {
-		List<Map<String, Object>> result = getConnector().getApplications();
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetApplications() {
+        List<Map<String, Object>> result = getConnector().getApplications();
+        assertTrue(result.size() > 0);
+    }
 
 }

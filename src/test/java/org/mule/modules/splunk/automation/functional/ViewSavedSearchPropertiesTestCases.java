@@ -42,7 +42,8 @@ public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
             Set<Map.Entry<String, Object>> result = getConnector().viewSavedSearchProperties(SEARCH_NAME, "search", "admin");
             assertNotNull(result);
             for (Map.Entry<String, Object> property : result) {
-                if (property.getKey().equalsIgnoreCase("search")) {
+                if (property.getKey()
+                        .equalsIgnoreCase("search")) {
                     assertEquals("search * | head 100", property.getValue());
                 }
             }
@@ -64,7 +65,8 @@ public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
     @Test
     public void testViewSavedSearchPropertiesForInvalidSavedSearch() {
         try {
-            assertTrue(getConnector().viewSavedSearchProperties("Invalid Saved Search Name", "search", "admin").size() == 0);
+            assertTrue(getConnector().viewSavedSearchProperties("Invalid Saved Search Name", "search", "admin")
+                    .size() == 0);
         } catch (SplunkConnectorException e) {
             fail("Exception not expected: " + e.getMessage());
         }

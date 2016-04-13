@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 
 public class SplunkConnectorExceptionTest {
 
-
     @Test
     public void testConstructor() {
         Exception dummyException = new Exception();
@@ -29,6 +28,5 @@ public class SplunkConnectorExceptionTest {
         assertEquals("Testing Exception", ex.getMessage());
         assertEquals(dummyException, ex.getCause());
     }
-
 
 }

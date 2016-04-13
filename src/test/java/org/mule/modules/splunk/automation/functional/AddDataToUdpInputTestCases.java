@@ -20,20 +20,20 @@ import com.splunk.InputKind;
 
 public class AddDataToUdpInputTestCases extends SplunkAbstractTestCase {
 
-	@Before
-	public void setup() throws SplunkConnectorException {
-		getConnector().createInput("9988", InputKind.Udp, null);
-	}
+    @Before
+    public void setup() throws SplunkConnectorException {
+        getConnector().createInput("9988", InputKind.Udp, null);
+    }
 
-	@After
-	public void tearDown() {
-		getConnector().removeInput("9988");
-	}
+    @After
+    public void tearDown() {
+        getConnector().removeInput("9988");
+    }
 
-	@Test
-	public void testAddDataToUdpInput() {
-		boolean result = getConnector().addDataToUdpInput("9988",
-				"addDataToUdpInputTestDataString");
-		assertTrue(result);
-	}
+    @Test
+    public void testAddDataToUdpInput() {
+        boolean result = getConnector().addDataToUdpInput("9988",
+                "addDataToUdpInputTestDataString");
+        assertTrue(result);
+    }
 }

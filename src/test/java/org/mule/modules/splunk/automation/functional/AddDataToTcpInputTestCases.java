@@ -20,20 +20,20 @@ import com.splunk.InputKind;
 
 public class AddDataToTcpInputTestCases extends SplunkAbstractTestCase {
 
-	@Before
-	public void setup() throws SplunkConnectorException {
-		getConnector().createInput("9988", InputKind.Tcp, null);
-	}
+    @Before
+    public void setup() throws SplunkConnectorException {
+        getConnector().createInput("9988", InputKind.Tcp, null);
+    }
 
-	@After
-	public void tearDown() {
-		getConnector().removeInput("9988");
-	}
+    @After
+    public void tearDown() {
+        getConnector().removeInput("9988");
+    }
 
-	@Test
-	public void testAddDataToTcpInput() {
-		boolean result = getConnector().addDataToTcpInput("9988",
-				"addDataToTcpInputTestDataString");
-		assertTrue(result);
-	}
+    @Test
+    public void testAddDataToTcpInput() {
+        boolean result = getConnector().addDataToTcpInput("9988",
+                "addDataToTcpInputTestDataString");
+        assertTrue(result);
+    }
 }

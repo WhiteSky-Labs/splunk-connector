@@ -36,7 +36,8 @@ public class InputService extends AbstractService {
      */
     public boolean addDataToTcpInput(String portNumber, String stringData) {
         try {
-            TcpInput input = (TcpInput) getService().getInputs().get(portNumber);
+            TcpInput input = (TcpInput) getService().getInputs()
+                    .get(portNumber);
             input.submit(stringData);
             return true;
         } catch (Exception e) {
@@ -56,7 +57,8 @@ public class InputService extends AbstractService {
      */
     public boolean addDataToUdpInput(String portNumber, String data) {
         try {
-            UdpInput input = (UdpInput) getService().getInputs().get(portNumber);
+            UdpInput input = (UdpInput) getService().getInputs()
+                    .get(portNumber);
             input.submit(data);
             return true;
         } catch (Exception e) {
@@ -91,12 +93,12 @@ public class InputService extends AbstractService {
      * Retrieves an Input with the given identifier
      *
      * @param inputIdentifier
-     *            The identifier, for example a file path if it is a Monitor
-     *            Input
+     *            The identifier, for example a file path if it is a Monitor Input
      * @return The Input specified.
      */
     public Map<String, Object> getInput(String inputIdentifier) {
-        Input input = getService().getInputs().get(inputIdentifier);
+        Input input = getService().getInputs()
+                .get(inputIdentifier);
         Map<String, Object> mapFromSet = new HashMap<String, Object>();
         if (input != null && input.entrySet() != null) {
             mapFromSet = processSet(input.entrySet());
@@ -128,7 +130,8 @@ public class InputService extends AbstractService {
      * @return Returns the modified input.
      */
     public Map<String, Object> modifyInput(String inputIdentifier, Map<String, Object> inputArgs) {
-        Input input = getService().getInputs().get(inputIdentifier);
+        Input input = getService().getInputs()
+                .get(inputIdentifier);
         input.update(inputArgs);
         return processSet(input.entrySet());
     }
@@ -137,13 +140,13 @@ public class InputService extends AbstractService {
      * Remove an Input
      *
      * @param inputIdentifier
-     *            the identifier of the input to remove, for example a port
-     *            number or filename
+     *            the identifier of the input to remove, for example a port number or filename
      * @return Success or Failure
      */
     public boolean removeInput(String inputIdentifier) {
         try {
-            Input input = getService().getInputs().get(inputIdentifier);
+            Input input = getService().getInputs()
+                    .get(inputIdentifier);
             input.remove();
             return true;
         } catch (Exception e) {

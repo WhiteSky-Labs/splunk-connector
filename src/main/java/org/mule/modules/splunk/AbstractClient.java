@@ -38,31 +38,31 @@ public abstract class AbstractClient {
     protected ApplicationService getApplicationService() {
         return applicationService;
     }
-    
+
     protected DataModelService getDataModelService() {
         return dataModelService;
     }
-    
+
     protected IndexService getIndexService() {
         return indexService;
     }
-    
+
     protected InputService getInputService() {
         return inputService;
     }
-    
+
     protected JobService getJobService() {
         return jobService;
     }
-    
+
     protected SavedSearchService getSavedSearchService() {
         return savedSearchService;
     }
-    
+
     protected SearchService getSearchService() {
         return searchService;
     }
-    
+
     private void initServices() {
         this.applicationService = new ApplicationService(this);
         this.dataModelService = new DataModelService(this);

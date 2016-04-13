@@ -50,7 +50,8 @@ public class IndexServiceTest {
         when(clientService.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get("indexName")).thenReturn(index);
 
-        doNothing().when(index).submit(anyString());
+        doNothing().when(index)
+                .submit(anyString());
         Map<String, Object> result = new HashMap<String, Object>();
         assertEquals(result, service.addDataToIndex("indexName", "stringData", null));
     }
@@ -64,7 +65,8 @@ public class IndexServiceTest {
         when(clientService.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
 
-        doNothing().when(index).submit(any(Args.class), eq("stringData"));
+        doNothing().when(index)
+                .submit(any(Args.class), eq("stringData"));
         assertTrue(service.addDataToIndex("indexName", "stringData", indexArgs) != null);
     }
 
@@ -74,7 +76,8 @@ public class IndexServiceTest {
         when(clientService.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get(anyString())).thenReturn(index);
 
-        doNothing().when(index).submit(any(Args.class), eq("stringData"));
+        doNothing().when(index)
+                .submit(any(Args.class), eq("stringData"));
         assertTrue(service.addDataToIndex("indexName", "stringData", null) != null);
     }
 
@@ -169,9 +172,11 @@ public class IndexServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getIndexes()).thenReturn(indexCollection);
         when(indexCollection.get("indexName")).thenReturn(index);
-        doNothing().when(index).update(props);
+        doNothing().when(index)
+                .update(props);
         when(index.entrySet()).thenReturn(entry.entrySet());
-        assertEquals(1, service.modifyIndex("indexName", props).size());
+        assertEquals(1, service.modifyIndex("indexName", props)
+                .size());
     }
 
     @Test

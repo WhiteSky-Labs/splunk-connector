@@ -68,7 +68,8 @@ public class SearchServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getJobs()).thenReturn(jobCollection);
         when(jobCollection.create(eq("searchQuery"), any(JobArgs.class))).thenReturn(job);
-        doReturn(searchResult).when(service).populateEventResponse(job);
+        doReturn(searchResult).when(service)
+                .populateEventResponse(job);
         Map<String, Object> result = service.runBlockingSearch("searchQuery", searchArgs);
         assertEquals(result.get("job"), job);
     }
@@ -78,7 +79,8 @@ public class SearchServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.export(eq("searchQuery"), any(JobExportArgs.class))).thenReturn(inputStream);
         try {
-            doNothing().when(service).processCallback(any(IgnoreFieldPropertyMultiResultsReaderJson.class), any(SourceCallback.class));
+            doNothing().when(service)
+                    .processCallback(any(IgnoreFieldPropertyMultiResultsReaderJson.class), any(SourceCallback.class));
             service.runExportSearch("searchQuery", "-1h", "now", SearchMode.NORMAL, OutputMode.JSON, null);
         } catch (Exception e) {
             fail("Exception not expected");
@@ -94,7 +96,8 @@ public class SearchServiceTest {
         when(clientService.getJobs()).thenReturn(jobCollection);
         when(jobCollection.create(anyString(), any(JobArgs.class))).thenReturn(job);
         when(job.isDone()).thenReturn(true);
-        doReturn(jobResult).when(service).populateEventResponse(job);
+        doReturn(jobResult).when(service)
+                .populateEventResponse(job);
         when(sourceCallback.process(any(Map.class))).thenReturn(any(Object.class));
         service.runNormalSearch(anyString(), eq(searchArgs), sourceCallback);
     }
@@ -109,7 +112,8 @@ public class SearchServiceTest {
         when(clientService.oneshotSearch(eq("searchQuery"), any(Args.class))).thenReturn(stubInputStream);
         ResultsReaderXml resultsReader;
         resultsReader = new ResultsReaderXml(stubInputStream);
-        doReturn(searchResult).when(service).parseEvents(resultsReader);
+        doReturn(searchResult).when(service)
+                .parseEvents(resultsReader);
         assertEquals(searchResult, service.runOneShotSearch("searchQuery", "-1h", "now", searchArgs));
     }
 
@@ -119,7 +123,8 @@ public class SearchServiceTest {
         when(clientService.search(eq("searchQuery"), any(JobArgs.class))).thenReturn(job);
         when(job.isReady()).thenReturn(true);
         try {
-            doThrow(new NullPointerException()).when(service).processResults(any(Job.class), any(JobResultsPreviewArgs.class), eq(null));
+            doThrow(new NullPointerException()).when(service)
+                    .processResults(any(Job.class), any(JobResultsPreviewArgs.class), eq(null));
             service.runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
             fail("Exception Expected");
         } catch (Exception e) {
@@ -135,7 +140,8 @@ public class SearchServiceTest {
         when(clientService.search(eq("searchQuery"), any(JobArgs.class))).thenReturn(job);
         when(job.isReady()).thenReturn(true);
         try {
-            doThrow(new InterruptedException()).when(service).processResults(any(Job.class), any(JobResultsPreviewArgs.class), eq(null));
+            doThrow(new InterruptedException()).when(service)
+                    .processResults(any(Job.class), any(JobResultsPreviewArgs.class), eq(null));
             service.runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
             fail("Exception Expected");
         } catch (Exception e) {

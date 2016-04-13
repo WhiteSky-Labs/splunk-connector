@@ -41,9 +41,11 @@ public class SavedSearchService extends AbstractService {
     public Map<String, Object> createSavedSearch(String searchName, String searchQuery, Map<String, Object> searchArgs) {
         SavedSearch createdSearch;
         if (searchArgs != null && !searchArgs.isEmpty()) {
-            createdSearch = getService().getSavedSearches().create(searchName, searchQuery, searchArgs);
+            createdSearch = getService().getSavedSearches()
+                    .create(searchName, searchQuery, searchArgs);
         } else {
-            createdSearch = getService().getSavedSearches().create(searchName, searchQuery);
+            createdSearch = getService().getSavedSearches()
+                    .create(searchName, searchQuery);
         }
         return processSet(createdSearch.entrySet());
     }
@@ -57,7 +59,8 @@ public class SavedSearchService extends AbstractService {
      */
     public boolean deleteSavedSearch(String searchName) {
         try {
-            SavedSearch savedSearch = getService().getSavedSearches().get(searchName);
+            SavedSearch savedSearch = getService().getSavedSearches()
+                    .get(searchName);
             savedSearch.remove();
             return true;
         } catch (Exception e) {
@@ -122,7 +125,8 @@ public class SavedSearchService extends AbstractService {
                 Collections.addAll(jobList, entity.history());
             }
         } else {
-            SavedSearch savedSearch = getService().getSavedSearches(namespace).get(searchName);
+            SavedSearch savedSearch = getService().getSavedSearches(namespace)
+                    .get(searchName);
             if (savedSearch != null) {
                 Collections.addAll(jobList, savedSearch.history());
             }
@@ -145,7 +149,8 @@ public class SavedSearchService extends AbstractService {
      * @return The Modified Saved Search
      */
     public Map<String, Object> modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) {
-        SavedSearch savedSearch = getService().getSavedSearches().get(searchName);
+        SavedSearch savedSearch = getService().getSavedSearches()
+                .get(searchName);
         savedSearch.update(searchProperties);
         return processSet(savedSearch.entrySet());
     }
@@ -162,7 +167,8 @@ public class SavedSearchService extends AbstractService {
      *             on search processing error
      */
     public List<Map<String, Object>> runSavedSearch(String searchName) throws InterruptedException, IOException {
-        SavedSearch savedSearch = getService().getSavedSearches().get(searchName);
+        SavedSearch savedSearch = getService().getSavedSearches()
+                .get(searchName);
         Job job = savedSearch.dispatch();
         while (!job.isDone()) {
             Thread.sleep(500);
@@ -187,7 +193,8 @@ public class SavedSearchService extends AbstractService {
      */
     public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, Map<String, Object> customArgs,
             SavedSearchDispatchArgs searchDispatchArgsParam) throws InterruptedException, IOException {
-        SavedSearch savedSearch = getService().getSavedSearches().get(searchName);
+        SavedSearch savedSearch = getService().getSavedSearches()
+                .get(searchName);
         SavedSearchDispatchArgs searchDispatchArgs = new SavedSearchDispatchArgs();
 
         if (searchDispatchArgsParam != null) {
@@ -221,6 +228,8 @@ public class SavedSearchService extends AbstractService {
         if (app != null && !app.isEmpty()) {
             namespace.setApp(app);
         }
-        return getService().getSavedSearches(namespace).get(searchName).entrySet();
+        return getService().getSavedSearches(namespace)
+                .get(searchName)
+                .entrySet();
     }
 }

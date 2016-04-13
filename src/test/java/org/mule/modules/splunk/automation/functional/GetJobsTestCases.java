@@ -19,11 +19,11 @@ import org.junit.Test;
 
 public class GetJobsTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetJobs() {
-		List<Map<String, Object>> result = getConnector().getJobs();
-		assertNotNull(result);
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetJobs() {
+        List<Map<String, Object>> result = getConnector().getJobs();
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
 
 }

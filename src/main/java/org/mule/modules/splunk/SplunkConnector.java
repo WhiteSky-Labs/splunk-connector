@@ -72,16 +72,14 @@ public class SplunkConnector {
     }
 
     /**
-     * Run a normal search, which polls for completion. Results will be streamed
-     * via a SourceCallback.
+     * Run a normal search, which polls for completion. Results will be streamed via a SourceCallback.
      *
      * @param searchQuery
      *            The search Query
      * @param searchArgs
      *            The search properties
      * @param searchCallback
-     *            the {@link SourceCallback} used to dispatch messages when a
-     *            response is received
+     *            the {@link SourceCallback} used to dispatch messages when a response is received
      * @throws SplunkConnectorException
      *             when the search cannot execute
      */
@@ -92,14 +90,12 @@ public class SplunkConnector {
     }
 
     /**
-     * Runs a blocking search, which will wait for completion on the splunk
-     * server and return synchronously.
+     * Runs a blocking search, which will wait for completion on the splunk server and return synchronously.
      *
      * @param searchQuery
      *            The search query
      * @param searchArgs
-     *            The map of search arguments, described in the splunk
-     *            documentation.
+     *            The map of search arguments, described in the splunk documentation.
      * @return the results as a list of hashmaps
      * @throws SplunkConnectorException
      *             when the search cannot execute
@@ -110,8 +106,7 @@ public class SplunkConnector {
     }
 
     /**
-     * Run a basic oneshot search and display results NOTE: XML output appears
-     * to be the only supported type right now.
+     * Run a basic oneshot search and display results NOTE: XML output appears to be the only supported type right now.
      *
      * @param searchQuery
      *            The search query
@@ -135,11 +130,9 @@ public class SplunkConnector {
      * Retrieve and list the saved searches in the saved search collection.
      *
      * @param app
-     *            Optional the name of the App to restrict the namespace of the
-     *            list of saved searches to
+     *            Optional the name of the App to restrict the namespace of the list of saved searches to
      * @param owner
-     *            Optional the owner of the namespace to restrict the list of
-     *            saved searches by
+     *            Optional the owner of the namespace to restrict the list of saved searches by
      * @return A List of Maps that represent the saved searches
      */
     @Processor
@@ -155,8 +148,7 @@ public class SplunkConnector {
      * @param searchQuery
      *            The query
      * @param searchArgs
-     *            A Map of Key-Value Arguments for the saved search. See the
-     *            Splunk documentation for details.
+     *            A Map of Key-Value Arguments for the saved search. See the Splunk documentation for details.
      * @return a map of the SavedSearch object that can then be executed
      * @throws SplunkConnectorException
      *             on invalid searchName and/or searchQuery
@@ -223,8 +215,7 @@ public class SplunkConnector {
      *
      * @param searchName
      *            The name of the search
-     * @return The search results as parsed XML, in the form of a list of
-     *         HashMaps
+     * @return The search results as parsed XML, in the form of a list of HashMaps
      * @throws org.mule.modules.splunk.exception.SplunkConnectorException
      *             when there is a problem running the saved search
      */
@@ -289,8 +280,7 @@ public class SplunkConnector {
     }
 
     /**
-     * Run a realtime search and process the response returns via a
-     * sourcecallback
+     * Run a realtime search and process the response returns via a sourcecallback
      *
      * @param searchQuery
      *            The query to run in realtime
@@ -335,8 +325,7 @@ public class SplunkConnector {
     }
 
     /**
-     * Get Inputs returns an InputCollection of possible inputs to use with
-     * Splunk
+     * Get Inputs returns an InputCollection of possible inputs to use with Splunk
      *
      * @return List of Inputs available to the user
      */
@@ -383,8 +372,7 @@ public class SplunkConnector {
      * Retrieves an Input with the given identifier
      *
      * @param inputIdentifier
-     *            The identifier, for example a file path if it is a Monitor
-     *            Input
+     *            The identifier, for example a file path if it is a Monitor Input
      * @return The Input specified.
      * @throws SplunkConnectorException
      *             on invalid inputIdentifier
@@ -463,8 +451,7 @@ public class SplunkConnector {
      * @param indexName
      *            The name of the index to clean
      * @param maxSeconds
-     *            Optional how long to wait, -1 is forever (not recommended on a
-     *            Connector). Default is 180s
+     *            Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
      * @return the cleaned index
      * @throws SplunkConnectorException
      *             on invalid indexName

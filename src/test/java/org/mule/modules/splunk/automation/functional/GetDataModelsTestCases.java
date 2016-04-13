@@ -18,9 +18,9 @@ import org.junit.Test;
 
 public class GetDataModelsTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetDataModels() {
-		List<Map<String, Object>> result = getConnector().getDataModels();
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetDataModels() {
+        List<Map<String, Object>> result = getConnector().getDataModels();
+        assertTrue(result.size() > 0);
+    }
 }

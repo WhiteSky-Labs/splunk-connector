@@ -56,17 +56,19 @@ public class GetIndexTestCases extends SplunkAbstractTestCase {
             getConnector().getIndex("");
             fail("Should throw exception for invalid index name");
         } catch (SplunkConnectorException sce) {
-            assertTrue(sce.getMessage().contains("You must provide a valid index name"));
+            assertTrue(sce.getMessage()
+                    .contains("You must provide a valid index name"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }
     }
-    
+
     @Test
     public void testGetInvalidIndex() {
         try {
             getConnector().getIndex("Not a real index");
-            assertTrue(getConnector().getIndex("Not a real index").size() == 0);
+            assertTrue(getConnector().getIndex("Not a real index")
+                    .size() == 0);
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

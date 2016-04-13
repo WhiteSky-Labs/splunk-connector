@@ -88,7 +88,9 @@ public class ConnectionManagementStrategy {
      */
     @ValidateConnection
     public boolean isConnected() {
-        return client != null && client.getService().getToken() != null && client.getService().login() != null;
+        return client != null && client.getService()
+                .getToken() != null && client.getService()
+                .login() != null;
     }
 
     /**
@@ -99,7 +101,8 @@ public class ConnectionManagementStrategy {
     @ConnectionIdentifier
     public String getConnectionIdentifier() {
         if (client.getService() != null) {
-            return client.getService().getToken();
+            return client.getService()
+                    .getToken();
         } else {
             return "001";
         }

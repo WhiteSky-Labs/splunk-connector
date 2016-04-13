@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
  * <p/>
  */
 public class OutputModeTest {
+
     @Test
     public void testOutputMode() {
         assertNotNull(OutputMode.JSON);

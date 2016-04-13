@@ -23,39 +23,40 @@ import com.splunk.InputKind;
 
 public class GetInputTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetInput() throws SplunkConnectorException {
-		//setup
-		getConnector().createInput("9906", InputKind.Tcp, null);
-		
-		Map<String, Object> result = getConnector().getInput("9906");
-		assertNotNull(result);
-		assertEquals("default", result.get("index"));
-		
-		//teardown
-		getConnector().removeInput("9906");
-	}
+    @Test
+    public void testGetInput() throws SplunkConnectorException {
+        // setup
+        getConnector().createInput("9906", InputKind.Tcp, null);
 
-	   @Test
-	    public void testGetInputWithEmptyIdentifier() {
-	        try {
-	            getConnector().getInput("");
-	            fail("Exception should be thrown for an invalid input identifier");
-	        } catch (SplunkConnectorException sce) {
-	            assertEquals("You must provide a valid input identifier",
-	                    sce.getMessage());
-	        } catch (Exception e) {
-	            fail("Exception type not expected: " + e.getMessage());
-	        }
-	    }
-	   
-	@Test
-	public void testGetInputWithInvalidIdentifier() {
-		try {
-		    assertTrue(getConnector().getInput("An Invalid Identifier").size() == 0);
-		} catch (Exception e) {
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+        Map<String, Object> result = getConnector().getInput("9906");
+        assertNotNull(result);
+        assertEquals("default", result.get("index"));
+
+        // teardown
+        getConnector().removeInput("9906");
+    }
+
+    @Test
+    public void testGetInputWithEmptyIdentifier() {
+        try {
+            getConnector().getInput("");
+            fail("Exception should be thrown for an invalid input identifier");
+        } catch (SplunkConnectorException sce) {
+            assertEquals("You must provide a valid input identifier",
+                    sce.getMessage());
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGetInputWithInvalidIdentifier() {
+        try {
+            assertTrue(getConnector().getInput("An Invalid Identifier")
+                    .size() == 0);
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 
 }

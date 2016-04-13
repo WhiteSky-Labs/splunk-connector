@@ -24,36 +24,37 @@ import com.splunk.HttpException;
 
 public class GetIndexesTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetIndexes() {
-		List<Map<String, Object>> result = getConnector().getIndexes(null,
-				null, null);
-		assertNotNull(result);
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetIndexes() {
+        List<Map<String, Object>> result = getConnector().getIndexes(null,
+                null, null);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
 
-	@Test
-	public void testGetIndexesWithParametersTestData() {
-		List<Map<String, Object>> result = getConnector().getIndexes(
-				"totalEventCount", CollectionArgs.SortDirection.DESC, null);
-		assertNotNull(result);
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetIndexesWithParametersTestData() {
+        List<Map<String, Object>> result = getConnector().getIndexes(
+                "totalEventCount", CollectionArgs.SortDirection.DESC, null);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
 
-	@Test
-	public void testGetIndexesWithInvalidParametersTestData() {
-		try {
-			Map<String, Object> args = new HashMap<>();
-			args.put("invalidparameter", "true");
-			getConnector().getIndexes("totalEventCount",
-					CollectionArgs.SortDirection.DESC, args);
-			fail("Error should be thrown for invalid parameter");
-		} catch (HttpException e) {
-			assertTrue(e.getMessage().contains(
-					"is not supported by this handler"));
-		} catch (Exception e) {
-			fail("Exception type not expected: " + e.getMessage());
-		}
-	}
+    @Test
+    public void testGetIndexesWithInvalidParametersTestData() {
+        try {
+            Map<String, Object> args = new HashMap<>();
+            args.put("invalidparameter", "true");
+            getConnector().getIndexes("totalEventCount",
+                    CollectionArgs.SortDirection.DESC, args);
+            fail("Error should be thrown for invalid parameter");
+        } catch (HttpException e) {
+            assertTrue(e.getMessage()
+                    .contains(
+                            "is not supported by this handler"));
+        } catch (Exception e) {
+            fail("Exception type not expected: " + e.getMessage());
+        }
+    }
 
 }

@@ -19,10 +19,10 @@ import org.junit.Test;
 
 public class GetInputsTestCases extends SplunkAbstractTestCase {
 
-	@Test
-	public void testGetInputs() {
-		List<Map<String, Object>> result = getConnector().getInputs();
-		assertNotNull(result);
-		assertTrue(result.size() > 0);
-	}
+    @Test
+    public void testGetInputs() {
+        List<Map<String, Object>> result = getConnector().getInputs();
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
 }

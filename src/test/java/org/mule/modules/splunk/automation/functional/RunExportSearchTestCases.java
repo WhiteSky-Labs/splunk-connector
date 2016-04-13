@@ -10,7 +10,6 @@
 package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -22,7 +21,12 @@ public class RunExportSearchTestCases extends SplunkAbstractTestCase {
 
     @Before
     public void setup() throws Throwable {
-        Object[] signature = { "search index=_internal | head 10", "-1h", "now", null };
+        Object[] signature = {
+                "search index=_internal | head 10",
+                "-1h",
+                "now",
+                null
+        };
         getDispatcher().initializeSource("runExportSearch", signature);
     }
 
@@ -31,14 +35,14 @@ public class RunExportSearchTestCases extends SplunkAbstractTestCase {
         getDispatcher().shutDownSource("runExportSearch");
     }
 
-    @SuppressWarnings("unchecked")
     @Test
     public void testRunExportSearch() {
         // allow time to produce messages
         try {
             Thread.sleep(5000);
         } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
+            Thread.currentThread()
+                    .interrupt();
         }
 
         List<Object> events = getDispatcher().getSourceMessages("runExportSearch");

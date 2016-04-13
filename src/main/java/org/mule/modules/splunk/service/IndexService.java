@@ -37,7 +37,8 @@ public class IndexService extends AbstractService {
      * @return The index that has been updated
      */
     public Map<String, Object> addDataToIndex(String indexName, String stringData, Map<String, Object> indexArgs) {
-        Index index = getService().getIndexes().get(indexName);
+        Index index = getService().getIndexes()
+                .get(indexName);
         if (indexArgs != null && !indexArgs.isEmpty()) {
             Args eventArgs = new Args();
             eventArgs.putAll(indexArgs);
@@ -54,12 +55,12 @@ public class IndexService extends AbstractService {
      * @param indexName
      *            The name of the index to clean
      * @param maxSeconds
-     *            Optional how long to wait, -1 is forever (not recommended on a
-     *            Connector). Default is 180s
+     *            Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
      * @return the cleaned index
      */
     public Map<String, Object> cleanIndex(String indexName, int maxSeconds) {
-        Index index = getService().getIndexes().get(indexName);
+        Index index = getService().getIndexes()
+                .get(indexName);
         index = index.clean(maxSeconds);
         return processSet(index.entrySet());
     }
@@ -76,9 +77,11 @@ public class IndexService extends AbstractService {
     public Map<String, Object> createIndex(String indexName, Map<String, Object> args) {
         Index index;
         if ((args != null) && !args.isEmpty()) {
-            index = getService().getIndexes().create(indexName, args);
+            index = getService().getIndexes()
+                    .create(indexName, args);
         } else {
-            index = getService().getIndexes().create(indexName);
+            index = getService().getIndexes()
+                    .create(indexName);
         }
         return processSet(index.entrySet());
     }
@@ -93,7 +96,8 @@ public class IndexService extends AbstractService {
      * @return the new Index
      */
     public Map<String, Object> getIndex(String indexIdentifier) {
-        Index index = getService().getIndexes().get(indexIdentifier);
+        Index index = getService().getIndexes()
+                .get(indexIdentifier);
         Map<String, Object> mapFromSet = new HashMap<String, Object>();
         if (index != null && index.entrySet() != null) {
             mapFromSet = processSet(index.entrySet());
@@ -146,7 +150,8 @@ public class IndexService extends AbstractService {
      * @return Returns the modified index.
      */
     public Map<String, Object> modifyIndex(String indexName, Map<String, Object> indexArgs) {
-        Index index = getService().getIndexes().get(indexName);
+        Index index = getService().getIndexes()
+                .get(indexName);
         index.update(indexArgs);
         return processSet(index.entrySet());
     }
@@ -160,7 +165,8 @@ public class IndexService extends AbstractService {
      */
     public boolean removeIndex(String indexName) {
         try {
-            Index index = getService().getIndexes().get(indexName);
+            Index index = getService().getIndexes()
+                    .get(indexName);
             index.remove();
             return true;
         } catch (Exception e) {

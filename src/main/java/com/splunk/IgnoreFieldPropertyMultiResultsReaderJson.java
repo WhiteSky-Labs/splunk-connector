@@ -16,7 +16,6 @@ public class IgnoreFieldPropertyMultiResultsReaderJson extends MultiResultsReade
 
     public IgnoreFieldPropertyMultiResultsReaderJson(InputStream inputStream) throws IOException {
         super(new IgnoreFieldPropertyResultsReaderJson(inputStream));
-        }
+    }
 
-    
 }

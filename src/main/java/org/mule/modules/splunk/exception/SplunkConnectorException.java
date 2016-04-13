@@ -17,11 +17,19 @@ package org.mule.modules.splunk.exception;
  * Exception thrown by the connector when we cannot resolve it to {@link org.mule.modules.splunk.exception.SplunkConnectorException}
  */
 public class SplunkConnectorException extends Exception {
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1269156746029212077L;
+
     /**
      * Create a SplunkConnectorException
      *
-     * @param message The human-readable message
-     * @param cause   The underlying exception
+     * @param message
+     *            The human-readable message
+     * @param cause
+     *            The underlying exception
      */
     public SplunkConnectorException(String message, Throwable cause) {
         super(message, cause);

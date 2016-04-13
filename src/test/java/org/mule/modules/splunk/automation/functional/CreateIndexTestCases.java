@@ -71,7 +71,8 @@ public class CreateIndexTestCases extends SplunkAbstractTestCase {
             getConnector().createIndex(INDEX_NAME, args);
             fail("Error should be thrown with invalid args");
         } catch (SplunkConnectorException sce) {
-            assertTrue(sce.getMessage().contains("is not supported by this handler"));
+            assertTrue(sce.getMessage()
+                    .contains("is not supported by this handler"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

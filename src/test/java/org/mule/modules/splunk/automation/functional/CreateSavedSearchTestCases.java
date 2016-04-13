@@ -50,7 +50,8 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
             getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100", null);
             fail("Exception should be thrown when creating an existing saved search");
         } catch (SplunkConnectorException sce) {
-            assertTrue(sce.getMessage().contains("A saved search with that name already exists."));
+            assertTrue(sce.getMessage()
+                    .contains("A saved search with that name already exists."));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

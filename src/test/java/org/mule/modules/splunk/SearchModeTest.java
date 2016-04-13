@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
  * <p/>
  */
 public class SearchModeTest {
+
     @Test
     public void testSearchMode() {
         assertNotNull(SearchMode.NORMAL);

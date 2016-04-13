@@ -40,8 +40,7 @@ public class SplunkClient extends AbstractClient {
      * Connect to splunk instance
      *
      * @param strategy
-     *            The ConnectionManagementStrategy used to connect to the Splunk
-     *            Server
+     *            The ConnectionManagementStrategy used to connect to the Splunk Server
      * @throws ConnectionException
      *             on invalid credentials
      */
@@ -138,8 +137,7 @@ public class SplunkClient extends AbstractClient {
      * @param indexName
      *            The name of the index to clean
      * @param maxSeconds
-     *            Optional how long to wait, -1 is forever (not recommended on a
-     *            Connector). Default is 180s
+     *            Optional how long to wait, -1 is forever (not recommended on a Connector). Default is 180s
      * @return the cleaned index
      * @throws SplunkConnectorException
      *             on invalid indexName
@@ -388,8 +386,7 @@ public class SplunkClient extends AbstractClient {
     /**
      * Get the current users Jobs
      *
-     * @return A List of the current user's Job objects retrieved from the
-     *         Splunk Server
+     * @return A List of the current user's Job objects retrieved from the Splunk Server
      */
     public List<Map<String, Object>> getJobs() {
         return getJobService().getJobs();
@@ -419,8 +416,7 @@ public class SplunkClient extends AbstractClient {
     }
 
     /**
-     * Run a blocking search, which returns synchronously after waiting for the
-     * search to complete (blocking the Splunk Server)
+     * Run a blocking search, which returns synchronously after waiting for the search to complete (blocking the Splunk Server)
      *
      * @param searchQuery
      *            The query string
@@ -467,8 +463,7 @@ public class SplunkClient extends AbstractClient {
     }
 
     /**
-     * Run a realtime search and process the response returns via a
-     * sourcecallback
+     * Run a realtime search and process the response returns via a sourcecallback
      *
      * @param searchQuery
      *            The query to run in realtime
@@ -501,8 +496,7 @@ public class SplunkClient extends AbstractClient {
      * @param searchQuery
      *            the search query to run
      * @param earliestTime
-     *            the earliest time for the search, defaults for an hour before
-     *            now
+     *            the earliest time for the search, defaults for an hour before now
      * @param latestTime
      *            the latest time, defaults to now
      * @param searchMode
@@ -583,8 +577,7 @@ public class SplunkClient extends AbstractClient {
      * Retrieves an Input with the given identifier
      *
      * @param inputIdentifier
-     *            The identifier, for example a file path if it is a Monitor
-     *            Input
+     *            The identifier, for example a file path if it is a Monitor Input
      * @return The Input specified.
      * @throws SplunkConnectorException
      *             on invalid inputIdentifier
@@ -628,8 +621,7 @@ public class SplunkClient extends AbstractClient {
      * Remove an Input
      *
      * @param inputIdentifier
-     *            the identifier of the input to remove, for example a port
-     *            number or filename
+     *            the identifier of the input to remove, for example a port number or filename
      * @return Success or Failure
      */
     public boolean removeInput(String inputIdentifier) {

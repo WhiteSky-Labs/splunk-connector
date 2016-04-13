@@ -78,7 +78,8 @@ public class SavedSearchServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
         when(savedSearchCollection.get("searchName")).thenReturn(savedSearch);
-        doNothing().when(savedSearch).remove();
+        doNothing().when(savedSearch)
+                .remove();
         assertTrue(service.deleteSavedSearch("searchName"));
     }
 
@@ -120,7 +121,8 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchHistoryWithSearchNameWithNamespace() {
-        Job[] jobs = { job };
+        Job[] jobs = { job
+        };
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
         List<SavedSearch> savedSearchList = new ArrayList<>();
@@ -136,7 +138,8 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchHistoryWithSearchNameNoNamespace() {
-        Job[] jobs = { job };
+        Job[] jobs = { job
+        };
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
@@ -150,7 +153,8 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchHistoryNoSearchNameWithNamespace() {
-        Job[] jobs = { job };
+        Job[] jobs = { job
+        };
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
         List<SavedSearch> savedSearchList = new ArrayList<>();
@@ -166,7 +170,8 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchHistoryNoSearchNameNoNamespace() {
-        Job[] jobs = { job };
+        Job[] jobs = { job
+        };
         Map<String, Object> entry = new HashMap<>();
         entry.put("testKey", "testValue");
         List<SavedSearch> savedSearchList = new ArrayList<>();
@@ -187,7 +192,8 @@ public class SavedSearchServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
         when(savedSearchCollection.get("searchName")).thenReturn(savedSearch);
-        doNothing().when(savedSearch).update(args);
+        doNothing().when(savedSearch)
+                .update(args);
         when(savedSearch.entrySet()).thenReturn(args.entrySet());
         Map<String, Object> result = service.modifySavedSearchProperties("searchName", args);
         assertEquals(1, result.size());
@@ -201,7 +207,8 @@ public class SavedSearchServiceTest {
         when(savedSearchCollection.get("searchName")).thenReturn(savedSearch);
         when(savedSearch.dispatch()).thenReturn(job);
         when(job.isDone()).thenReturn(true);
-        doReturn(searchResult).when(service).populateEventResponse(job);
+        doReturn(searchResult).when(service)
+                .populateEventResponse(job);
         assertEquals(searchResult, service.runSavedSearch("searchName"));
     }
 
@@ -213,10 +220,12 @@ public class SavedSearchServiceTest {
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
         when(savedSearchCollection.get(anyString())).thenReturn(savedSearch);
-        doNothing().when(service).processCustomArgs(eq(customArgs), any(SavedSearchDispatchArgs.class));
+        doNothing().when(service)
+                .processCustomArgs(eq(customArgs), any(SavedSearchDispatchArgs.class));
         when(savedSearch.dispatch(any(SavedSearchDispatchArgs.class))).thenReturn(job);
         when(job.isDone()).thenReturn(true);
-        doReturn(processed).when(service).populateEventResponse(job);
+        doReturn(processed).when(service)
+                .populateEventResponse(job);
         assertEquals(processed, service.runSavedSearchWithArguments(anyString(), eq(customArgs), any(SavedSearchDispatchArgs.class)));
     }
 
