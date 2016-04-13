@@ -52,8 +52,8 @@ public class CleanIndexesTestCases extends SplunkAbstractTestCase {
         try {
             getConnector().cleanIndex("Not a real index", 180);
             fail("Error should be thrown cleaning an invalid index");
-        } catch (NullPointerException e) {
-            assertTrue(e instanceof NullPointerException);
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce instanceof SplunkConnectorException);
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

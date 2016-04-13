@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-
-import com.splunk.HttpException;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
 
@@ -44,8 +43,8 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
 			getConnector().runOneShotSearch("Invalid search query", "-10d",
 					"now", null);
 			fail("An invalid search query should throw an exception");
-		} catch (HttpException e) {
-			assertTrue(e.getMessage().contains("Unknown search command"));
+		} catch (SplunkConnectorException sce) {
+			assertTrue(sce.getMessage().contains("Unknown search command"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Exception type not expected: " + e.getMessage());

@@ -9,7 +9,7 @@
 
 package org.mule.modules.splunk.automation.functional;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,26 +31,14 @@ public class DeleteSavedSearchTestCases extends SplunkAbstractTestCase {
 
     @Test
     public void testDeleteSavedSearchWithEmptyName() {
-        try {
-            getConnector().deleteSavedSearch("");
-            fail("Exception should be thrown when using an empty name to delete a Saved Search");
-        } catch (NullPointerException e) {
-            assertEquals(null, e.getMessage());
-        } catch (Exception e) {
-            fail("Exception type not expected: " + e.getMessage());
-        }
+        boolean result = getConnector().deleteSavedSearch("");
+        assertFalse(result);
     }
 
     @Test
     public void testDeleteSavedSearchWithNullName() {
-        try {
-            getConnector().deleteSavedSearch("");
-            fail("Exception should be thrown when using an null name to delete a Saved Search");
-        } catch (NullPointerException e) {
-            assertEquals(null, e.getMessage());
-        } catch (Exception e) {
-            fail("Exception type not expected: " + e.getMessage());
-        }
+        boolean result = getConnector().deleteSavedSearch("");
+        assertFalse(result);
     }
 
 }

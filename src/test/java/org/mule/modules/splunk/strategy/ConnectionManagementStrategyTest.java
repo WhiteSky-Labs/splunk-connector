@@ -28,7 +28,6 @@ public class ConnectionManagementStrategyTest {
 	@Before
 	public void setup() {
 		MockitoAnnotations.initMocks(this);
-		
 		this.connectionStrategy = spy(new ConnectionManagementStrategy());
 	}
 

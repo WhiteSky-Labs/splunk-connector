@@ -59,8 +59,8 @@ public class ModifyInputTestCases extends SplunkAbstractTestCase {
             args.put("invalid", "not valid");
             getConnector().modifyInput(INPUT_IDENTIFIER, args);
             fail("Error should be thrown when using invalid arguments");
-        } catch (HttpException e) {
-            assertTrue(e.getMessage().contains("is not supported by this handler"));
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce.getMessage().contains("is not supported by this handler"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

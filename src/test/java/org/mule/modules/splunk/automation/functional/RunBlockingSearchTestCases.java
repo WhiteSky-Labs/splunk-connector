@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-import com.splunk.HttpException;
 import com.splunk.Job;
 
 public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
@@ -48,8 +48,8 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		try {
 			getConnector().runBlockingSearch("invalid search query", null);
 			fail("Exception should be thrown when attempting an invalid search query");
-		} catch (HttpException e) {
-			assertTrue(e.getMessage().contains("Unknown search command"));
+		} catch (SplunkConnectorException sce) {
+			assertTrue(sce.getMessage().contains("Unknown search command"));
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}
@@ -60,8 +60,8 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		try {
 			getConnector().runBlockingSearch("", null);
 			fail("Exception should be thrown when attempting an invalid search query");
-		} catch (IllegalArgumentException e) {
-			assertEquals("Search Query is empty.", e.getMessage());
+		} catch (SplunkConnectorException sce) {
+			assertEquals("Search Query is empty.", sce.getMessage());
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}
@@ -72,8 +72,8 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
 		try {
 			getConnector().runBlockingSearch(null, null);
 			fail("Exception should be thrown when attempting an invalid search query");
-		} catch (IllegalArgumentException e) {
-			assertEquals("Search Query is empty.", e.getMessage());
+		} catch (SplunkConnectorException sce) {
+			assertEquals("Search Query is empty.", sce.getMessage());
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}

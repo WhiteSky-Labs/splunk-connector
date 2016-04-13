@@ -52,14 +52,21 @@ public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
     }
 
     @Test
+    public void testViewSavedSearchPropertiesForEmptySavedSearchName() {
+        try {
+            getConnector().viewSavedSearchProperties("", "search", "admin");
+            fail("Exception should be thrown when getting properties for an invalid saved search");
+        } catch (Exception e) {
+            assertTrue(e instanceof SplunkConnectorException);
+        }
+    }
+
+    @Test
     public void testViewSavedSearchPropertiesForInvalidSavedSearch() {
         try {
-            getConnector().viewSavedSearchProperties("Invalid Saved Search Name", "search", "admin");
-            fail("Exception should be thrown when getting properties for an invalid saved search");
-        } catch (NullPointerException e) {
-            assertTrue(e instanceof NullPointerException);
-        } catch (Exception e) {
-            fail("Exception type not expected: " + e.getMessage());
+            assertTrue(getConnector().viewSavedSearchProperties("Invalid Saved Search Name", "search", "admin").size() == 0);
+        } catch (SplunkConnectorException e) {
+            fail("Exception not expected: " + e.getMessage());
         }
     }
 }

@@ -32,9 +32,9 @@ public class GetDataModelTestCases extends SplunkAbstractTestCase {
 	public void testGetDataModelWithEmptyName() {
 		try {
 			getConnector().getDataModel("");
-			fail("InvalidArgumentException should be thrown");
-		} catch (IllegalArgumentException e) {
-			assertEquals("You must provide a data model name", e.getMessage());
+			fail("SplunkConnectorException should be thrown");
+		} catch (SplunkConnectorException sce) {
+			assertEquals("You must provide a data model name", sce.getMessage());
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}
@@ -45,9 +45,9 @@ public class GetDataModelTestCases extends SplunkAbstractTestCase {
 
 		try {
 			getConnector().getDataModel(null);
-			fail("InvalidArgumentException should be thrown");
-		} catch (IllegalArgumentException e) {
-			assertEquals("You must provide a data model name", e.getMessage());
+			fail("SplunkConnectorException should be thrown");
+		} catch (SplunkConnectorException sce) {
+			assertEquals("You must provide a data model name", sce.getMessage());
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}

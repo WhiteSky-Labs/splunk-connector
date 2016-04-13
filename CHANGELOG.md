@@ -3,7 +3,7 @@ Splunk Connector Release Notes
 
 Date: 24-February-2016
 
-Version: 1.0.2
+Version: 1.0.1
 
 Supported Mule Runtime Versions: 3.5.x, 3.6.x, 3.7.x
 

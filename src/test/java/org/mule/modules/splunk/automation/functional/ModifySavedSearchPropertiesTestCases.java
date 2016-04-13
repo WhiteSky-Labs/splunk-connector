@@ -57,8 +57,8 @@ public class ModifySavedSearchPropertiesTestCases extends SplunkAbstractTestCase
         try {
             getConnector().modifySavedSearchProperties(SEARCH_NAME, props);
             fail("Should throw exception when modifying invalid properties");
-        } catch (IllegalArgumentException e) {
-            assertEquals("You must provide some properties to modify", e.getMessage());
+        } catch (SplunkConnectorException sce) {
+            assertEquals("You must provide some properties to modify", sce.getMessage());
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

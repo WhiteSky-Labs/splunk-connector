@@ -19,6 +19,7 @@ import java.util.Map;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 //import org.mule.modules.tests.ConnectorTestUtils;
 
@@ -54,7 +55,7 @@ public class RunSavedSearchTestCases extends SplunkAbstractTestCase {
 			getConnector().runSavedSearch("Not a valid search name");
 			fail("Running a saved search that doesn't exist should throw an error");
 		} catch (Exception e) {
-			assertTrue(e instanceof NullPointerException);
+			assertTrue(e instanceof SplunkConnectorException);
 		}
 	}
 }

@@ -62,8 +62,8 @@ public class ModifyIndexTestCases extends SplunkAbstractTestCase {
             args.put("invalid", "not valid");
             getConnector().modifyIndex(INDEX_NAME, args);
             fail("Error should be thrown when using invalid arguments");
-        } catch (HttpException e) {
-            assertTrue(e.getMessage().contains("is not supported by this handler"));
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce.getMessage().contains("is not supported by this handler"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

@@ -11,6 +11,7 @@ package org.mule.modules.splunk.automation.functional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Map;
@@ -35,14 +36,23 @@ public class GetInputTestCases extends SplunkAbstractTestCase {
 		getConnector().removeInput("9906");
 	}
 
+	   @Test
+	    public void testGetInputWithEmptyIdentifier() {
+	        try {
+	            getConnector().getInput("");
+	            fail("Exception should be thrown for an invalid input identifier");
+	        } catch (SplunkConnectorException sce) {
+	            assertEquals("You must provide a valid input identifier",
+	                    sce.getMessage());
+	        } catch (Exception e) {
+	            fail("Exception type not expected: " + e.getMessage());
+	        }
+	    }
+	   
 	@Test
 	public void testGetInputWithInvalidIdentifier() {
 		try {
-			getConnector().getInput("An Invalid Identifier");
-			fail("Exception should be thrown for an invalid input identifier");
-		} catch (IllegalArgumentException e) {
-			assertEquals("You must provide a valid input identifier",
-					e.getMessage());
+		    assertTrue(getConnector().getInput("An Invalid Identifier").size() == 0);
 		} catch (Exception e) {
 			fail("Exception type not expected: " + e.getMessage());
 		}

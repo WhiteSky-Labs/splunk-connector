@@ -17,8 +17,7 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Test;
-
-import com.splunk.HttpException;
+import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
 
@@ -50,8 +49,8 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
             doTearDown = true;
             getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100", null);
             fail("Exception should be thrown when creating an existing saved search");
-        } catch (HttpException me) {
-            assertTrue(me.getMessage().contains("A saved search with that name already exists."));
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce.getMessage().contains("A saved search with that name already exists."));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }
@@ -62,8 +61,8 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
         try {
             getConnector().createSavedSearch("", "search * | head 100", null);
             fail("Exception should be thrown when using an empty name to create a Saved Search");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Search Name empty.", e.getMessage());
+        } catch (SplunkConnectorException sce) {
+            assertEquals("Search Name empty.", sce.getMessage());
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }
@@ -74,8 +73,8 @@ public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
         try {
             getConnector().createSavedSearch(null, "search * | head 100", null);
             fail("Exception should be thrown when using an empty name to create a Saved Search");
-        } catch (IllegalArgumentException e) {
-            assertEquals("Search Name empty.", e.getMessage());
+        } catch (SplunkConnectorException sce) {
+            assertEquals("Search Name empty.", sce.getMessage());
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

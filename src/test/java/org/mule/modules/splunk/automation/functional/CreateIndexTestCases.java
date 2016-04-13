@@ -20,8 +20,6 @@ import org.junit.After;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-import com.splunk.HttpException;
-
 public class CreateIndexTestCases extends SplunkAbstractTestCase {
 
     private static final String INDEX_NAME = "create_index_test_index";
@@ -46,7 +44,7 @@ public class CreateIndexTestCases extends SplunkAbstractTestCase {
             doTearDown = true;
             assertNotNull(result);
             assertTrue(((String) result.get("homePath")).contains(INDEX_NAME));
-        } catch (SplunkConnectorException e) {
+        } catch (Exception e) {
             fail("Exception not expected: " + e.getMessage());
         }
     }
@@ -72,8 +70,8 @@ public class CreateIndexTestCases extends SplunkAbstractTestCase {
             args.put("Invalid", "true");
             getConnector().createIndex(INDEX_NAME, args);
             fail("Error should be thrown with invalid args");
-        } catch (HttpException e) {
-            assertTrue(e.getMessage().contains("is not supported by this handler"));
+        } catch (SplunkConnectorException sce) {
+            assertTrue(sce.getMessage().contains("is not supported by this handler"));
         } catch (Exception e) {
             fail("Exception type not expected: " + e.getMessage());
         }

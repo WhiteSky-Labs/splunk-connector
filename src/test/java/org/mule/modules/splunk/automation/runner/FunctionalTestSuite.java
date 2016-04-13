@@ -27,10 +27,7 @@ import org.mule.modules.splunk.automation.functional.ModifyIndexTestCases;
 import org.mule.modules.splunk.automation.functional.ModifyInputTestCases;
 import org.mule.modules.splunk.automation.functional.ModifySavedSearchPropertiesTestCases;
 import org.mule.modules.splunk.automation.functional.RunBlockingSearchTestCases;
-import org.mule.modules.splunk.automation.functional.RunExportSearchTestCases;
-import org.mule.modules.splunk.automation.functional.RunNormalSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunOneShotSearchTestCases;
-import org.mule.modules.splunk.automation.functional.RunRealTimeSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchWithArgumentsTestCases;
 import org.mule.modules.splunk.automation.functional.ViewSavedSearchPropertiesTestCases;
@@ -38,35 +35,32 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
 
 @RunWith(Suite.class)
 @org.junit.runners.Suite.SuiteClasses({
-//    AddDataToIndexTestCases.class,
-//    AddDataToTcpInputTestCases.class,
-//    AddDataToUdpInputTestCases.class,
-//    CleanIndexesTestCases.class,
-//    CreateIndexTestCases.class,
-//    CreateInputsTestCases.class,
-//    CreateSavedSearchTestCases.class,
-//    DeleteSavedSearchTestCases.class,
-//    GetApplicationsTestCases.class,
-//    GetDataModelsTestCases.class,
-//    GetDataModelTestCases.class,
-//    GetIndexesTestCases.class,
-//    GetIndexTestCases.class,
-//    GetInputsTestCases.class,
-//    GetInputTestCases.class,
-//    GetJobsTestCases.class,
-//    GetSavedSearchesTestCases.class,
-//    GetSavedSearchHistoryTestCases.class,
-//    ModifyIndexTestCases.class,
-//    ModifyInputTestCases.class,
-//    ModifySavedSearchPropertiesTestCases.class,
-//    RunBlockingSearchTestCases.class,
-//    RunOneShotSearchTestCases.class,
-//    RunSavedSearchTestCases.class,
-//    RunSavedSearchWithArgumentsTestCases.class,
-//    ViewSavedSearchPropertiesTestCases.class
-//    RunExportSearchTestCases.class
-    RunNormalSearchTestCases.class,
-//    RunRealTimeSearchTestCases.class
+    AddDataToIndexTestCases.class,
+    AddDataToTcpInputTestCases.class,
+    AddDataToUdpInputTestCases.class,
+    CleanIndexesTestCases.class,
+    CreateIndexTestCases.class,
+    CreateInputsTestCases.class,
+    CreateSavedSearchTestCases.class,
+    DeleteSavedSearchTestCases.class,
+    GetApplicationsTestCases.class,
+    GetDataModelsTestCases.class,
+    GetDataModelTestCases.class,
+    GetIndexesTestCases.class,
+    GetIndexTestCases.class,
+    GetInputsTestCases.class,
+    GetInputTestCases.class,
+    GetJobsTestCases.class,
+    GetSavedSearchesTestCases.class,
+    GetSavedSearchHistoryTestCases.class,
+    ModifyIndexTestCases.class,
+    ModifyInputTestCases.class,
+    ModifySavedSearchPropertiesTestCases.class,
+    RunBlockingSearchTestCases.class,
+    RunOneShotSearchTestCases.class,
+    RunSavedSearchTestCases.class,
+    RunSavedSearchWithArgumentsTestCases.class,
+    ViewSavedSearchPropertiesTestCases.class,
 })
 public class FunctionalTestSuite {
 
