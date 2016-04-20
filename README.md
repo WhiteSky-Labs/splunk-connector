@@ -24,7 +24,7 @@ The Splunk Connector is certified to be compatible with:
 * CloudHub Runtime v3.5.2
 
 The Splunk Connector has been tested compatible with:
-* Splunk Enterprise v6.2 and v6.3
+* Splunk Enterprise versions 6.2, 6.3 and 6.4
 * Splunk SDK for Java v1.5.0
 
 If you are interested in support for other versions of MuleSoft's platforms or Splunk, please contact [support@whiteskylabs.com](mailto:support@whiteskylabs.com).
