@@ -27,7 +27,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/createsavedsearch" allowedMethods="POST" doc:name="HTTP" />
 		<splunk:create-saved-search config-ref="Splunk"
-			searchName="#[message.inboundProperties['searchname']]" searchQuery="#[message.inboundProperties['searchquery']]"
+			searchName="DemoSavedSearch" searchQuery="search * | head 100"
 			doc:name="Create Saved Search" />
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
@@ -38,7 +38,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/runsavedsearch" allowedMethods="POST" doc:name="HTTP" />
 		<splunk:run-saved-search config-ref="Splunk"
-			doc:name="Run Saved Search" searchName="#[message.inboundProperties['savedsearchname']]" />
+			doc:name="Run Saved Search" searchName="DemoSavedSearch" />
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
 		<logger message="Splunk processed saved search, payload is #[payload]"
@@ -48,7 +48,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/deletesavedsearch" allowedMethods="POST" doc:name="HTTP" />
 		<splunk:delete-saved-search config-ref="Splunk"
-			searchName="#[message.inboundProperties['searchname']]" doc:name="Delete Saved Search" />
+			searchName="DemoSavedSearch" doc:name="Delete Saved Search" />
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
 		<logger message="Splunk deleted saved search, payload is #[payload]"

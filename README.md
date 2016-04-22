@@ -20,8 +20,8 @@ Compatibility
 ----------------------
 
 The Splunk Connector is certified to be compatible with:
-* Mule ESB v3.5.2 and newer versions
-* CloudHub Runtime v3.5.2
+* Mule ESB v3.5.3 and newer versions
+* CloudHub Runtime v3.6.4 and newer versions
 
 The Splunk Connector has been tested compatible with:
 * Splunk Enterprise versions 6.2, 6.3 and 6.4

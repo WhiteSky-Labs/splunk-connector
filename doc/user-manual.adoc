@@ -62,7 +62,7 @@ You will require a valid CloudHub Subcription or Mule ESB Enterprise License in 
 
 === Dependencies
 
-The Splunk Connector requires AnyPoint Studio 4.1.1 or greater with Mule EE ESB Runtime 3.5.2 or newer.
+The Splunk Connector requires AnyPoint Studio 4.1.1 or greater with Mule EE ESB Runtime 3.5.3 or newer.
 
 *Versions* +
 
@@ -78,7 +78,7 @@ The Connector requires Splunk Enterprise Server v6.2 or newer.
 |Version
 
 |Mule Runtime
-|Mule EE 3.5.2 and above
+|Mule EE 3.5.3 and above
 
 |Splunk SDK for Java
 |v1.5.0
