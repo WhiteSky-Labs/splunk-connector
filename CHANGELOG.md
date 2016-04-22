@@ -1,7 +1,7 @@
 Splunk Connector Release Notes
 =====================================
 
-Date: 2-April-2016
+Date: 22-April-2016
 
 Version: 1.0.1
 
