@@ -82,6 +82,7 @@ The Connector requires Splunk Enterprise Server v6.2 or newer.
 
 |Splunk SDK for Java
 |v1.5.0
+|===
 
 ---
 
@@ -158,6 +159,8 @@ image::globalparameters.png
 |Port
 |The administration port (not the web port) of the Splunk Enterprise Server
 |8089
+|===
+
 4. Access the Pooling Profile tab to configure any settings relevant to managing multiple connections via a connection pool.
 
 5. Access the Reconnection tab to configure any settings relevant to reconnection strategies that Mule should execute if it loses its connection to Splunk.
