@@ -151,6 +151,7 @@ image::globalparameters.png[Global Parameters, 600]
 |8089
 |===
 
+
 4. Access the Pooling Profile tab to configure any settings relevant to managing multiple connections via a connection pool.
 
 5. Access the Reconnection tab to configure any settings relevant to reconnection strategies that Mule should execute if it loses its connection to Splunk.
@@ -162,6 +163,7 @@ image::globalparameters.png[Global Parameters, 600]
 8. Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.
 
 9. Configure the connector’s parameters according to the table below.
+
 
 image::connectorparameters.png[Connector Parameters, 600]
 
@@ -187,6 +189,7 @@ image::connectorparameters.png[Connector Parameters, 600]
 |A parameter for the operation chosen
 |#[payload]
 |===
+
 
 10. Click blank space on the canvas to save your Splunk connector configurations.
 
