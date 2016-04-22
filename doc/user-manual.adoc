@@ -132,7 +132,7 @@ To create a global Splunk connector configuration, follow these steps:
 
 3. Configure the global connector’s parameters according to the table below.
 
-image::globalparameters.png
+image::globalparameters.png[Global Parameters, 600]
 
 [cols="3*", options="header"]
 |===
