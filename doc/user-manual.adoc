@@ -114,7 +114,7 @@ image::installsplunk.png
 
 6. Click Restart Now to complete the installation. Once you have installed the connector and restarted Studio you will see the Splunk Connector available in the palette, under the Connectors category.
 
-image::splunkpalette.png
+image::splunkpalette.png[Splunk Palette, 600]
 
 === Configuring
 
@@ -173,7 +173,7 @@ image::globalparameters.png[Global Parameters, 600]
 
 9. Configure the connector’s parameters according to the table below.
 
-image::connectorparameters.png
+image::connectorparameters.png[Connector Parameters, 600]
 
 [cols="3*", options="header"]
 |===
@@ -196,6 +196,7 @@ image::connectorparameters.png
 |Index Name
 |A parameter for the operation chosen
 |#[payload]
+|===
 
 10. Click blank space on the canvas to save your Splunk connector configurations.
 
