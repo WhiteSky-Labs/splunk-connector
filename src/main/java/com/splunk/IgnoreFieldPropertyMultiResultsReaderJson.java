@@ -11,8 +11,6 @@ package com.splunk;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.splunk.MultiResultsReader;
-
 public class IgnoreFieldPropertyMultiResultsReaderJson extends MultiResultsReader<IgnoreFieldPropertyResultsReaderJson> {
 
     public IgnoreFieldPropertyMultiResultsReaderJson(InputStream inputStream) throws IOException {

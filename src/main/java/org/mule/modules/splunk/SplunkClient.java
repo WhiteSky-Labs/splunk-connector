@@ -350,20 +350,20 @@ public class SplunkClient extends AbstractClient {
      * Run a Saved Search with arguments
      *
      * @param searchName
-     *            The name of the searh
+     *            The name of the search
      * @param customArgs
      *            Custom Arguments, Optional list of custom arguments to supply
      * @param searchDispatchArgs
      *            Optional list of search dispatch arguments
-     * @return The results as a List of Hashmaps
+     * @return The results as a List of Maps
      * @throws SplunkConnectorException
      *             when there is an issue running the saved search
      */
     public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, Map<String, Object> customArgs,
-            SavedSearchDispatchArgs searchDispatchArgsParam) throws SplunkConnectorException {
+            SavedSearchDispatchArgs searchDispatchArgs) throws SplunkConnectorException {
         try {
             Validate.notEmpty(searchName, "You must provide a valid search name");
-            return getSavedSearchService().runSavedSearchWithArguments(searchName, customArgs, searchDispatchArgsParam);
+            return getSavedSearchService().runSavedSearchWithArguments(searchName, customArgs, searchDispatchArgs);
         } catch (NullPointerException npe) {
             throw new SplunkConnectorException("Unable to find Saved Search with searchName=" + searchName, npe);
         } catch (Exception e) {

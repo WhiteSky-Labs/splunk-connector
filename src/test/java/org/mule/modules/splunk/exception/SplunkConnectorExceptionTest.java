@@ -8,10 +8,9 @@
  */
 package org.mule.modules.splunk.exception;
 
-import org.junit.Test;
-import org.mule.modules.splunk.exception.SplunkConnectorException;
-
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 /**
  * Test {@link org.mule.modules.splunk.exception.SplunkConnectorException} internals

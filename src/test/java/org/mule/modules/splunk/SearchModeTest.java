@@ -8,10 +8,9 @@
  */
 package org.mule.modules.splunk;
 
-import org.junit.Test;
-import org.mule.modules.splunk.SearchMode;
-
 import static org.junit.Assert.assertNotNull;
+
+import org.junit.Test;
 
 /**
  * Test {@link org.mule.modules.splunk.SearchModeTest} internals

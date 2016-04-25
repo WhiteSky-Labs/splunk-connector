@@ -200,17 +200,17 @@ public class SavedSearchService extends AbstractService {
      *             on search processing error
      */
     public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, Map<String, Object> customArgs,
-            SavedSearchDispatchArgs searchDispatchArgsParam) throws InterruptedException, IOException {
+            SavedSearchDispatchArgs searchDispatchArgs) throws InterruptedException, IOException {
         SavedSearch savedSearch = getService().getSavedSearches()
                 .get(searchName);
-        SavedSearchDispatchArgs searchDispatchArgs = new SavedSearchDispatchArgs();
+        SavedSearchDispatchArgs newSearchDispatchArgs = new SavedSearchDispatchArgs();
 
-        if (searchDispatchArgsParam != null) {
-            searchDispatchArgs.putAll(searchDispatchArgsParam);
+        if (searchDispatchArgs != null) {
+            searchDispatchArgs.putAll(searchDispatchArgs);
         }
-        processCustomArgs(customArgs, searchDispatchArgs);
+        processCustomArgs(customArgs, newSearchDispatchArgs);
 
-        Job job = savedSearch.dispatch(searchDispatchArgs);
+        Job job = savedSearch.dispatch(newSearchDispatchArgs);
         while (!job.isDone()) {
             Thread.sleep(500);
         }

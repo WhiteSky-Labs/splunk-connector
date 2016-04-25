@@ -14,8 +14,6 @@ import java.util.Collection;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import com.splunk.ResultsReaderJson;
-
 public class IgnoreFieldPropertyResultsReaderJson extends ResultsReaderJson {
 
     public IgnoreFieldPropertyResultsReaderJson(InputStream inputStream) throws IOException {

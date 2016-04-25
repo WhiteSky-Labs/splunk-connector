@@ -20,7 +20,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mule.api.ConnectionException;
 import org.mule.modules.splunk.SplunkClient;
-import org.mule.modules.splunk.strategy.ConnectionManagementStrategy;
 
 import com.splunk.Service;
 

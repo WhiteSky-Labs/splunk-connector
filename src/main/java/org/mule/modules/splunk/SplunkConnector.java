@@ -500,8 +500,6 @@ public class SplunkConnector {
      * @param stringData
      *            The data to send
      * @return Success or Failure
-     * @throws SplunkConnectorException
-     *             when cannot connect to the port
      */
     @Processor
     public Boolean addDataToUdpInput(String portNumber, String stringData) {

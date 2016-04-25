@@ -80,7 +80,7 @@ public abstract class AbstractService {
      * @param resultsReader
      *            A results reader (can be XML or JSON)
      * @return A List of HashMaps (the results)
-     * @throws IOException
+     * @throws IOException on processing error
      */
     protected List<Map<String, Object>> parseEvents(ResultsReader resultsReader) throws IOException {
         List<Map<String, Object>> searchResponseList = new ArrayList<Map<String, Object>>();
@@ -101,8 +101,8 @@ public abstract class AbstractService {
      *
      * @param job
      *            The job response to parse
-     * @return A List of Hashmaps (the results)
-     * @throws IOException
+     * @return A List of Maps (the results)
+     * @throws IOException on processing error
      */
     protected List<Map<String, Object>> populateEventResponse(Job job) throws IOException {
         JobResultsArgs resultsArgs = new JobResultsArgs();

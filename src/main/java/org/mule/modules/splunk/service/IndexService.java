@@ -95,13 +95,11 @@ public class IndexService extends AbstractService {
     }
 
     /**
-     * Creates an Index with optional arguments
+     * Retrieves an Index
      *
-     * @param indexName
+     * @param indexIdentifier
      *            The name of the index to create
-     * @param args
-     *            Optional key-value pairs of arguments to apply on creation
-     * @return the new Index
+     * @return the Index
      */
     public Map<String, Object> getIndex(String indexIdentifier) {
         Index index = getService().getIndexes()
