@@ -34,7 +34,7 @@ import com.splunk.SavedSearchDispatchArgs;
  *
  * @author WhiteSky Labs
  */
-@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk", minMuleVersion = "3.5.2")
+@Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk", minMuleVersion = "3.5.3")
 @RequiresEnterpriseLicense
 public class SplunkConnector {
 
