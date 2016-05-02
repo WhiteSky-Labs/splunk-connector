@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/createsavedsearch" allowedMethods="POST" doc:name="HTTP" />
 		<splunk:create-saved-search config-ref="Splunk"
-			searchName="DemoSavedSearch" searchQuery="search * | head 100"
+			searchName="DemoSavedSearch" searchQuery="* | head 100"
 			doc:name="Create Saved Search" />
 		<json:object-to-json-transformer
 			doc:name="Object to JSON" />
