@@ -17,12 +17,6 @@ http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/jso
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
-	<context:property-placeholder location="credentials.properties" />
-	<splunk:config-type name="Splunk" username="${splunk.username}"
-		password="${splunk.password}" host="${splunk.host}" port="${splunk.port}"
-		doc:name="Splunk: Connection Management" />
-	<http:listener-config name="HTTP_Listener_Configuration"
-		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
 	<flow name="Create_Saved_Search_Flow">
 		<http:listener config-ref="HTTP_Listener_Configuration"
 			path="/createsavedsearch" allowedMethods="POST" doc:name="HTTP" />

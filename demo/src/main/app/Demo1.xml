@@ -32,6 +32,7 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 			doc:name="Object to JSON" />
 		<logger message="Splunk Index Created, payload is #[payload]"
 			level="INFO" doc:name="Logger" />
+        <splunk:clean-index config-ref="Splunk" indexName="t" doc:name="Splunk"/>
 	</flow>
 	<flow name="Add_Data_To_Index_Flow">
 		<http:listener config-ref="HTTP_Listener_Configuration"
