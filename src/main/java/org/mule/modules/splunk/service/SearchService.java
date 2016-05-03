@@ -20,11 +20,11 @@ import org.mule.modules.splunk.OutputMode;
 import org.mule.modules.splunk.SearchMode;
 
 import com.splunk.Args;
-import com.splunk.IgnoreFieldPropertyMultiResultsReaderJson;
 import com.splunk.Job;
 import com.splunk.JobArgs;
 import com.splunk.JobExportArgs;
 import com.splunk.JobResultsPreviewArgs;
+import com.splunk.MultiResultsReaderJson;
 import com.splunk.ResultsReaderXml;
 
 /**
@@ -119,7 +119,7 @@ public class SearchService extends AbstractService {
         newExportArgs.setSearchMode(JobExportArgs.SearchMode.NORMAL);
         newExportArgs.setOutputMode(JobExportArgs.OutputMode.JSON);
         exportSearch = getService().export(searchQuery, newExportArgs);
-        processCallback(new IgnoreFieldPropertyMultiResultsReaderJson(exportSearch), callback);
+        processCallback(new MultiResultsReaderJson(exportSearch), callback);
     }
 
     /**

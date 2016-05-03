@@ -35,6 +35,7 @@ import org.mule.modules.splunk.automation.functional.ModifyIndexTestCases;
 import org.mule.modules.splunk.automation.functional.ModifyInputTestCases;
 import org.mule.modules.splunk.automation.functional.ModifySavedSearchPropertiesTestCases;
 import org.mule.modules.splunk.automation.functional.RunBlockingSearchTestCases;
+import org.mule.modules.splunk.automation.functional.RunExportSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunOneShotSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchWithArgumentsTestCases;
@@ -66,9 +67,10 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
         ModifySavedSearchPropertiesTestCases.class,
         RunBlockingSearchTestCases.class,
         RunOneShotSearchTestCases.class,
+        RunExportSearchTestCases.class,
         RunSavedSearchTestCases.class,
         RunSavedSearchWithArgumentsTestCases.class,
-        ViewSavedSearchPropertiesTestCases.class,
+        ViewSavedSearchPropertiesTestCases.class
 })
 public class FunctionalTestSuite {
 

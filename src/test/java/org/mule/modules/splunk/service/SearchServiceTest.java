@@ -36,12 +36,12 @@ import org.mule.modules.splunk.SearchMode;
 import org.mule.modules.splunk.SplunkClient;
 
 import com.splunk.Args;
-import com.splunk.IgnoreFieldPropertyMultiResultsReaderJson;
 import com.splunk.Job;
 import com.splunk.JobArgs;
 import com.splunk.JobCollection;
 import com.splunk.JobExportArgs;
 import com.splunk.JobResultsPreviewArgs;
+import com.splunk.MultiResultsReaderJson;
 import com.splunk.ResultsReaderXml;
 import com.splunk.Service;
 
@@ -88,7 +88,7 @@ public class SearchServiceTest {
         when(clientService.export(eq("searchQuery"), any(JobExportArgs.class))).thenReturn(inputStream);
         try {
             doNothing().when(service)
-                    .processCallback(any(IgnoreFieldPropertyMultiResultsReaderJson.class), any(SourceCallback.class));
+                    .processCallback(any(MultiResultsReaderJson.class), any(SourceCallback.class));
             service.runExportSearch("searchQuery", "-1h", "now", SearchMode.NORMAL, OutputMode.JSON, null);
         } catch (Exception e) {
             fail("Exception not expected");
