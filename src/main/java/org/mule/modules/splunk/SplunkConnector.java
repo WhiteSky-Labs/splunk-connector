@@ -102,7 +102,7 @@ public class SplunkConnector {
      *             when the search cannot execute
      */
     @Processor
-    public Map<String, Object> runBlockingSearch(String searchQuery, @Optional Map<String, Object> searchArgs) throws SplunkConnectorException {
+    public Map<String, Object> runBlockingSearch(@Default("#[payload]") String searchQuery, @Optional Map<String, Object> searchArgs) throws SplunkConnectorException {
         return getClient().runBlockingSearch(searchQuery, searchArgs);
     }
 
@@ -122,7 +122,7 @@ public class SplunkConnector {
      *             when an error occurs communicating with Splunk
      */
     @Processor
-    public List<Map<String, Object>> runOneShotSearch(String searchQuery, String earliestTime, String latestTime, @Optional Map<String, String> args)
+    public List<Map<String, Object>> runOneShotSearch(@Default("#[payload]") String searchQuery, String earliestTime, String latestTime, @Optional Map<String, String> args)
             throws SplunkConnectorException {
         return getClient().runOneShotSearch(searchQuery, earliestTime, latestTime, args);
     }
@@ -137,7 +137,7 @@ public class SplunkConnector {
      * @return A List of Maps that represent the saved searches
      */
     @Processor
-    public List<Map<String, Object>> getSavedSearches(@Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearches(@Default("#[payload]") @Optional String app, @Optional String owner) {
         return getClient().getSavedSearches(app, owner);
     }
 
@@ -155,7 +155,7 @@ public class SplunkConnector {
      *             on invalid searchName and/or searchQuery
      */
     @Processor
-    public Map<String, Object> createSavedSearch(String searchName, String searchQuery, @Optional Map<String, Object> searchArgs)
+    public Map<String, Object> createSavedSearch(@Default("#[payload]") String searchName, String searchQuery, @Optional Map<String, Object> searchArgs)
             throws SplunkConnectorException {
         return getClient().createSavedSearch(searchName, searchQuery, searchArgs);
     }
@@ -174,7 +174,7 @@ public class SplunkConnector {
      *             on invalid Search Name
      */
     @Processor
-    public Set<Map.Entry<String, Object>> viewSavedSearchProperties(String searchName, @Optional String app, @Optional String owner)
+    public Set<Map.Entry<String, Object>> viewSavedSearchProperties(@Default("#[payload]") String searchName, @Optional String app, @Optional String owner)
             throws SplunkConnectorException {
         return getClient().viewSavedSearchProperties(searchName, app, owner);
     }
@@ -191,7 +191,7 @@ public class SplunkConnector {
      *             when the search properties are invalid
      */
     @Processor
-    public Map<String, Object> modifySavedSearchProperties(String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
+    public Map<String, Object> modifySavedSearchProperties(@Default("#[payload]") String searchName, Map<String, Object> searchProperties) throws SplunkConnectorException {
         return getClient().modifySavedSearchProperties(searchName, searchProperties);
     }
 
@@ -207,7 +207,7 @@ public class SplunkConnector {
      * @return List of Job History
      */
     @Processor
-    public List<Map<String, Object>> getSavedSearchHistory(@Optional String searchName, @Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearchHistory(@Default("#[payload]") @Optional String searchName, @Optional String app, @Optional String owner) {
         return getClient().getSavedSearchHistory(searchName, app, owner);
     }
 
@@ -239,7 +239,7 @@ public class SplunkConnector {
      *             when there is an issue running the saved search
      */
     @Processor
-    public List<Map<String, Object>> runSavedSearchWithArguments(String searchName, @Optional Map<String, Object> customArgs,
+    public List<Map<String, Object>> runSavedSearchWithArguments(@Default("#[payload]") String searchName, @Optional Map<String, Object> customArgs,
             @Optional @RefOnly SavedSearchDispatchArgs searchDispatchArgs) throws SplunkConnectorException {
         return getClient().runSavedSearchWithArguments(searchName, customArgs, searchDispatchArgs);
     }
@@ -349,7 +349,7 @@ public class SplunkConnector {
      *             when there is an issue executing
      */
     @Processor
-    public Map<String, Object> createInput(String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) throws SplunkConnectorException {
+    public Map<String, Object> createInput(@Default("#[payload]") String inputIdentifier, InputKind kind, @Optional Map<String, Object> args) throws SplunkConnectorException {
         return getClient().createInput(inputIdentifier, kind, args);
     }
 
@@ -365,7 +365,7 @@ public class SplunkConnector {
      *             on invalid parameters
      */
     @Processor
-    public Map<String, Object> modifyInput(String inputIdentifier, Map<String, Object> inputArgs) throws SplunkConnectorException {
+    public Map<String, Object> modifyInput(@Default("#[payload]") String inputIdentifier, Map<String, Object> inputArgs) throws SplunkConnectorException {
         return getClient().modifyInput(inputIdentifier, inputArgs);
     }
 
@@ -395,7 +395,7 @@ public class SplunkConnector {
      * @return Collection of indexes
      */
     @Processor
-    public List<Map<String, Object>> getIndexes(@Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection,
+    public List<Map<String, Object>> getIndexes(@Default("#[payload]") @Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection,
             @Optional Map<String, Object> collectionParameters) {
         return getClient().getIndexes(sortKey, sortDirection, collectionParameters);
     }
@@ -412,7 +412,7 @@ public class SplunkConnector {
      *             on invalid indexName
      */
     @Processor
-    public Map<String, Object> createIndex(String indexName, @Optional Map<String, Object> args) throws SplunkConnectorException {
+    public Map<String, Object> createIndex(@Default("#[payload]") String indexName, @Optional Map<String, Object> args) throws SplunkConnectorException {
         return getClient().createIndex(indexName, args);
     }
 
@@ -428,7 +428,7 @@ public class SplunkConnector {
      *             on invalid indexName
      */
     @Processor
-    public Map<String, Object> modifyIndex(String indexName, Map<String, Object> indexArgs) throws SplunkConnectorException {
+    public Map<String, Object> modifyIndex(@Default("#[payload]") String indexName, Map<String, Object> indexArgs) throws SplunkConnectorException {
         return getClient().modifyIndex(indexName, indexArgs);
     }
 
@@ -458,7 +458,7 @@ public class SplunkConnector {
      *             on invalid indexName
      */
     @Processor
-    public Map<String, Object> cleanIndex(String indexName, @Default("180") int maxSeconds) throws SplunkConnectorException {
+    public Map<String, Object> cleanIndex(@Default("#[payload]") String indexName, @Default("180") int maxSeconds) throws SplunkConnectorException {
         return getClient().cleanIndex(indexName, maxSeconds);
     }
 
@@ -476,7 +476,7 @@ public class SplunkConnector {
      *             on invalid indexName
      */
     @Processor
-    public Map<String, Object> addDataToIndex(String indexName, String stringData, @Optional Map<String, Object> indexArgs) throws SplunkConnectorException {
+    public Map<String, Object> addDataToIndex(@Default("#[payload]") String indexName, String stringData, @Optional Map<String, Object> indexArgs) throws SplunkConnectorException {
         return getClient().addDataToIndex(indexName, stringData, indexArgs);
     }
 
@@ -490,7 +490,7 @@ public class SplunkConnector {
      * @return Success or Failure
      */
     @Processor
-    public Boolean addDataToTcpInput(String portNumber, String stringData) {
+    public Boolean addDataToTcpInput(@Default("#[payload]") String portNumber, String stringData) {
         return getClient().addDataToTcpInput(portNumber, stringData);
     }
 
@@ -504,7 +504,7 @@ public class SplunkConnector {
      * @return Success or Failure
      */
     @Processor
-    public Boolean addDataToUdpInput(String portNumber, String stringData) {
+    public Boolean addDataToUdpInput(@Default("#[payload]") String portNumber, String stringData) {
         return getClient().addDataToUdpInput(portNumber, stringData);
     }
 
