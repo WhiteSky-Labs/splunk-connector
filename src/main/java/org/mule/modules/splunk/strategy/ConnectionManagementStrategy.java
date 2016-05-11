@@ -21,7 +21,7 @@ import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.param.ConnectionKey;
 import org.mule.modules.splunk.SplunkClient;
 
-@ConnectionManagement(friendlyName = "Connection Management", configElementName = "config-type")
+@ConnectionManagement(friendlyName = "Configuration", configElementName = "config-type")
 public class ConnectionManagementStrategy {
 
     private SplunkClient client;
