@@ -80,17 +80,11 @@
 	</build>
 
 	<repositories>
-		<!-- To be removed once splunk jars have been pushed to the mule repository -->
 		<repository>
 			<id>mulesoft-releases</id>
 			<name>MuleSoft Releases Repository</name>
 			<url>http://repository.mulesoft.org/releases/</url>
 			<layout>default</layout>
-		</repository>
-		<repository>
-			<id>splunk-artifactory</id>
-			<name>Splunk Releases</name>
-			<url>http://splunk.artifactoryonline.com/splunk/ext-releases-local</url>
 		</repository>
 	</repositories>
 	<distributionManagement>
