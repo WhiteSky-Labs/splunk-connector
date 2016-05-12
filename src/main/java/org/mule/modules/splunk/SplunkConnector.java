@@ -18,7 +18,6 @@ import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.Source;
 import org.mule.api.annotations.display.Placement;
 import org.mule.api.annotations.licensing.RequiresEnterpriseLicense;
-import org.mule.api.annotations.licensing.RequiresEntitlement;
 import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.annotations.param.RefOnly;
@@ -36,8 +35,7 @@ import com.splunk.SavedSearchDispatchArgs;
  * @author WhiteSky Labs
  */
 @Connector(name = "splunk", schemaVersion = "1.0.0-SNAPSHOT", friendlyName = "Splunk", minMuleVersion = "3.5.3")
-@RequiresEnterpriseLicense(allowEval = true) 
-@RequiresEntitlement(name="splunk", provider="WhiteSky_Labs")
+@RequiresEnterpriseLicense
 public class SplunkConnector {
 
     @Config
