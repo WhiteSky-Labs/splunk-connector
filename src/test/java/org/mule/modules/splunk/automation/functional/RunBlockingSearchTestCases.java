@@ -29,14 +29,14 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
     public void testRunBlockingSearch() {
         try {
             Map<String, Object> result = getConnector().runBlockingSearch(
-                    "search * | head 100", null);
+                    "search index=_internal | head 10", null);
             assertNotNull(result);
             List<Map<String, Object>> events = (List<Map<String, Object>>) result
                     .get("events");
             assertTrue(events.size() > 0);
             Job job = (Job) result.get("job");
             assertEquals("DONE", job.getDispatchState());
-            assertEquals("search * | head 100", job.getSearch());
+            assertEquals("search index=_internal | head 10", job.getSearch());
         } catch (Exception e) {
             fail("Exception not expected: " + e.getMessage());
         }
@@ -87,7 +87,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
             args.put("timeout", "60");
             args.put("auto_pause", "0");
             Map<String, Object> result = getConnector().runBlockingSearch(
-                    "search * | head 100", args);
+                    "search index=_internal | head 10", args);
             assertNotNull(result);
             assertTrue(result.size() > 0);
             List<Map<String, Object>> events = ((List<Map<String, Object>>) result
@@ -95,7 +95,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
             assertTrue(events.size() > 0);
             Job job = (Job) result.get("job");
             assertEquals("DONE", job.getDispatchState());
-            assertEquals("search * | head 100", job.getSearch());
+            assertEquals("search index=_internal | head 10", job.getSearch());
         } catch (Exception e) {
             fail("Exception not expected: " + e.getMessage());
         }

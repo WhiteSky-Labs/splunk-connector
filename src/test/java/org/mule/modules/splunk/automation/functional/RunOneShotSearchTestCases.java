@@ -27,7 +27,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
             Map<String, String> args = new HashMap<>();
             args.put("description", "Sample Description");
             List<Map<String, Object>> results = getConnector()
-                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                    .runOneShotSearch("search index=_internal | head 10", "-10d", "now",
                             args);
             assertNotNull(results);
             assertTrue(results.size() > 0);
@@ -57,7 +57,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
             Map<String, String> args = new HashMap<>();
             args.put("invalid", "invalid value");
             List<Map<String, Object>> results = getConnector()
-                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                    .runOneShotSearch("search index=_internal | head 10", "-10d", "now",
                             args);
             // invalid search args are ignored for a one-shot search, should
             // return successfully
@@ -72,7 +72,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
     public void testRunOneShotSearchWithoutSearchArgs() {
         try {
             List<Map<String, Object>> results = getConnector()
-                    .runOneShotSearch("search * | head 100", "-10d", "now",
+                    .runOneShotSearch("search index=_internal | head 10", "-10d", "now",
                             null);
             // missing search args are ignored for a one-shot search, should
             // return successfully
