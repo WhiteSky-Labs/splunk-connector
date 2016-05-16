@@ -137,7 +137,7 @@ public class SplunkConnector {
      * @return A List of Maps that represent the saved searches
      */
     @Processor
-    public List<Map<String, Object>> getSavedSearches(@Default("#[payload]") @Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearches(@Default("#[payload]") String app, @Optional String owner) {
         return getClient().getSavedSearches(app, owner);
     }
 
@@ -207,7 +207,7 @@ public class SplunkConnector {
      * @return List of Job History
      */
     @Processor
-    public List<Map<String, Object>> getSavedSearchHistory(@Default("#[payload]") @Optional String searchName, @Optional String app, @Optional String owner) {
+    public List<Map<String, Object>> getSavedSearchHistory(@Default("#[payload]") String searchName, @Optional String app, @Optional String owner) {
         return getClient().getSavedSearchHistory(searchName, app, owner);
     }
 
@@ -395,7 +395,7 @@ public class SplunkConnector {
      * @return Collection of indexes
      */
     @Processor
-    public List<Map<String, Object>> getIndexes(@Default("#[payload]") @Optional String sortKey, @Optional CollectionArgs.SortDirection sortDirection,
+    public List<Map<String, Object>> getIndexes(@Default("#[payload]") String sortKey, @Optional CollectionArgs.SortDirection sortDirection,
             @Optional Map<String, Object> collectionParameters) {
         return getClient().getIndexes(sortKey, sortDirection, collectionParameters);
     }
