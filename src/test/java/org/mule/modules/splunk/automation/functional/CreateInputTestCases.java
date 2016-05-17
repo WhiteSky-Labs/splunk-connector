@@ -21,7 +21,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
-public class CreateInputsTestCases extends SplunkAbstractTestCases {
+public class CreateInputTestCases extends SplunkAbstractTestCases {
 
     private String inputIdentifier = "";
 

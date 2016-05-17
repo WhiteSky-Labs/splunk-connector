@@ -18,7 +18,7 @@ import org.mule.modules.splunk.automation.functional.AddDataToTcpInputTestCases;
 import org.mule.modules.splunk.automation.functional.AddDataToUdpInputTestCases;
 import org.mule.modules.splunk.automation.functional.CleanIndexTestCases;
 import org.mule.modules.splunk.automation.functional.CreateIndexTestCases;
-import org.mule.modules.splunk.automation.functional.CreateInputsTestCases;
+import org.mule.modules.splunk.automation.functional.CreateInputTestCases;
 import org.mule.modules.splunk.automation.functional.CreateSavedSearchTestCases;
 import org.mule.modules.splunk.automation.functional.DeleteSavedSearchTestCases;
 import org.mule.modules.splunk.automation.functional.GetApplicationsTestCases;
@@ -52,7 +52,7 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
         AddDataToUdpInputTestCases.class,
         CleanIndexTestCases.class,
         CreateIndexTestCases.class,
-        CreateInputsTestCases.class,
+        CreateInputTestCases.class,
         CreateSavedSearchTestCases.class,
         DeleteSavedSearchTestCases.class,
         GetApplicationsTestCases.class,
