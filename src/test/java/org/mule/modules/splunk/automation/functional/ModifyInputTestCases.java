@@ -23,7 +23,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
-public class ModifyInputTestCases extends SplunkAbstractTestCase {
+public class ModifyInputTestCases extends SplunkAbstractTestCases {
 
     private static final String INPUT_IDENTIFIER = "9908";
     private Map<String, Object> args;

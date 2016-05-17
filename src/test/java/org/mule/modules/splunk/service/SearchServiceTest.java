@@ -149,7 +149,7 @@ public class SearchServiceTest {
         when(job.isReady()).thenReturn(true);
         try {
             doThrow(new InterruptedException()).when(service)
-                    .processResults(any(Job.class), any(JobResultsPreviewArgs.class), eq(null));
+                    .processResults(any(Job.class), any(JobResultsPreviewArgs.class), any(SourceCallback.class));
             service.runRealTimeSearch("searchQuery", "-1h", "now", 1, 1, null);
             fail("Exception Expected");
         } catch (Exception e) {

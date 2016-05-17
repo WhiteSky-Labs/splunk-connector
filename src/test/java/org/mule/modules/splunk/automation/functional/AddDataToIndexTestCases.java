@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class AddDataToIndexTestCases extends SplunkAbstractTestCase {
+public class AddDataToIndexTestCases extends SplunkAbstractTestCases {
 
     private static final String INDEX_NAME = "add_data_to_index_test_index";
 

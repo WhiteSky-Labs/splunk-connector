@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class ModifySavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
+public class ModifySavedSearchPropertiesTestCases extends SplunkAbstractTestCases {
 
     private static final String SEARCH_NAME = "modify_saved_search_test_search";
     private Map<String, Object> props;

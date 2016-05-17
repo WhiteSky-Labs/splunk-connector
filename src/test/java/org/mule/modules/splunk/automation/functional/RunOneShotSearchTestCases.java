@@ -19,7 +19,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class RunOneShotSearchTestCases extends SplunkAbstractTestCase {
+public class RunOneShotSearchTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testRunOneShotSearch() {

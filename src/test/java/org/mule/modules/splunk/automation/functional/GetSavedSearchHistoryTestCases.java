@@ -22,7 +22,7 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class GetSavedSearchHistoryTestCases extends SplunkAbstractTestCase {
+public class GetSavedSearchHistoryTestCases extends SplunkAbstractTestCases {
 
     private static final String SEARCH_NAME = "get_saved_search_history";
 

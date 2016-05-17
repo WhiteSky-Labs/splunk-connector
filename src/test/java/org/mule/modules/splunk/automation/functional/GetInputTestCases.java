@@ -20,7 +20,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
-public class GetInputTestCases extends SplunkAbstractTestCase {
+public class GetInputTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testGetInput() throws SplunkConnectorException {

@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class GetDataModelsTestCases extends SplunkAbstractTestCase {
+public class GetDataModelsTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testGetDataModels() {

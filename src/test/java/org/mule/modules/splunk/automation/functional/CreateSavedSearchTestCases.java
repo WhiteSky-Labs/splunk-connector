@@ -18,7 +18,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class CreateSavedSearchTestCases extends SplunkAbstractTestCase {
+public class CreateSavedSearchTestCases extends SplunkAbstractTestCases {
 
     private static final String SEARCH_NAME = "create_saved_search_test_search";
     private boolean doTearDown = false;

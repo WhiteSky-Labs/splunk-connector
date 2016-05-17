@@ -16,7 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RunExportSearchTestCases extends SplunkAbstractTestCase {
+public class RunExportSearchTestCases extends SplunkAbstractTestCases {
 
     @Before
     public void setup() throws Throwable {

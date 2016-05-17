@@ -24,7 +24,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.SavedSearchDispatchArgs;
 
-public class RunSavedSearchWithArgumentsTestCases extends SplunkAbstractTestCase {
+public class RunSavedSearchWithArgumentsTestCases extends SplunkAbstractTestCases {
 
     @Rule
     public Timeout globalTimeout = new Timeout(200000);

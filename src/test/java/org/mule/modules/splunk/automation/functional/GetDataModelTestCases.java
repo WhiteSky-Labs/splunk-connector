@@ -17,7 +17,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class GetDataModelTestCases extends SplunkAbstractTestCase {
+public class GetDataModelTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testGetDataModel() throws SplunkConnectorException {

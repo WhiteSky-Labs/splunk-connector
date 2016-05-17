@@ -21,7 +21,7 @@ import org.junit.Test;
 import com.splunk.CollectionArgs;
 import com.splunk.HttpException;
 
-public class GetIndexesTestCases extends SplunkAbstractTestCase {
+public class GetIndexesTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testGetIndexes() {

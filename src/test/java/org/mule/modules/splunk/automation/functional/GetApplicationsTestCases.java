@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-public class GetApplicationsTestCases extends SplunkAbstractTestCase {
+public class GetApplicationsTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testGetApplications() {

@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class RunNormalSearchTestCases extends SplunkAbstractTestCase {
+public class RunNormalSearchTestCases extends SplunkAbstractTestCases {
 
     @Before
     public void setup() throws Throwable {

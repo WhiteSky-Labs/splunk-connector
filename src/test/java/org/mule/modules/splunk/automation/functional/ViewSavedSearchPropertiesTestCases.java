@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCase {
+public class ViewSavedSearchPropertiesTestCases extends SplunkAbstractTestCases {
 
     private static final String SEARCH_NAME = "view_saved_search_properties_test_search";
 

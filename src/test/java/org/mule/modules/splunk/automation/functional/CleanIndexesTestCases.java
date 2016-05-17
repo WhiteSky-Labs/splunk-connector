@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class CleanIndexesTestCases extends SplunkAbstractTestCase {
+public class CleanIndexesTestCases extends SplunkAbstractTestCases {
 
     private static final String INDEX_NAME = "clean_index_test_index";
 

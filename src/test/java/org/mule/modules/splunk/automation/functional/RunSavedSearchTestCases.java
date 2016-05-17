@@ -22,7 +22,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 //import org.mule.modules.tests.ConnectorTestUtils;
 
-public class RunSavedSearchTestCases extends SplunkAbstractTestCase {
+public class RunSavedSearchTestCases extends SplunkAbstractTestCases {
 
     private static final String SEARCH_NAME = "run_saved_search_test_search";
 

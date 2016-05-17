@@ -17,7 +17,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.InputKind;
 
-public class AddDataToUdpInputTestCases extends SplunkAbstractTestCase {
+public class AddDataToUdpInputTestCases extends SplunkAbstractTestCases {
 
     @Before
     public void setup() throws SplunkConnectorException {

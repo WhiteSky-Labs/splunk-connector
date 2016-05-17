@@ -22,7 +22,7 @@ import org.mule.modules.splunk.exception.SplunkConnectorException;
 
 import com.splunk.Job;
 
-public class RunBlockingSearchTestCases extends SplunkAbstractTestCase {
+public class RunBlockingSearchTestCases extends SplunkAbstractTestCases {
 
     @SuppressWarnings("unchecked")
     @Test

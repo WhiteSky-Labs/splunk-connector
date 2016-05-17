@@ -21,7 +21,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class ModifyIndexTestCases extends SplunkAbstractTestCase {
+public class ModifyIndexTestCases extends SplunkAbstractTestCases {
 
     private static final String INDEX_NAME = "modify_index_test_index";
     private Map<String, Object> args;

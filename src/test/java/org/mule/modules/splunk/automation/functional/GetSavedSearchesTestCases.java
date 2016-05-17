@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class GetSavedSearchesTestCases extends SplunkAbstractTestCase {
+public class GetSavedSearchesTestCases extends SplunkAbstractTestCases {
 
     @Rule
     public Timeout globalTimeout = new Timeout(200000);

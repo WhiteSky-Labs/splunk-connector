@@ -19,7 +19,7 @@ import org.junit.After;
 import org.junit.Test;
 import org.mule.modules.splunk.exception.SplunkConnectorException;
 
-public class CreateIndexTestCases extends SplunkAbstractTestCase {
+public class CreateIndexTestCases extends SplunkAbstractTestCases {
 
     private static final String INDEX_NAME = "create_index_test_index";
     private boolean doTearDown = false;

@@ -14,7 +14,7 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class DeleteSavedSearchTestCases extends SplunkAbstractTestCase {
+public class DeleteSavedSearchTestCases extends SplunkAbstractTestCases {
 
     @Test
     public void testDeleteSavedSearch() {
