@@ -12,6 +12,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -104,7 +105,7 @@ public class CreateInputTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateMonitorInput() {
         try {
-            inputIdentifier = "/tmp";
+            inputIdentifier = Paths.get("").toAbsolutePath().toString();
             Map<String, Object> result = getConnector().createInput(inputIdentifier, InputKind.Monitor, null);
             assertNotNull(result);
             assertEquals("default", result.get("index"));
@@ -118,7 +119,7 @@ public class CreateInputTestCases extends SplunkAbstractTestCases {
         try {
             Map<String, Object> args = new HashMap<>();
             args.put("index", "summary");
-            inputIdentifier = "/tmp";
+            inputIdentifier = Paths.get("").toAbsolutePath().toString();
             Map<String, Object> result = getConnector().createInput(inputIdentifier, InputKind.Monitor, args);
             assertNotNull(result);
             assertEquals("summary", result.get("index"));

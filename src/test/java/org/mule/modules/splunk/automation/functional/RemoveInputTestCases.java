@@ -14,6 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.nio.file.Paths;
 import java.util.Map;
 
 import org.junit.Test;
@@ -27,7 +28,7 @@ public class RemoveInputTestCases extends SplunkAbstractTestCases {
     @Test
     public void testRemoveInputMonitor() {
         try {
-            inputIdentifier = "/tmp";
+            inputIdentifier = Paths.get("").toAbsolutePath().toString();
             Map<String, Object> result = getConnector().createInput(inputIdentifier, InputKind.Monitor, null);
             assertNotNull(result);
             assertEquals("default", result.get("index"));
