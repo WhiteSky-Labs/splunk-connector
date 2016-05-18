@@ -1,7 +1,7 @@
 SPLUNK ANYPOINT STUDIO DEMO
 ================
 
-Mule Anypoint Studio demo for Splunk Connector Saved Searches Operations.
+Mule Anypoint Studio demo for Splunk Connector Saved Search Operations.
 
 HOW TO EXECUTE THE DEMO
 -----------------------
