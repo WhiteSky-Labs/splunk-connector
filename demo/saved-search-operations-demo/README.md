@@ -6,6 +6,7 @@ Mule Anypoint Studio demo for Splunk Connector Saved Search Operations.
 HOW TO EXECUTE THE DEMO
 -----------------------
 
+* Make sure that you are using Java 8 and Mule Enterprise 3.7.3
 * Set username and password of the Splunk User as well as the host and management port of started Splunk instance in src/main/resources/credentials.properties.
 * Run the demo and hit these endpoints for the demo of each processor.
     * **Create Saved Search** - *POST* http://host:port/createsavedsearch

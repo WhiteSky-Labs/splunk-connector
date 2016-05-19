@@ -44,9 +44,9 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 		<logger message="Data added to Splunk Index, payload is #[payload]"
 			level="INFO" doc:name="Logger" />			
 	</flow>
-    <flow name="Retrieve_Index">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/retrieveindex" allowedMethods="GET" doc:name="HTTP"/>
-        <splunk:get-index config-ref="Splunk" indexIdentifier="#[message.inboundProperties['indexname']]" doc:name="Retrieve Index"/>
+    <flow name="Get_Index_Flow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/getindex" allowedMethods="GET" doc:name="HTTP"/>
+        <splunk:get-index config-ref="Splunk" indexIdentifier="#[message.inboundProperties['indexname']]" doc:name="Get Index"/>
         <json:object-to-json-transformer doc:name="Object to JSON"/>
         <logger message="Index retireved from Splunk, payload is #[payload]" level="INFO" doc:name="Logger"/>
     </flow>
