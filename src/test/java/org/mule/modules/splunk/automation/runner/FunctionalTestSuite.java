@@ -40,6 +40,7 @@ import org.mule.modules.splunk.automation.functional.RunBlockingSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunExportSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunNormalSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunOneShotSearchTestCases;
+import org.mule.modules.splunk.automation.functional.RunRealTimeSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchTestCases;
 import org.mule.modules.splunk.automation.functional.RunSavedSearchWithArgumentsTestCases;
 import org.mule.modules.splunk.automation.functional.ViewSavedSearchPropertiesTestCases;
@@ -75,6 +76,7 @@ import org.mule.tools.devkit.ctf.mockup.ConnectorTestContext;
         RunExportSearchTestCases.class,
         RunNormalSearchTestCases.class,
         RunOneShotSearchTestCases.class,
+        RunRealTimeSearchTestCases.class,
         RunSavedSearchTestCases.class,
         RunSavedSearchWithArgumentsTestCases.class,
         ViewSavedSearchPropertiesTestCases.class
