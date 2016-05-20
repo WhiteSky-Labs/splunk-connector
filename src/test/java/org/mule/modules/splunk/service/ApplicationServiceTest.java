@@ -51,7 +51,7 @@ public class ApplicationServiceTest {
     public void testGetApplications() {
         List<Application> applist = new ArrayList<Application>();
         applist.add(application);
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
         Set<Map.Entry<String, Object>> set = entry.entrySet();
 

@@ -34,7 +34,7 @@ public class RunSavedSearchWithArgumentsTestCases extends SplunkAbstractTestCase
 
     @Before
     public void setup() throws SplunkConnectorException {
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<String, Object>();
         args.put("dispatch.earliest_time", "-20h");
         args.put("dispatch.latest_time", "now");
         getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100", args);
@@ -53,7 +53,7 @@ public class RunSavedSearchWithArgumentsTestCases extends SplunkAbstractTestCase
     public void testRunSavedSearchWithArguments() {
 
         try {
-            Map<String, Object> customArgs = new HashMap<>();
+            Map<String, Object> customArgs = new HashMap<String, Object>();
             customArgs.put("mysourcetype", "*");
             List<Map<String, Object>> result = getConnector().runSavedSearchWithArguments(SEARCH_NAME, customArgs, searchDispatchArgs);
             assertNotNull(result);
@@ -67,7 +67,7 @@ public class RunSavedSearchWithArgumentsTestCases extends SplunkAbstractTestCase
         try {
             // invalid custom arguments are ignored by saved searches, should be
             // successful
-            Map<String, Object> customArgs = new HashMap<>();
+            Map<String, Object> customArgs = new HashMap<String, Object>();
             customArgs.put("invalid", "invalid");
             List<Map<String, Object>> result = getConnector().runSavedSearchWithArguments(SEARCH_NAME, customArgs, searchDispatchArgs);
             assertNotNull(result);

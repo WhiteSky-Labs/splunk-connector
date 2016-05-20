@@ -49,7 +49,7 @@ public class DataModelServiceTest {
 
     @Test
     public void testGetDataModel() {
-        Map<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<String, Object>();
         map.put("testKey", "testValue");
         Set<Map.Entry<String, Object>> entrySet = map.entrySet();
 
@@ -66,9 +66,9 @@ public class DataModelServiceTest {
 
     @Test
     public void testGetDataModels() {
-        List<DataModel> modelList = new ArrayList<>();
+        List<DataModel> modelList = new ArrayList<DataModel>();
         modelList.add(model);
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
         Set<Map.Entry<String, Object>> set = entry.entrySet();
 

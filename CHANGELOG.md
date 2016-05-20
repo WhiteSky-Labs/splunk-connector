@@ -6,6 +6,7 @@ Date: 22-April-2016
 Version: 1.0.1
 
 Supported Mule Runtime Versions: 3.5.3 and above
+Supported Java Versions: 6 and above
 
 Supported API versions
 ----------------------

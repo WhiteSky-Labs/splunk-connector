@@ -52,7 +52,7 @@ public class CreateInputTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateTcpRawInputWithArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("index", "summary");
             inputIdentifier = "9293";
             Map<String, Object> result;
@@ -91,7 +91,7 @@ public class CreateInputTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateUdpInputWithArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("index", "summary");
             inputIdentifier = "9293";
             Map<String, Object> result = getConnector().createInput(inputIdentifier, InputKind.Udp, args);
@@ -117,7 +117,7 @@ public class CreateInputTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateMonitorInputWithArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("index", "summary");
             inputIdentifier = Paths.get("").toAbsolutePath().toString();
             Map<String, Object> result = getConnector().createInput(inputIdentifier, InputKind.Monitor, args);

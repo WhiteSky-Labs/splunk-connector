@@ -70,6 +70,9 @@ The Connector requires Splunk Enterprise Server v6.2 or newer.
 |Mule Runtime
 |Mule EE 3.5.3 and above
 
+|Java Runtime
+|Java 6 and above
+
 |Splunk SDK for Java
 |v1.5.0
 |===

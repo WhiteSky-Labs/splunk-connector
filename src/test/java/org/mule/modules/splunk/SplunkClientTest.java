@@ -83,7 +83,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetApplications() {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getApplicationService()).thenReturn(applicationService);
         when(applicationService.getApplications()).thenReturn(expected);
@@ -94,7 +94,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetDataModel() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("testKey", "testValue");
         when(client.getDataModelService()).thenReturn(dataModelService);
         when(dataModelService.getDataModel("Test")).thenReturn(expected);
@@ -117,7 +117,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetDataModels() {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getDataModelService()).thenReturn(dataModelService);
         when(dataModelService.getDataModels()).thenReturn(expected);
@@ -128,7 +128,7 @@ public class SplunkClientTest {
 
     @Test
     public void testAddDataToIndex() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("testKey", "testValue");
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.addDataToIndex("indexName", "stringData", null)).thenReturn(expected);
@@ -176,7 +176,7 @@ public class SplunkClientTest {
 
     @Test
     public void testCleanIndex() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("testKey", "testValue");
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.cleanIndex("indexName", 120)).thenReturn(expected);
@@ -212,7 +212,7 @@ public class SplunkClientTest {
 
     @Test
     public void testCreateIndex() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("testKey", "testValue");
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.createIndex("indexName", null)).thenReturn(expected);
@@ -223,7 +223,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetIndex() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("testKey", "testValue");
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.getIndex("indexName")).thenReturn(expected);
@@ -246,7 +246,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetIndexes() {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.getIndexes(null, null, null)).thenReturn(expected);
@@ -257,7 +257,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifyIndex() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("assureUTF8", "true");
         when(client.getIndexService()).thenReturn(indexService);
         when(indexService.modifyIndex("indexName", expected)).thenReturn(expected);
@@ -268,7 +268,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifyIndexWithEmptyIndexName() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("assureUTF8", "true");
         try {
             client.modifyIndex("", expected);
@@ -315,7 +315,7 @@ public class SplunkClientTest {
 
     @Test
     public void testCreateInput() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getInputService()).thenReturn(inputService);
         when(inputService.createInput("inputName", InputKind.TcpSplunk, expected)).thenReturn(expected);
@@ -326,7 +326,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetInput() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getInputService()).thenReturn(inputService);
         when(inputService.getInput("inputName")).thenReturn(expected);
@@ -337,7 +337,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetInputNoInputIdentifier() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         try {
             client.getInput("");
@@ -351,7 +351,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetInputs() {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getInputService()).thenReturn(inputService);
         when(inputService.getInputs()).thenReturn(expected);
@@ -362,7 +362,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifyInput() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getInputService()).thenReturn(inputService);
         when(inputService.modifyInput("inputName", expected)).thenReturn(expected);
@@ -385,7 +385,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifyInputWithEmptyInputName() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         try {
             client.modifyInput("", expected);
@@ -399,7 +399,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifyInputWithInvalidInputName() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(inputService.modifyInput("invalidName", expected)).thenThrow(new NullPointerException());
         try {
@@ -421,7 +421,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetJobs() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getJobService()).thenReturn(jobService);
         when(jobService.getJobs()).thenReturn(expected);
@@ -432,7 +432,7 @@ public class SplunkClientTest {
 
     @Test
     public void testCreateSavedSearch() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.createSavedSearch("searchName", "searchQuery", expected)).thenReturn(expected);
@@ -474,7 +474,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetSavedSearches() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.getSavedSearches("app", "owner")).thenReturn(expected);
@@ -485,7 +485,7 @@ public class SplunkClientTest {
 
     @Test
     public void testGetSavedSearchHistory() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.getSavedSearchHistory("searchName", "app", "owner")).thenReturn(expected);
@@ -496,7 +496,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifySavedSearchProperties() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.modifySavedSearchProperties("searchName", expected)).thenReturn(expected);
@@ -507,7 +507,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifySavedSearchPropertiesNoSearchName() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         try {
             client.modifySavedSearchProperties("", expected);
@@ -533,7 +533,7 @@ public class SplunkClientTest {
 
     @Test
     public void testModifySavedSearchPropertiesInvalidSearchName() {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(savedSearchService.modifySavedSearchProperties("invalidName", expected)).thenThrow(new NullPointerException());
         try {
@@ -548,7 +548,7 @@ public class SplunkClientTest {
 
     @Test
     public void testRunSavedSearch() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.runSavedSearch("searchName")).thenReturn(expected);
@@ -584,7 +584,7 @@ public class SplunkClientTest {
 
     @Test
     public void testRunSavedSearchWithArguments() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.runSavedSearchWithArguments("searchName", null, null)).thenReturn(expected);
@@ -620,7 +620,7 @@ public class SplunkClientTest {
 
     @Test
     public void testViewSavedSearchProperties() throws Exception {
-        Set<Map.Entry<String, Object>> expected = new HashSet<>();
+        Set<Map.Entry<String, Object>> expected = new HashSet<Map.Entry<String, Object>>();
         expected.add(mapEntry);
         when(client.getSavedSearchService()).thenReturn(savedSearchService);
         when(savedSearchService.viewSavedSearchProperties("searchName", "app", "owner")).thenReturn(expected);
@@ -651,7 +651,7 @@ public class SplunkClientTest {
 
     @Test
     public void testRunBlockingSearch() throws Exception {
-        Map<String, Object> expected = new HashMap<>();
+        Map<String, Object> expected = new HashMap<String, Object>();
         expected.put("input_key", "text_input");
         when(client.getSearchService()).thenReturn(searchService);
         when(searchService.runBlockingSearch("searchName", expected)).thenReturn(expected);
@@ -741,7 +741,7 @@ public class SplunkClientTest {
 
     @Test
     public void testRunOneShotSearch() throws Exception {
-        List<Map<String, Object>> expected = new ArrayList<>();
+        List<Map<String, Object>> expected = new ArrayList<Map<String, Object>>();
         expected.add(entry);
         when(client.getSearchService()).thenReturn(searchService);
         when(searchService.runOneShotSearch("searchQuery", "-1h", "now", null)).thenReturn(expected);

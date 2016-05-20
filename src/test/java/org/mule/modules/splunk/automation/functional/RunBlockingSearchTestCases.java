@@ -83,7 +83,7 @@ public class RunBlockingSearchTestCases extends SplunkAbstractTestCases {
     @Test
     public void testRunBlockingSearchWithValidSearchArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("timeout", "60");
             args.put("auto_pause", "0");
             Map<String, Object> result = getConnector().runBlockingSearch(

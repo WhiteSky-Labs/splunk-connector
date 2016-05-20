@@ -30,7 +30,7 @@ public class ModifyInputTestCases extends SplunkAbstractTestCases {
 
     @Before
     public void setup() throws SplunkConnectorException {
-        args = new HashMap<>();
+        args = new HashMap<String, Object>();
         getConnector().createInput(INPUT_IDENTIFIER, InputKind.Tcp, args);
     }
 

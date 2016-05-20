@@ -91,7 +91,7 @@ public class IndexServiceTest {
 
     @Test
     public void testCleanIndex() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
 
         when(service.getService()).thenReturn(clientService);
@@ -129,7 +129,7 @@ public class IndexServiceTest {
 
     @Test
     public void testGetIndex() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
 
         when(service.getService()).thenReturn(clientService);
@@ -174,7 +174,7 @@ public class IndexServiceTest {
     public void testModifyIndex() {
         HashMap<String, Object> props = new HashMap<String, Object>();
         props.put("assureUTF8", "true");
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
 
         when(service.getService()).thenReturn(clientService);

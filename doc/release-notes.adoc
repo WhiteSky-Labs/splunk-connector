@@ -19,6 +19,7 @@ Make it easy to send data from your third party applications directly into the S
 |===
 |Software |Version
 |Mule Runtime |3.5.3 and above
+|Java Runtime |6 and above
 |Splunk Enterprise |6.2 and above
 |===
 
@@ -26,7 +27,7 @@ Make it easy to send data from your third party applications directly into the S
 
 If you’re currently using the Splunk Connector 1.0.0 to migrate to this connector you need to:
 
-- Upgrade to at least Mule Runtime 3.5.3
+- Upgrade to at least Mule Runtime 3.5.3 and Java 6
 - Install the new connector from Exchange
 
 === Features

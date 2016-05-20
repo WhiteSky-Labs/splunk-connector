@@ -27,7 +27,7 @@ public class ModifySavedSearchPropertiesTestCases extends SplunkAbstractTestCase
 
     @Before
     public void setup() throws SplunkConnectorException {
-        props = new HashMap<>();
+        props = new HashMap<String, Object>();
         getConnector().createSavedSearch(SEARCH_NAME, "search * | head 100", null);
     }
 

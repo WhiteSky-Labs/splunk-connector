@@ -59,7 +59,7 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testCreateSavedSearch() {
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<String, Object>();
         args.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
@@ -71,7 +71,7 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testCreateSavedSearchWithNoArgs() {
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<String, Object>();
         args.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
@@ -101,9 +101,9 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchesWithNameSpace() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<SavedSearch> savedSearchList = new ArrayList<>();
+        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
         savedSearchList.add(savedSearch);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -115,9 +115,9 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testGetSavedSearchesWithNoNameSpace() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<SavedSearch> savedSearchList = new ArrayList<>();
+        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
         savedSearchList.add(savedSearch);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -131,9 +131,9 @@ public class SavedSearchServiceTest {
     public void testGetSavedSearchHistoryWithSearchNameWithNamespace() {
         Job[] jobs = { job
         };
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<SavedSearch> savedSearchList = new ArrayList<>();
+        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
         savedSearchList.add(savedSearch);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -148,7 +148,7 @@ public class SavedSearchServiceTest {
     public void testGetSavedSearchHistoryWithSearchNameNoNamespace() {
         Job[] jobs = { job
         };
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -163,9 +163,9 @@ public class SavedSearchServiceTest {
     public void testGetSavedSearchHistoryNoSearchNameWithNamespace() {
         Job[] jobs = { job
         };
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<SavedSearch> savedSearchList = new ArrayList<>();
+        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
         savedSearchList.add(savedSearch);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -180,9 +180,9 @@ public class SavedSearchServiceTest {
     public void testGetSavedSearchHistoryNoSearchNameNoNamespace() {
         Job[] jobs = { job
         };
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<SavedSearch> savedSearchList = new ArrayList<>();
+        List<SavedSearch> savedSearchList = new ArrayList<SavedSearch>();
         savedSearchList.add(savedSearch);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches(any(ServiceArgs.class))).thenReturn(savedSearchCollection);
@@ -195,7 +195,7 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testModifySavedSearchProperties() {
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<String, Object>();
         args.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);
@@ -222,8 +222,8 @@ public class SavedSearchServiceTest {
 
     @Test
     public void testRunSavedSearchWithArguments() throws Exception {
-        List<Map<String, Object>> processed = new ArrayList<>();
-        Map<String, Object> customArgs = new HashMap<>();
+        List<Map<String, Object>> processed = new ArrayList<Map<String, Object>>();
+        Map<String, Object> customArgs = new HashMap<String, Object>();
         customArgs.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getSavedSearches()).thenReturn(savedSearchCollection);

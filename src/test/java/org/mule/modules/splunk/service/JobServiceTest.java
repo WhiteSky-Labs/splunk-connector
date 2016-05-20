@@ -58,9 +58,9 @@ public class JobServiceTest {
 
     @Test
     public void testGetJobs() throws Exception {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
-        List<Job> jobs = new ArrayList<>();
+        List<Job> jobs = new ArrayList<Job>();
         jobs.add(job);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getJobs()).thenReturn(jobCollection);
@@ -83,13 +83,13 @@ public class JobServiceTest {
 
     @Test
     public void testParseEvents() throws Exception {
-        List<Map<String, Object>> entries = new ArrayList<>();
+        List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
         assertEquals(entries, service.parseEvents(resultsReaderJson));
     }
 
     @Test
     public void testPopulateEventResponseEmptyResult() throws Exception {
-        List<Map<String, Object>> entries = new ArrayList<>();
+        List<Map<String, Object>> entries = new ArrayList<Map<String, Object>>();
         when(job.getResults(any(JobResultsArgs.class))).thenReturn(inputStream);
         assertEquals(entries, service.parseEvents(resultsReaderJson));
     }
@@ -97,7 +97,7 @@ public class JobServiceTest {
     @Test
     public void testProcessCustomArgs() {
         SavedSearchDispatchArgs savedSearchDispatchArgs = new SavedSearchDispatchArgs();
-        Map<String, Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<String, Object>();
         args.put("testKey", "testValue");
         service.processCustomArgs(args, savedSearchDispatchArgs);
         assertTrue(savedSearchDispatchArgs.size() == 1);
@@ -105,7 +105,7 @@ public class JobServiceTest {
 
     @Test
     public void testProcessSet() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
         assertTrue(service.processSet(entry.entrySet())
                 .size() == 1);

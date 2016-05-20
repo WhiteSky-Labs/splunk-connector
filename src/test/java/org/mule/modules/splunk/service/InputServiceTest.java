@@ -139,7 +139,7 @@ public class InputServiceTest {
 
     @Test
     public void testGetInputs() {
-        List<Input> inputs = new ArrayList<>();
+        List<Input> inputs = new ArrayList<Input>();
         inputs.add(input);
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);
@@ -150,7 +150,7 @@ public class InputServiceTest {
 
     @Test
     public void testModifyInput() {
-        Map<String, Object> entry = new HashMap<>();
+        Map<String, Object> entry = new HashMap<String, Object>();
         entry.put("testKey", "testValue");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getInputs()).thenReturn(inputCollection);

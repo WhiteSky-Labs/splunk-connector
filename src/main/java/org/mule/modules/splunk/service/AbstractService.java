@@ -167,7 +167,7 @@ public abstract class AbstractService {
      *             on processing interruptions or errors
      */
     protected void processCallback(MultiResultsReader<?> multiResultsReader, SourceCallback callback) throws Exception {
-        List<Event> events = new ArrayList<>();
+        List<Event> events = new ArrayList<Event>();
         for (SearchResults searchResults : multiResultsReader) {
             for (Event event : searchResults) {
                 events.add(event);

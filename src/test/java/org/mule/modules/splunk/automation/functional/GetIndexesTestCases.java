@@ -42,7 +42,7 @@ public class GetIndexesTestCases extends SplunkAbstractTestCases {
     @Test
     public void testGetIndexesWithInvalidParametersTestData() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("invalidparameter", "true");
             getConnector().getIndexes("totalEventCount",
                     CollectionArgs.SortDirection.DESC, args);

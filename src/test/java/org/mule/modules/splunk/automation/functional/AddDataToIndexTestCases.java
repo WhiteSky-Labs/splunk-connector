@@ -52,7 +52,7 @@ public class AddDataToIndexTestCases extends SplunkAbstractTestCases {
     @Test
     public void testAddDataToIndexWithArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("maxDataSize", "750");
             Map<String, Object> result = getConnector().addDataToIndex(INDEX_NAME, "addDataToIndexStringData", args);
             assertNotNull(result);

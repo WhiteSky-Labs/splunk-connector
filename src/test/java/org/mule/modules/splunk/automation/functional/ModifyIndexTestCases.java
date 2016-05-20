@@ -28,7 +28,7 @@ public class ModifyIndexTestCases extends SplunkAbstractTestCases {
 
     @Before
     public void setup() throws SplunkConnectorException {
-        args = new HashMap<>();
+        args = new HashMap<String, Object>();
         getConnector().createIndex(INDEX_NAME, args);
     }
 

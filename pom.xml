@@ -23,7 +23,7 @@
 		<devkit.studio.package.skip>false</devkit.studio.package.skip>
 		<splunk.version>1.5.0.0</splunk.version>
 		<licm.version>1.1.4</licm.version>
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>1.6</jdk.version>
 	</properties>
 
 	<dependencies>

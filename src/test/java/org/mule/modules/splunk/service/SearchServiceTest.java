@@ -71,7 +71,7 @@ public class SearchServiceTest {
     @Test
     public void testRunBlockingSearch() throws Exception {
         List<Map<String, Object>> searchResult = new ArrayList<Map<String, Object>>();
-        Map<String, Object> searchArgs = new HashMap<>();
+        Map<String, Object> searchArgs = new HashMap<String, Object>();
         searchArgs.put("key", "value");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getJobs()).thenReturn(jobCollection);
@@ -98,7 +98,7 @@ public class SearchServiceTest {
     @Test
     public void testRunNormalSearch() throws Exception {
         List<Map<String, Object>> jobResult = new ArrayList<Map<String, Object>>();
-        Map<String, Object> searchArgs = new HashMap<>();
+        Map<String, Object> searchArgs = new HashMap<String, Object>();
         searchArgs.put("key", "value");
         when(service.getService()).thenReturn(clientService);
         when(clientService.getJobs()).thenReturn(jobCollection);
@@ -113,7 +113,7 @@ public class SearchServiceTest {
     @Test
     public void testRunOneShotSearch() throws Exception {
         List<Map<String, Object>> searchResult = new ArrayList<Map<String, Object>>();
-        Map<String, String> searchArgs = new HashMap<>();
+        Map<String, String> searchArgs = new HashMap<String, String>();
         searchArgs.put("key", "value");
         InputStream stubInputStream = IOUtils.toInputStream("<xml><Test>Bob</Test></xml>");
         when(service.getService()).thenReturn(clientService);

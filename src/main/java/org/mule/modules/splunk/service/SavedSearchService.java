@@ -140,7 +140,7 @@ public class SavedSearchService extends AbstractService {
             }
         }
 
-        List<Map<String, Object>> result = new ArrayList<>();
+        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
         for (Job entity : jobList) {
             result.add(processSet(entity.entrySet()));
         }

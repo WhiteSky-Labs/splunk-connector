@@ -24,7 +24,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCases {
     @Test
     public void testRunOneShotSearch() {
         try {
-            Map<String, String> args = new HashMap<>();
+            Map<String, String> args = new HashMap<String, String>();
             args.put("description", "Sample Description");
             List<Map<String, Object>> results = getConnector()
                     .runOneShotSearch("search index=_internal | head 10", "-10d", "now",
@@ -54,7 +54,7 @@ public class RunOneShotSearchTestCases extends SplunkAbstractTestCases {
     @Test
     public void testRunOneShotSearchWithInvalidSearchArgs() {
         try {
-            Map<String, String> args = new HashMap<>();
+            Map<String, String> args = new HashMap<String, String>();
             args.put("invalid", "invalid value");
             List<Map<String, Object>> results = getConnector()
                     .runOneShotSearch("search index=_internal | head 10", "-10d", "now",

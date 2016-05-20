@@ -51,7 +51,7 @@ public class CreateIndexTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateIndexWithArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("maxDataSize", "750");
             Map<String, Object> result = getConnector().createIndex(INDEX_NAME, args);
             doTearDown = true;
@@ -65,7 +65,7 @@ public class CreateIndexTestCases extends SplunkAbstractTestCases {
     @Test
     public void testCreateIndexWithInvalidArgs() {
         try {
-            Map<String, Object> args = new HashMap<>();
+            Map<String, Object> args = new HashMap<String, Object>();
             args.put("Invalid", "true");
             getConnector().createIndex(INDEX_NAME, args);
             fail("Error should be thrown with invalid args");
