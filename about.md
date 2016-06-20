@@ -18,20 +18,20 @@ Installation and Usage
 
 * For information about usage and installation you can review the documentation at [http://whitesky-labs.github.io/splunk-connector/](http://whitesky-labs.github.io/splunk-connector/).
 * API Documentation is available at [http://whitesky-labs.github.io/splunk-connector/apidocs](http://whitesky-labs.github.io/splunk-connector/apidocs)
-* Release notes are available at [http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/](http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/)
+* Release notes are available at [http://whitesky-labs.github.io/splunk-connector/2016/04/22/release-notes/](http://whitesky-labs.github.io/splunk-connector/2016/04/22/release-notes/)
 
 Compatibility
 ----------------------
 
 The Splunk Connector is certified to be compatible with:
 
-* Mule ESB v3.5.2
-* CloudHub Runtime v3.5.2
+* Mule ESB v3.5.3 and newer versions
+* CloudHub Runtime v3.6.4 and newer versions
 
 The Splunk Connector has been tested compatible with:
 
-* Splunk Enterprise v6.2
-* Splunk SDK for Java v1.3.0
+* Splunk Enterprise v6.2 and newer versions
+* Splunk SDK for Java v1.5.0
 
 If you are interested in support for other versions of MuleSoft's platforms or Splunk, please contact [support@whiteskylabs.com](mailto:support@whiteskylabs.com).
 
