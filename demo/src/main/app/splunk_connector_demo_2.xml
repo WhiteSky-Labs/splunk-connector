@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      version="EE-3.5.2"
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd">
+    <flow name="Create_Saved_Search_Flow" doc:name="Create_Saved_Search_Flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="createsavedsearch"
+                               doc:name="HTTP"/>
+        <splunk:create-saved-search config-ref="Splunk" searchName="DemoSavedSearch" searchQuery="search * | head 100"
+                                    doc:name="Create Saved Search"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Saved Search created in Splunk, payload is #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="Run_Saved_Search_Flow" doc:name="Run_Saved_Search_Flow">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="runsavedsearch"
+                               doc:name="HTTP"/>
+        <splunk:run-saved-search config-ref="Splunk" searchName="DemoSavedSearch" doc:name="Run Saved Search"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Saved Search has been run, results are #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="Delete_Saved_Search" doc:name="Delete_Saved_Search">
+        <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="deletesavedsearch"
+                               doc:name="HTTP"/>
+        <splunk:delete-saved-search config-ref="Splunk" searchName="DemoSavedSearch" doc:name="Delete Saved Search"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Saved Search was deleted, payload is #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+</mule>

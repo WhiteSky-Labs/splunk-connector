@@ -1,0 +1,124 @@
+<!-- BEGIN_INCLUDE(splunk:get-applications) -->
+    <splunk:get-applications />
+<!-- END_INCLUDE(splunk:get-applications) -->
+<!-- BEGIN_INCLUDE(splunk:get-jobs) -->
+    <splunk:get-jobs />
+<!-- END_INCLUDE(splunk:get-jobs) -->
+<!-- BEGIN_INCLUDE(splunk:run-normal-search) -->
+    <splunk:run-normal-search searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:run-normal-search>
+<!-- END_INCLUDE(splunk:run-normal-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-blocking-search) -->
+    <splunk:run-blocking-search searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:run-blocking-search>
+<!-- END_INCLUDE(splunk:run-blocking-search) -->
+<!-- BEGIN_INCLUDE(splunk:get-saved-searches) -->
+    <splunk:get-saved-searches app="#[payload.app]" owner="#[payload.owner]"/>
+<!-- END_INCLUDE(splunk:get-saved-searches) -->
+<!-- BEGIN_INCLUDE(splunk:create-saved-search) -->
+    <splunk:create-saved-search searchName="#[payload.searchName]" searchQuery="#[payload.searchQuery]">
+        <splunk:search-args ref="#[payload.searchArgs]"/>
+    </splunk:create-saved-search>
+<!-- END_INCLUDE(splunk:create-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:view-saved-search-properties) -->
+    <splunk:view-saved-search-properties searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]"/>
+<!-- END_INCLUDE(splunk:view-saved-search-properties) -->
+<!-- BEGIN_INCLUDE(splunk:get-saved-search-history) -->
+    <splunk:get-saved-search-history searchName="#[payload.searchName]" app="#[payload.app]" owner="#[payload.owner]" />
+<!-- END_INCLUDE(splunk:get-saved-search-history) -->
+<!-- BEGIN_INCLUDE(splunk:run-job) -->
+    <splunk:run-job searchName="#[payload.searchName]" />
+<!-- END_INCLUDE(splunk:run-job) -->
+<!-- BEGIN_INCLUDE(splunk:run-saved-search) -->
+    <splunk:run-saved-search searchName="#[payload.searchName]" />
+<!-- END_INCLUDE(splunk:run-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-saved-search-with-arguments) -->
+    <splunk:run-saved-search-with-arguments searchName="#[payload.searchName]">
+            <splunk:custom-args ref="#[payload.customArgs]" />
+            <splunk:search-dispatch-args ref="#[payload.searchDispatchArgs]" />
+    </splunk:run-saved-search-with-arguments>
+<!-- END_INCLUDE(splunk:run-saved-search-with-arguments) -->
+<!-- BEGIN_INCLUDE(splunk:run-one-shot-search) -->
+    <splunk:run-one-shot-search searchQuery="#[payload.searchQuery]"
+                                    earliestTime="#[payload.earliestTime]" latestTime="#[payload.earliestTime]">
+            <splunk:args ref="#[payload.args]"/>
+    </splunk:run-one-shot-search>
+<!-- END_INCLUDE(splunk:run-one-shot-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-real-time-search) -->
+    <splunk:run-real-time-search searchQuery="#[payload.searchQuery]" earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]" statusBuckets="#[payload.statusBuckets]" previewCount="#[payload.previewCount]" />
+<!-- END_INCLUDE(splunk:run-real-time-search) -->
+<!-- BEGIN_INCLUDE(splunk:run-export-search) -->
+     <splunk:run-export-search searchQuery="#[payload.searchQuery]" earliestTime="#[payload.earliestTime]" latestTime="#[payload.latestTime]">
+            
+     </splunk:run-export-search>
+<!-- END_INCLUDE(splunk:run-export-search) -->
+<!-- BEGIN_INCLUDE(splunk:delete-saved-search) -->
+    <splunk:delete-saved-search searchName ="#[payload.searchName]" />
+<!-- END_INCLUDE(splunk:delete-saved-search) -->
+<!-- BEGIN_INCLUDE(splunk:get-data-model) -->
+    <splunk:get-data-model dataModelName="#[payload.dataModelName]" />
+<!-- END_INCLUDE(splunk:get-data-model) -->
+<!-- BEGIN_INCLUDE(splunk:get-data-models) -->
+    <splunk:get-data-models/>
+<!-- END_INCLUDE(splunk:get-data-models) -->
+<!-- BEGIN_INCLUDE(splunk:get-inputs) -->
+    <splunk:get-inputs/>
+<!-- END_INCLUDE(splunk:get-inputs) -->
+<!-- BEGIN_INCLUDE(splunk:modify-saved-search-properties) -->
+    <splunk:modify-saved-search-properties searchName="#[payload.searchName]">
+        <splunk:search-properties ref="#[payload.searchProperties]" />
+    </splunk:modify-saved-search-properties>
+<!-- END_INCLUDE(splunk:modify-saved-search-properties) -->
+<!-- BEGIN_INCLUDE(splunk:modify-input) -->
+    <splunk:modify-input inputIdentifier="#[payload.inputIdentifier]">
+        <splunk:input-args ref="#[payload.inputArgs]"/>
+    </splunk:modify-input>
+<!-- END_INCLUDE(splunk:modify-input) -->
+<!-- BEGIN_INCLUDE(splunk:get-input) -->
+    <splunk:get-input inputIdentifier="#[payload.inputIdentifier]"/>
+<!-- END_INCLUDE(splunk:get-input) -->
+<!-- BEGIN_INCLUDE(splunk:get-indexes) -->
+    <splunk:get-indexes sortKey="#[payload.sortKey]" sortDirection="#[payload.sortDirection]">
+        <splunk:collection-parameters ref="#[payload.collectionParameters]"/>
+    </splunk:get-indexes>
+<!-- END_INCLUDE(splunk:get-indexes) -->
+<!-- BEGIN_INCLUDE(splunk:create-index) -->
+    <splunk:create-index indexName="#[payload.indexName]">
+        <splunk:args ref="#[payload.args]"/>
+    </splunk:create-index>
+<!-- END_INCLUDE(splunk:create-index) -->
+<!-- BEGIN_INCLUDE(splunk:modify-index) -->
+    <splunk:modify-index indexName="#[payload.indexName]">
+        <splunk:index-args ref="#[payload.indexArgs]"/>
+    </splunk:modify-index>
+<!-- END_INCLUDE(splunk:modify-index) -->
+<!-- BEGIN_INCLUDE(splunk:get-index) -->
+    <splunk:get-index indexIdentifier="#[payload.indexIdentifier]"/>
+<!-- END_INCLUDE(splunk:get-index) -->
+<!-- BEGIN_INCLUDE(splunk:clean-index) -->
+    <splunk:clean-index indexName="#[payload.indexName]" maxSeconds="#[payload.maxSeconds]"/>
+<!-- END_INCLUDE(splunk:clean-index) -->
+<!-- BEGIN_INCLUDE(splunk:add-data-to-index) -->
+    <splunk:add-data-to-index indexName="#[payload.indexName]" stringData="#[payload.stringData]">
+        <splunk:index-args ref="#[payload.index-args]"/>
+    </splunk:add-data-to-index>
+<!-- END_INCLUDE(splunk:add-data-to-index) -->
+<!-- BEGIN_INCLUDE(splunk:add-data-to-tcp-input) -->
+    <splunk:add-data-to-tcp-input portNumber="#[payload.portNumber]" stringData="#[payload.stringData]"/>
+<!-- END_INCLUDE(splunk:add-data-to-tcp-input) -->
+<!-- BEGIN_INCLUDE(splunk:add-data-to-udp-input) -->
+    <splunk:add-data-to-tcp-input portNumber="#[payload.portNumber]" stringData="#[payload.stringData]"/>
+<!-- END_INCLUDE(splunk:add-data-to-udp-input) -->
+<!-- BEGIN_INCLUDE(splunk:create-input) -->
+    <splunk:create-input inputIdentifier="#payload.inputIdentifier]" kind-ref="#[payload.kind]">
+        <splunk:args ref="#[payload.args]"/>
+    </splunk:create-input>
+<!-- END_INCLUDE(splunk:create-input) -->
+<!-- BEGIN_INCLUDE(splunk:remove-input) -->
+    <splunk:remove-input inputIdentifier="#[payload.inputIdentifier]"/>
+<!-- END_INCLUDE(splunk:remove-input) -->
+<!-- BEGIN_INCLUDE(splunk:remove-index) -->
+    <splunk:remove-index indexName="#[payload.indexName]"/>
+<!-- END_INCLUDE(splunk:remove-index) -->
