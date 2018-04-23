@@ -1,6 +1,5 @@
 # Site settings
 title:       Splunk Connector
-email:       support@whiteskylabs.com
 author:      WhiteSky Labs
 description: "MuleSoft Connector for Splunk"
 baseurl:     "/splunk-connector"
