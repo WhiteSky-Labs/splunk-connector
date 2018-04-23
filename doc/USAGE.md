@@ -47,7 +47,7 @@ If you haven't installed Anypoint Studio on your computer yet, it's time to down
 
 5. Click on "Finish" button. The connector is downloaded and installed onto Studio. You'll need to restart the Studio for the installation to be completed.
 
-![Install Splunk Connector](images/installsplunk.png)
+![Install Splunk Connector](__images/installsplunk.png)
 
 ###Setting up the project
 
@@ -55,11 +55,11 @@ Now that you've got your Anypoint Studio up and running, it's time to work on th
 
 The first thing to do in your new app is to configure the connection to Splunk. In the message flow editor, click on the "Global Elements" tab on the bottom of the page. Then click on "Create" button on the top right of the tab. In the "Choose Global Element" type dialog box that opens select "Splunk" under "Connector Configuration" and click okay.
 
-![Create Splunk Config](images/splunkcreateconfigref.png)
+![Create Splunk Config](_images/splunkcreateconfigref.png)
 
 In the Splunk Configuration box that follows, set the Hostname and Port to the hostname and port of your Splunk Server. Note that the port defaults to 8089, and is the "admin" port, distinct from the "web" port. For example: "localhost" and "8089". Provide a username and password that is a member of a role which has access to the features you would like to use with the Connector (see the Splunk Documentation for more information).
 
-![Set Splunk Properties](images/setsplunkprops.png)
+![Set Splunk Properties](_images/setsplunkprops.png)
 
 The XML for the global element should look like this:
 
@@ -68,55 +68,89 @@ The XML for the global element should look like this:
 ###Building the flows, Demo 1
 It's time to build the flows which creates an Index, sends some data to the index via HTTP, and removes the index.
 
-![Create Index flow](images/createindex.png)
+![Create Index flow](_images/createindex.png)
 
-![Add Data and Remove Index flows](images/addandremoveindex.png)
+![Add Data and Remove Index flows](_images/addandremoveindex.png)
 
 **Create Index flow:** This is the flow which creates an index on the Splunk Server. Start by dragging an HTTP endpoint from the palette onto the flow. Configure the Host, Port and Path to "localhost", "8081", and "createindex", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Create Index", and set the Index Name to ""#[message.inboundProperties['indexname']]". Click okay.
 
-![Create Index Flow](images/createIndexDetail.png)
+![Create Index Flow](_images/createIndexDetail.png)
 
 This completes the Create Index flow.
 
 **Send Data flow:** This is the flow which sends data to the index. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to "localhost", "8081", and "adddata", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Add data to Index", and set the Index Name field to "#[message.inboundProperties['indexname']]". Set the "String Data" field to "#[message.inboundProperties['stringdata']]". Click OK.
 
-![Send Data to Index Flow](images/adddata.png)
+![Send Data to Index Flow](_images/adddata.png)
 
 **Remove Index flow:** This is the flow which removes the index you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to "localhost", "8081", and "removeindex", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Remove Index", and set the Index Name field to "#[message.inboundProperties['indexname']]". Click OK.
 
-![Remove Index Flow](images/removeindex.png)
+![Remove Index Flow](_images/removeindex.png)
 
 **Flow XML**
 
-The final flow XML should look like this.
+The final flow XML should look like this. (Note: An Object to JSON transformer and Logger has been added for purposes.)
 
 	<?xml version="1.0" encoding="UTF-8"?>
 
-    <mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-    	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
-    	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+    <mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
     http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
     http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
     http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
-    http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
-        <splunk:config name="Splunk" username="#{splunk.username}" password="#{splunk.password}" host="#{splunk.host}" port="#{splunk.port}" doc:name="Splunk"/>
-        <flow name="Create_Index_Flow" doc:name="Create_Index_Flow">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="createindex" doc:name="HTTP"/>
-            <splunk:create-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]" doc:name="Create Index"/>
-        </flow>
-        <flow name="Add_Data_To_Index_Flow" doc:name="Add_Data_To_Index_Flow">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="adddata" doc:name="HTTP"/>
-            <splunk:add-data-to-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]" stringData="#[message.inboundProperties['stringdata']]" doc:name="Add Data To Index"/>
-        </flow>
-        <flow name="Remove_Index_Flow" doc:name="Remove_Index_Flow">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="removeindex" doc:name="HTTP"/>
-            <splunk:remove-index config-ref="Splunk" indexName="#[message.inboundProperties['indexname']]" doc:name="Remove Index"/>
-        </flow>
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+    http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+    http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+    http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+    http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+	<context:property-placeholder location="credentials.properties" />
+	<splunk:config-type name="Splunk" username="${splunk.username}"
+		password="${splunk.password}" host="${splunk.host}" port="${splunk.port}"
+		doc:name="Splunk: Connection Management" />
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<flow name="Create_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/createindex" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:create-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" doc:name="Create Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Splunk Index Created, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	</flow>
+	<flow name="Add_Data_To_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/adddata" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:add-data-to-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" stringData="#[message.inboundProperties['stringdata']]"
+			doc:name="Add Data To Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Data added to Splunk Index, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	</flow>
+	<flow name="Remove_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/removeindex" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:remove-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" doc:name="Remove Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Index removed from Splunk, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	    </flow>
     </mule>
+
 
 
 **Testing the app**
@@ -126,58 +160,93 @@ Now visit [http://localhost:8081/adddata?indexname=demoindex&stringdata=testing]
 Now visit [http://localhost:8081/removeindex?indexname=demoindex](http://localhost:8081/removeindex?indexname=demoindex). This will remove the previously created index.
 
 ###Building the flows, Demo 2
-A second demo shows how to Create and perform a Saved Search on the Splunk Server. Create a second mule flow in the project.
+A second demo shows how to Create and perform a Saved Search and then delete a Saved Search on the Splunk Server. Create a second mule flow in the project.
 
-![Create Saved Search Flow](images/createsavedsearch.png)
+![Create Saved Search Flow](_images/createsavedsearch.png)
 
-![Run Saved Search Flow](images/runsavedsearch.png)
+![Run Saved Search Flow](_images/runsavedsearch.png)
 
-![Delete Saved Search Flow](images/deletesavedsearch.png)
+![Delete Saved Search Flow](_images/deletesavedsearch.png)
 
 **Create Saved Search:** This is the flow which creates a Saved Search on the Splunk Server. Start by dragging an HTTP endpoint from the palette onto the flow. Configure the Host, Port and Path to "localhost", "8081", and "createsavedsearch", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Create Saved Search", and set the Saved Search Name to "DemoSavedSearch". Set the Search Query to "search * | head 100". Click okay.
 
-![Create Saved Search Detail](images/createsavedsearchdetail.png)
+![Create Saved Search Detail](_images/createsavedsearchdetail.png)
 
 This completes the Create Saved Search flow.
 
 **Run Saved Search flow:** This is the flow which runs the Saved Search you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to "localhost", "8081", and "runsavedsearch", respectively. This is the URL you will call to start the flow.
-Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Run Saved Search", and set the Index Name field to "#[message.inboundProperties['indexname']]". Set the "String Data" field to "#[message.inboundProperties['stringdata']]". Click OK.
+Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Run Saved Search", and set the Search Name field to "#[message.inboundProperties['savedsearchname']]". Click OK.
 
-![Run Saved Search Detail](images/runsavedsearchdetail.png)
+![Run Saved Search Detail](_images/runsavedsearchdetail.png)
 
 **Delete Saved Search flow:** This is the flow which deletes the Saved Search. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to "localhost", "8081", and "deletesavedsearch", respectively. This is the URL you will call to start the flow.
 Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to "Delete Saved Search", and set the Search Name field to "DemoSavedSearch". Click OK.
 
-![Delete Saved Search Detail](images/deletesavedsearchdetail.png)
+![Delete Saved Search Detail](_images/deletesavedsearchdetail.png)
 
 **Flow XML**
 
-The final flow XML should look like this.
+The final flow XML should look like this. (Note: An Object to JSON transformer and Logger has been added for purposes.)
 
     <?xml version="1.0" encoding="UTF-8"?>
 
-    <mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-    	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.5.2"
-    	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+    <mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
     http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
     http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
     http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
-    http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
-        <flow name="Create_Saved_Search_Flow" doc:name="Create_Saved_Search_Flow">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="createsavedsearch" doc:name="HTTP"/>
-            <splunk:create-saved-search config-ref="Splunk" searchName="DemoSavedSearch" searchQuery="search * | head 100" doc:name="Create Saved Search"/>
-        </flow>
-        <flow name="Run_Saved_Search_Flow" doc:name="Run_Saved_Search_Flow">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="runsavedsearch" doc:name="HTTP"/>
-            <splunk:run-saved-search config-ref="Splunk" searchName="DemoSavedSearch" doc:name="Run Saved Search"/>
-        </flow>
-        <flow name="Delete_Saved_Search" doc:name="Delete_Saved_Search">
-            <http:inbound-endpoint exchange-pattern="request-response" host="localhost" port="8081" path="deletesavedsearch" doc:name="HTTP"/>
-            <splunk:delete-saved-search config-ref="Splunk" searchName="DemoSavedSearch" doc:name="Delete Saved Search"/>
-        </flow>
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+    http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+    http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+    http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+    http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+	<context:property-placeholder location="credentials.properties" />
+	<splunk:config-type name="Splunk" username="${splunk.username}"
+		password="${splunk.password}" host="${splunk.host}" port="${splunk.port}"
+		doc:name="Splunk: Connection Management" />
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<flow name="Create_Saved_Search_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/createsavedsearch" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:create-saved-search config-ref="Splunk"
+			searchName="DemoSavedSearch" searchQuery="search * | head 100"
+			doc:name="Create Saved Search" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Splunk created saved search, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	</flow>
+	<flow name="Run_Saved_Search_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/runsavedsearch" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:run-saved-search config-ref="Splunk"
+			doc:name="Run Saved Search" searchName="DemoSavedSearch" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Splunk processed saved search, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	    </flow>
+    	    <flow name="Delete_Saved_Search_Flow">
+    		<http:listener config-ref="HTTP_Listener_Configuration"
+    			path="/deletesavedsearch" allowedMethods="POST" doc:name="HTTP" />
+    		<splunk:delete-saved-search config-ref="Splunk"
+    			searchName="DemoSavedSearch" doc:name="Delete Saved Search" />
+    		<json:object-to-json-transformer
+    			doc:name="Object to JSON" />
+    		<logger message="Splunk deleted saved search, payload is #[payload]"
+    			level="INFO" doc:name="Logger" />
+	    </flow>
     </mule>
+
 
 
 

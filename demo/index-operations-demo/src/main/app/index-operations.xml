@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking"
+	xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:spring="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:splunk="http://www.mulesoft.org/schema/mule/splunk"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+	<context:property-placeholder location="credentials.properties" />
+	<splunk:config-type name="Splunk" username="${splunk.username}"
+		password="${splunk.password}" host="${splunk.host}" port="${splunk.port}"
+		doc:name="Splunk: Connection Management" />
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<flow name="Create_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/createindex" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:create-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" doc:name="Create Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Splunk Index Created, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	</flow>
+	<flow name="Add_Data_To_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/adddata" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:add-data-to-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" stringData="#[message.inboundProperties['stringdata']]"
+			doc:name="Add Data To Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Data added to Splunk Index, payload is #[payload]"
+			level="INFO" doc:name="Logger" />			
+	</flow>
+    <flow name="Get_Index_Flow">
+        <http:listener config-ref="HTTP_Listener_Configuration" path="/getindex" allowedMethods="GET" doc:name="HTTP"/>
+        <splunk:get-index config-ref="Splunk" indexIdentifier="#[message.inboundProperties['indexname']]" doc:name="Get Index"/>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+        <logger message="Index retireved from Splunk, payload is #[payload]" level="INFO" doc:name="Logger"/>
+    </flow>
+	<flow name="Remove_Index_Flow">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/removeindex" allowedMethods="POST" doc:name="HTTP" />
+		<splunk:remove-index config-ref="Splunk"
+			indexName="#[message.inboundProperties['indexname']]" doc:name="Remove Index" />
+		<json:object-to-json-transformer
+			doc:name="Object to JSON" />
+		<logger message="Index removed from Splunk, payload is #[payload]"
+			level="INFO" doc:name="Logger" />
+	</flow>
+</mule>

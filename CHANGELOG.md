@@ -1,11 +1,12 @@
 Splunk Connector Release Notes
 =====================================
 
-Date: 7-December-2015
+Date: 23-April-2018
 
-Version: 1.0.1
+Version: 2.0.0
 
-Supported Mule Runtime Versions: 3.5.x, 3.6.x, 3.7.x
+Supported Mule Runtime Versions: 3.5.3 and above
+Supported Java Versions: 7 and above
 
 Supported API versions
 ----------------------
@@ -14,13 +15,13 @@ Supported API versions
 
 New Features and Functionality
 ------------------------------
-No new features
+
+* Community Release
 
 Closed Issues in this release
 -----------------------------
 
-* Splunk SDK 1.3.0 did not support JDK 1.8 out-of-the-box, due to a change in SSL cipher handling. New release switches to TLS1.2 instead of SSLv3 as recommended by Splunk.
-* testConnection was not correctly detecting expired tokens, so connections would error after the token expiry time. 
+* None noted
 
 Known Issues in this release
 ----------------------------

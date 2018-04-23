@@ -20,17 +20,16 @@ Compatibility
 ----------------------
 
 The Splunk Connector is certified to be compatible with:
-* Mule ESB v3.5.2
-* CloudHub Runtime v3.5.2
+* Mule ESB v3.5.3 and newer versions
+* CloudHub Runtime v3.6.4 and newer versions
+* Java 7 and newer versions
 
 The Splunk Connector has been tested compatible with:
-* Splunk Enterprise v6.2 and v6.4
+* Splunk Enterprise versions 6.2, 6.3 and 6.4
 * Splunk SDK for Java v1.5.0
-
-If you are interested in support for other versions of MuleSoft's platforms or Splunk, please contact [support@whiteskylabs.com](mailto:support@whiteskylabs.com).
 
 Reporting Issues
 ----------------
 
-You can report new issues by emailing [support@whiteskylabs.com](mailto:support@whiteskylabs.com).
+Issues will be used to keep track of bugs, enhancements, or other requests. To submit an issue, go to the Issue tab on the Splunk Connector repository and create a new issue.
 

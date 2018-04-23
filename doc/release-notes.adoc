@@ -1,0 +1,49 @@
+= Splunk Connector Release Notes
+
+Make it easy to send data from your third party applications directly into the Splunk Index, and perform searches directly on the Splunk Enterprise Server from your system of choice.
+
+*Guide:* link:user-guide.adoc[Link to Guide]
+
+== 2.0,0 - April 23, 2018
+
+- Version Compatibility
+- Migrating from Older Versions
+- Features
+- Fixed in this Release
+- Known Issues
+- Support Resources
+
+=== Version Compatibility
+
+[width="100%", cols="2", options="header"]
+|===
+|Software |Version
+|Mule Runtime |3.5.3 and above
+|Java Runtime |7 and above
+|Splunk Enterprise |6.2 and above
+|===
+
+=== Migrating from Older Versions
+
+If you’re currently using the Splunk Connector 1.0.0 to migrate to this connector you need to:
+
+- Upgrade to at least Mule Runtime 3.5.3 and Java 7
+- Install the new connector from Exchange
+
+=== Features
+
+- None noted
+
+=== Fixed in this Release
+
+- None noted
+
+=== Known Issues
+
+- User Management APIs are not currently supported
+- Realtime searches never terminate, so will run until the connector is terminated.
+
+=== Support Resources
+- Splunk SDK for Java v 1.5.0 - http://dev.splunk.com/view/java-sdk/SP-CAAAECN
+- API Documentation is available at http://whitesky-labs.github.io/splunk-connector/apidocs/mule/splunk-config.html
+- Read more about http://www.mulesoft.org/documentation/display/current/Anypoint+Connectors
