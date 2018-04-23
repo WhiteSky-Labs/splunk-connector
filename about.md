@@ -37,5 +37,5 @@ The Splunk Connector has been tested compatible with:
 Reporting Issues
 ----------------
 
-Issues will be used to keep track of bugs, enhancements, or other requests. To submit an issue, go to the Issue tab on the Stripe Connector repository and create a new issue.
+Issues will be used to keep track of bugs, enhancements, or other requests. To submit an issue, go to the Issue tab on the Splunk Connector repository and create a new issue.
 

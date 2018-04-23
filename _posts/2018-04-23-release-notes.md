@@ -89,4 +89,4 @@ Unsupported APIs are most effectively managed through the Splunk Administration 
 * [Overview Documentation](http://whitesky-labs.github.io/splunk-connector/2018/04/23/splunk-connector/)
 * [Splunk SDK for Java Documentation](http://dev.splunk.com/view/java-sdk/SP-CAAAEFH)
 * API Documentation is available at [http://whitesky-labs.github.io/splunk-connector/apidocs](http://whitesky-labs.github.io/splunk-connector/apidocs)
-* Issues will be used to keep track of bugs, enhancements, or other requests. To submit an issue, go to the Issue tab on the Stripe Connector repository and create a new issue.
+* Issues will be used to keep track of bugs, enhancements, or other requests. To submit an issue, go to the Issue tab on the Splunk Connector repository and create a new issue.
