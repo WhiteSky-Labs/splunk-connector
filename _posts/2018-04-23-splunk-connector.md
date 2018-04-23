@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Splunk Connector v1.0.1
+title: Splunk Connector v2.0.0
 ---
 
-**MuleSoft-Certified Connector**
+**MuleSoft-Community Connector**
 
 Make it easy to send data from your third party applications directly into the Splunk Index, and perform searches directly on the Splunk Enterprise Server from your system of choice.
 
@@ -54,19 +54,13 @@ The Connector requires Splunk Enterprise Server v6.2 or newer.
     </tr>
     <tr>
         <td>Splunk SDK for Java</td>
-        <td>v1.3.0</td>
+        <td>v1.5.0</td>
     </tr>
 </table>
 
 # Installing and Configuring
 
-You can "test drive" the Splunk Connector by installing it in Anypoint Studio. Follow the instructions to download and launch Anypoint Studio, then follow the steps below to install the Splunk Connector.
-
-However, to use the Splunk Connector in a production environment, you must have either:
-
-* an Enterprise license to use Mule
-* a CloudHub Starter, Professional, or Enterprise account
-* Contact the MuleSoft Sales Team to obtain either of these.
+You can get the Splunk Connector by installing it in Anypoint Studio. Follow the instructions to download and launch Anypoint Studio, then follow the steps below to install the Splunk Connector.
 
 ## Installing
 
@@ -232,7 +226,7 @@ There is currently no procedure for upgrading as only one version of the Connect
 
 # Go Further
 
-* [Release Notes](http://whitesky-labs.github.io/splunk-connector/2016/04/22/release-notes/)
+* [Release Notes](http://whitesky-labs.github.io/splunk-connector/2018/04/23/release-notes/)
 * [Splunk SDK for Java Documentation](http://dev.splunk.com/view/java-sdk/SP-CAAAEFH)
 * API Documentation is available at [http://whitesky-labs.github.io/splunk-connector/apidocs](http://whitesky-labs.github.io/splunk-connector/apidocs)
 * Read more about [http://www.mulesoft.org/documentation/display/current/Anypoint+Connectors](AnyPoint Connectors)
