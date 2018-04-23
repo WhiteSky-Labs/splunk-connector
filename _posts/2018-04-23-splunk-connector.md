@@ -3,7 +3,7 @@ layout: post
 title: Splunk Connector v2.0.0
 ---
 
-**MuleSoft-Community Connector**
+**Community Connector**
 
 Make it easy to send data from your third party applications directly into the Splunk Index, and perform searches directly on the Splunk Enterprise Server from your system of choice.
 

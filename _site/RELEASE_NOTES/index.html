@@ -8,7 +8,7 @@
     <meta name="description" content="MuleSoft Connector for Splunk">
     <meta name="author" content="WhiteSky Labs">
     
-    <link rel="canonical" href="http://whitesky-labs.github.io/splunk-connector/RELEASE_NOTES/">
+    <link rel="canonical" href="http://localhost:4000/splunk-connector/RELEASE_NOTES/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/splunk-connector/css/pixyll.css" type="text/css">
@@ -24,7 +24,7 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="Splunk Connector Release Notes">
     <meta property="og:description" content="MuleSoft Connector for Splunk">
-    <meta property="og:url" content="http://whitesky-labs.github.io/RELEASE_NOTES/">
+    <meta property="og:url" content="http://localhost:4000/RELEASE_NOTES/">
     <meta property="og:site_name" content="Splunk Connector">
 
     <!-- Icons -->
@@ -49,10 +49,9 @@
     <header class="site-header px2 px-responsive">
   <div class="mt2 wrap">
     <div class="measure">
-      <a href="http://whitesky-labs.github.io//splunk-connector" class="site-title">Splunk Connector</a>
+      <a href="http://localhost:4000//splunk-connector" class="site-title">Splunk Connector</a>
       <nav class="site-nav right">
         <a href="/splunk-connector/about/">About</a>
-<a href="mailto:support@whiteskylabs.com">Contact</a>
 
       </nav>
       <div class="clearfix"></div>
@@ -77,81 +76,32 @@
 <article class="post-content">
   <h1 id="splunk-connector-release-notes">Splunk Connector Release Notes</h1>
 
-<p>Date: 22-April-2016</p>
+<p>Date: 23-April-2018</p>
 
-<p>Version: 1.0.0</p>
+<p>Version: 2.0.0</p>
 
-<p>Supported Mule Runtime Versions: 3.5.3 and above</p>
+<p>Supported Mule Runtime Versions: 3.5.x and newer</p>
 
 <h2 id="supported-api-versions">Supported API versions</h2>
-
 <p><a href="http://dev.splunk.com/view/java-sdk/SP-CAAAECN">Splunk SDK for Java v 1.5.0</a></p>
 
 <h2 id="new-features-and-functionality">New Features and Functionality</h2>
 
-<p>Supported Operations:</p>
-
 <ul>
-<li>Connect to Splunk:</li>
-<li>Work with Saved Searches
-
-<ul>
-<li>List Saved Searches</li>
-<li>View the History of a Saved Search</li>
-<li>Create a Saved Search</li>
-<li>View and Modify the Properties of a Saved Search</li>
-<li>Run a Saved Search</li>
-<li>Run a Saved Search with Runtime Arguments</li>
-<li>Delete a Saved Search</li>
-</ul></li>
-<li>Work with Searches and Jobs
-
-<ul>
-<li>List search jobs for current user</li>
-<li>Run a normal search and stream output</li>
-<li>Run a blocking search and display the properties of the Job</li>
-<li>Run a Oneshot search and display results</li>
-<li>Run a Real-Time Search (see issues)</li>
-<li>Run an Export Search</li>
-</ul></li>
-<li>Work With Data Models
-
-<ul>
-<li>Retrieve Data Model</li>
-<li>Retrieve all Data Models</li>
-</ul></li>
-<li>Get Data into Splunk
-
-<ul>
-<li>List Data Inputs</li>
-<li>Create a new Data Input</li>
-<li>View and Modify the Properties of a Data Input</li>
-<li>Create an Index</li>
-<li>View and Modify the Properties of a Data Input</li>
-<li>Clean Events from an Index</li>
-<li>Add data directly into an Index</li>
-<li>Add data directly into a Tcp Input</li>
-<li>Add data directly into a Udp Input</li>
-</ul></li>
-<li>List a user&rsquo;s applications</li>
+  <li>Community Release</li>
 </ul>
-
-<p>Unsupported APIs are most effectively managed through the Splunk Administration Interface. If you have a specific need for an API that is currently unsupported, please contact the MuleSoft for more information.
-* Modular Inputs are not supported.
-* User and Role Management operations are not supported.
-* Data Models and Pivots have limited support.</p>
 
 <h2 id="closed-issues-in-this-release">Closed Issues in this release</h2>
 
 <ul>
-<li>None</li>
+  <li>None</li>
 </ul>
 
 <h2 id="known-issues-in-this-release">Known Issues in this release</h2>
 
 <ul>
-<li>User Management APIs are not currently supported</li>
-<li>Realtime searches never terminate, so will run until the connector is terminated.</li>
+  <li>User Management APIs are not currently supported</li>
+  <li>Realtime searches never terminate, so will run until the connector is terminated.</li>
 </ul>
 
 </article>

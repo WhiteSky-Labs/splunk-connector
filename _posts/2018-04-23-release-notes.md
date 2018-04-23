@@ -5,7 +5,7 @@ redirect_from: "/release-notes/"
 ---
 
 
-**MuleSoft-Certified Connector**
+**Community Connector**
 
 The Splunk Enterprise Server Connector provides the ability to perform most common tasks against the Splunk API in an easy, consistent way. It allows you to not only directly send data from the AnyPoint Platform into the Splunk Index but also to perform a wide variety of searches and indexing operations.
 

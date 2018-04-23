@@ -8,7 +8,7 @@
     <meta name="description" content="MuleSoft Connector for Splunk">
     <meta name="author" content="WhiteSky Labs">
     <meta name="keywords" content="">
-    <link rel="canonical" href="http://whitesky-labs.github.io/splunk-connector/2015/01/22/splunk-connector/">
+    <link rel="canonical" href="http://localhost:4000/splunk-connector/2015/01/22/splunk-connector/">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/splunk-connector/css/pixyll.css" type="text/css">
@@ -24,7 +24,7 @@
     <meta property="og:type" content="article">
     <meta property="og:title" content="Splunk Connector v1.0.0">
     <meta property="og:description" content="MuleSoft Connector for Splunk">
-    <meta property="og:url" content="http://whitesky-labs.github.io/2015/01/22/splunk-connector/">
+    <meta property="og:url" content="http://localhost:4000/2015/01/22/splunk-connector/">
     <meta property="og:site_name" content="Splunk Connector">
 
     <!-- Icons -->
@@ -49,10 +49,9 @@
     <header class="site-header px2 px-responsive">
   <div class="mt2 wrap">
     <div class="measure">
-      <a href="http://whitesky-labs.github.io//splunk-connector" class="site-title">Splunk Connector</a>
+      <a href="http://localhost:4000//splunk-connector" class="site-title">Splunk Connector</a>
       <nav class="site-nav right">
         <a href="/splunk-connector/about/">About</a>
-<a href="mailto:support@whiteskylabs.com">Contact</a>
 
       </nav>
       <div class="clearfix"></div>
@@ -71,7 +70,7 @@
   <h1>Splunk Connector v1.0.0</h1>
   <span class="post-meta">Jan 22, 2015</span><br>
   
-  <span class="post-meta small">8 minute read</span>
+  <span class="post-meta small">9 minute read</span>
 </div>
 
 <article class="post-content">
@@ -132,14 +131,14 @@
 
 <h1 id="installing-and-configuring">Installing and Configuring</h1>
 
-<p>You can &ldquo;test drive&rdquo; the Splunk Connector by installing it in Anypoint Studio. Follow the instructions to download and launch Anypoint Studio, then follow the steps below to install the Splunk Connector.</p>
+<p>You can “test drive” the Splunk Connector by installing it in Anypoint Studio. Follow the instructions to download and launch Anypoint Studio, then follow the steps below to install the Splunk Connector.</p>
 
 <p>However, to use the Splunk Connector in a production environment, you must have either:</p>
 
 <ul>
-<li>an Enterprise license to use Mule</li>
-<li>a CloudHub Starter, Professional, or Enterprise account</li>
-<li>Contact the MuleSoft Sales Team to obtain either of these.</li>
+  <li>an Enterprise license to use Mule</li>
+  <li>a CloudHub Starter, Professional, or Enterprise account</li>
+  <li>Contact the MuleSoft Sales Team to obtain either of these.</li>
 </ul>
 
 <h2 id="installing">Installing</h2>
@@ -147,16 +146,20 @@
 <p>To install the Splunk Connector:</p>
 
 <ol>
-<li>Under the Help menu in Anypoint Studio, select Install New Software.</li>
-<li>Next to the Work with: field of the Install wizard, choose the &ldquo;Add:&rdquo; button. Choose &ldquo;Archive&rdquo; and navigate to the installation zip file provided to you by WhiteSky Labs. Finally, give the site a name (e.g. &ldquo;Splunk Connector Installer&rdquo;) and choose OK.</li>
-<li><p>In the table below the Filter field (see image below), click to expand the Standard folder, then select Mule Splunk Connector. Click Next.</p>
+  <li>Under the Help menu in Anypoint Studio, select Install New Software.</li>
+  <li>Next to the Work with: field of the Install wizard, choose the “Add:” button. Choose “Archive” and navigate to the installation zip file provided to you by WhiteSky Labs. Finally, give the site a name (e.g. “Splunk Connector Installer”) and choose OK.</li>
+  <li>
+    <p>In the table below the Filter field (see image below), click to expand the Standard folder, then select Mule Splunk Connector. Click Next.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/InstallConnector.png" alt="Install Splunk Connector"></p></li>
-<li><p>Review the details, then click <em>Next</em>.</p></li>
-<li><p>Click to accept the terms and conditions, then click <em>Finish</em>.</p></li>
-<li><p>Click <em>Restart Now</em> to complete the installation. Once you have installed the connector and restarted Studio you will see several the Splunk Connector available in the palette, under the Connectors category.</p>
+    <p><img src="http://localhost:4000//splunk-connector/images/InstallConnector.png" alt="Install Splunk Connector" /></p>
+  </li>
+  <li>Review the details, then click <em>Next</em>.</li>
+  <li>Click to accept the terms and conditions, then click <em>Finish</em>.</li>
+  <li>
+    <p>Click <em>Restart Now</em> to complete the installation. Once you have installed the connector and restarted Studio you will see several the Splunk Connector available in the palette, under the Connectors category.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/splunkpalette.png" alt="Splunk Connector Palette"></p></li>
+    <p><img src="http://localhost:4000//splunk-connector/images/splunkpalette.png" alt="Splunk Connector Palette" /></p>
+  </li>
 </ol>
 
 <h2 id="configuring">Configuring</h2>
@@ -164,133 +167,139 @@
 <p>To use the Splunk Connector, you must configure two things:</p>
 
 <ul>
-<li>an instance of the connector in your application</li>
-<li>a global Splunk connector configuration</li>
+  <li>an instance of the connector in your application</li>
+  <li>a global Splunk connector configuration</li>
 </ul>
 
 <p>To create a global Splunk connector configuration, follow these steps:</p>
 
 <ol>
-<li>Click the Global Elements tab at the base of the canvas, then click Create.</li>
-<li>Use the filter to locate, then select, Splunk, then click OK.</li>
-<li><p>Configure the global connector&rsquo;s parameters according to the table below.</p>
+  <li>Click the Global Elements tab at the base of the canvas, then click Create.</li>
+  <li>Use the filter to locate, then select, Splunk, then click OK.</li>
+  <li>
+    <p>Configure the global connector’s parameters according to the table below.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/globalparameters.png" alt="Splunk Global Parameters"></p>
+    <p><img src="http://localhost:4000//splunk-connector/images/globalparameters.png" alt="Splunk Global Parameters" /></p>
 
-<table>
-<tr>
-    <th>Parameter</th>
-    <th>Description</th>
-    <th>Example</th>
-</tr>
-<tr><td>Name</td><td>Name for the global element</td><td>Splunk</td></tr>
-<tr><td>Username</td><td>Username for connecting to Splunk Enterprise</td><td>admin</td></tr>
-<tr><td>Password</td><td>Password for connecting to Splunk Enterprise</td><td>changeme</td></tr>
-<tr><td>Host</td><td>The hostname of the Splunk Enterprise Server</td><td>localhost</td></tr>
-<tr><td>Port</td><td>The administration port (not the web port) of the Splunk Enterprise Server</td><td>8089</td></tr>
-</table></li>
-<li><p>Access the Pooling Profile tab to configure any settings relevant to managing multiple connections via a connection pool.</p></li>
-<li><p>Access the Reconnection tab to configure any settings relevant to reconnection strategies that Mule should execute if it loses its connection to Splunk.</p></li>
-<li><p>Click Test Connection to confirm that the parameters of your global Splunk connector are accurate, and that Mule is able to successfully connect to your instance of Splunk.</p></li>
-<li><p>Click OK to save the global connector configurations.</p></li>
-<li><p>Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.</p></li>
-<li><p>Configure the connector&rsquo;s parameters according to the table below.</p>
+    <table>
+ <tr>
+     <th>Parameter</th>
+     <th>Description</th>
+     <th>Example</th>
+ </tr>
+ <tr><td>Name</td><td>Name for the global element</td><td>Splunk</td></tr>
+ <tr><td>Username</td><td>Username for connecting to Splunk Enterprise</td><td>admin</td></tr>
+ <tr><td>Password</td><td>Password for connecting to Splunk Enterprise</td><td>changeme</td></tr>
+ <tr><td>Host</td><td>The hostname of the Splunk Enterprise Server</td><td>localhost</td></tr>
+ <tr><td>Port</td><td>The administration port (not the web port) of the Splunk Enterprise Server</td><td>8089</td></tr>
+ </table>
+  </li>
+  <li>Access the Pooling Profile tab to configure any settings relevant to managing multiple connections via a connection pool.</li>
+  <li>Access the Reconnection tab to configure any settings relevant to reconnection strategies that Mule should execute if it loses its connection to Splunk.</li>
+  <li>Click Test Connection to confirm that the parameters of your global Splunk connector are accurate, and that Mule is able to successfully connect to your instance of Splunk.</li>
+  <li>Click OK to save the global connector configurations.</li>
+  <li>Return to the Message Flow tab in Studio. Drag the Splunk Connector onto the canvas, then select it to open the Properties Editor console.</li>
+  <li>
+    <p>Configure the connector’s parameters according to the table below.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/connectorparameters.png" alt="Splunk Connector Instance Parameters"></p>
+    <p><img src="http://localhost:4000//splunk-connector/images/connectorparameters.png" alt="Splunk Connector Instance Parameters" /></p>
 
-<table>
-<tr>
-    <th>Field</th>
-    <th>Description</th>
-    <th>Default</th>
-</tr>
-<tr><td>Display Name</td><td>A human-readable name for the Connector operation</td><td>Splunk Connector</td></tr>
-<tr><td>Config Reference</td><td>The global configuration for the Connector to connect to Splunk Enterprise Server</td><td>Splunk</td></tr>
-<tr><td>Operation</td><td>The operation to perform.</td><td>Create Index</td></tr>
-<tr><td>Index Name</td><td>A parameter for the operation chosen.</td><td>#[payload]</td></tr>
-</table></li>
-<li><p>Click blank space on the canvas to save your Splunk connector configurations.</p></li>
+    <table>
+ <tr>
+     <th>Field</th>
+     <th>Description</th>
+     <th>Default</th>
+ </tr>
+ <tr><td>Display Name</td><td>A human-readable name for the Connector operation</td><td>Splunk Connector</td></tr>
+ <tr><td>Config Reference</td><td>The global configuration for the Connector to connect to Splunk Enterprise Server</td><td>Splunk</td></tr>
+ <tr><td>Operation</td><td>The operation to perform.</td><td>Create Index</td></tr>
+ <tr><td>Index Name</td><td>A parameter for the operation chosen.</td><td>#[payload]</td></tr>
+ </table>
+  </li>
+  <li>Click blank space on the canvas to save your Splunk connector configurations.</li>
 </ol>
 
 <h2 id="example-use-case">Example Use Case</h2>
 
-<p>It&rsquo;s time to build the flows which creates an Index, sends some data to the index via HTTP, and removes the index.</p>
+<p>It’s time to build the flows which creates an Index, sends some data to the index via HTTP, and removes the index.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/createindex.png" alt="Create Index flow"></p>
+<p><img src="http://localhost:4000//splunk-connector/images/createindex.png" alt="Create Index flow" /></p>
 
-<p><img src="http://whitesky-labs.github.iohttp://whitesky-labs.github.io//splunk-connector/images/addandremoveindex.png" alt="Add Data and Remove Index flows"></p>
+<p><img src="http://localhost:4000http://localhost:4000//splunk-connector/images/addandremoveindex.png" alt="Add Data and Remove Index flows" /></p>
 
 <p><strong>Create Index flow:</strong> This is the flow which creates an index on the Splunk Server. Start by dragging an HTTP endpoint from the palette onto the flow.</p>
 
-<p>Configure the Host, Port and Path to &ldquo;localhost&rdquo;, &ldquo;8081&rdquo;, and &ldquo;createindex&rdquo;, respectively. This is the URL you will call to start the flow.</p>
+<p>Configure the Host, Port and Path to “localhost”, “8081”, and “createindex”, respectively. This is the URL you will call to start the flow.</p>
 
 <p>Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown.</p>
 
-<p>Set the Operation to &ldquo;Create Index&rdquo;, and set the Index Name to</p>
+<p>Set the Operation to “Create Index”, and set the Index Name to</p>
 
-<p><code>&quot;#[message.inboundProperties[&#39;indexname&#39;]]&quot;</code>.</p>
+<p><code class="highlighter-rouge">"#[message.inboundProperties['indexname']]"</code>.</p>
 
 <p>Click okay.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/createIndexDetail.png" alt="Create Index Flow"></p>
+<p><img src="http://localhost:4000//splunk-connector/images/createIndexDetail.png" alt="Create Index Flow" /></p>
 
 <p>This completes the Create Index flow.</p>
 
 <p><strong>Send Data flow:</strong> This is the flow which sends data to the index. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow.</p>
 
-<p>Configure the Host, Port, and Path to &ldquo;localhost&rdquo;, &ldquo;8081&rdquo;, and &ldquo;adddata&rdquo;, respectively.
+<p>Configure the Host, Port, and Path to “localhost”, “8081”, and “adddata”, respectively.
 This is the URL you will call to start the flow.</p>
 
 <p>Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown.</p>
 
-<p>Set the Operation to &ldquo;Add data to Index&rdquo;, and set the Index Name field to</p>
+<p>Set the Operation to “Add data to Index”, and set the Index Name field to</p>
 
-<p><code>#[message.inboundProperties[&#39;indexname&#39;]]</code>.</p>
+<p><code class="highlighter-rouge">#[message.inboundProperties['indexname']]</code>.</p>
 
-<p>Set the &ldquo;String Data&rdquo; field to</p>
+<p>Set the “String Data” field to</p>
 
-<p><code>#[message.inboundProperties[&#39;stringdata&#39;]]</code>.</p>
+<p><code class="highlighter-rouge">#[message.inboundProperties['stringdata']]</code>.</p>
 
 <p>Click OK.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/adddata.png" alt="Send Data to Index Flow"></p>
+<p><img src="http://localhost:4000//splunk-connector/images/adddata.png" alt="Send Data to Index Flow" /></p>
 
-<p><strong>Remove Index flow:</strong> This is the flow which removes the index you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to &ldquo;localhost&rdquo;, &ldquo;8081&rdquo;, and &ldquo;removeindex&rdquo;, respectively. This is the URL you will call to start the flow.
-Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to &ldquo;Remove Index&rdquo;, and set the Index Name field to &ldquo;#[message.inboundProperties[&lsquo;indexname&rsquo;]]&rdquo;. Click OK.</p>
+<p><strong>Remove Index flow:</strong> This is the flow which removes the index you created. Start by dragging an HTTP endpoint from the palette onto the workspace (not onto a flow), creating a new flow. Configure the Host, Port, and Path to “localhost”, “8081”, and “removeindex”, respectively. This is the URL you will call to start the flow.
+Then drag a Splunk Connector onto the flow after the HTTP endpoint. In the configuration window for the Splunk Connector, select the previously created Splunk config from the Config Reference dropdown. Set the Operation to “Remove Index”, and set the Index Name field to “#[message.inboundProperties[‘indexname’]]”. Click OK.</p>
 
-<p><img src="http://whitesky-labs.github.io//splunk-connector/images/removeindex.png" alt="Remove Index Flow"></p>
+<p><img src="http://localhost:4000//splunk-connector/images/removeindex.png" alt="Remove Index Flow" /></p>
 
 <p><strong>Flow XML</strong></p>
 
 <p>The final flow XML should look like this.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 
-&lt;mule xmlns:http=&quot;http://www.mulesoft.org/schema/mule/http&quot; xmlns:splunk=&quot;http://www.mulesoft.org/schema/mule/splunk&quot; xmlns:tracking=&quot;http://www.mulesoft.org/schema/mule/ee/tracking&quot; xmlns=&quot;http://www.mulesoft.org/schema/mule/core&quot; xmlns:doc=&quot;http://www.mulesoft.org/schema/mule/documentation&quot;
-    xmlns:spring=&quot;http://www.springframework.org/schema/beans&quot; version=&quot;EE-3.5.2&quot;
-    xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
-    xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+
+<span class="nt">&lt;mule</span> <span class="na">xmlns:http=</span><span class="s">"http://www.mulesoft.org/schema/mule/http"</span> <span class="na">xmlns:splunk=</span><span class="s">"http://www.mulesoft.org/schema/mule/splunk"</span> <span class="na">xmlns:tracking=</span><span class="s">"http://www.mulesoft.org/schema/mule/ee/tracking"</span> <span class="na">xmlns=</span><span class="s">"http://www.mulesoft.org/schema/mule/core"</span> <span class="na">xmlns:doc=</span><span class="s">"http://www.mulesoft.org/schema/mule/documentation"</span>
+	<span class="na">xmlns:spring=</span><span class="s">"http://www.springframework.org/schema/beans"</span> <span class="na">version=</span><span class="s">"EE-3.5.2"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/splunk http://www.mulesoft.org/schema/mule/splunk/current/mule-splunk.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd&quot;&gt;
-    &lt;splunk:config name=&quot;Splunk&quot; username=&quot;#{splunk.username}&quot; password=&quot;#{splunk.password}&quot; host=&quot;#{splunk.host}&quot; port=&quot;#{splunk.port}&quot; doc:name=&quot;Splunk&quot;/&gt;
-    &lt;flow name=&quot;Create_Index_Flow&quot; doc:name=&quot;Create_Index_Flow&quot;&gt;
-        &lt;http:inbound-endpoint exchange-pattern=&quot;request-response&quot; host=&quot;localhost&quot; port=&quot;8081&quot; path=&quot;createindex&quot; doc:name=&quot;HTTP&quot;/&gt;
-        &lt;splunk:create-index config-ref=&quot;Splunk&quot; indexName=&quot;#[message.inboundProperties[&#39;indexname&#39;]]&quot; doc:name=&quot;Create Index&quot;/&gt;
-    &lt;/flow&gt;
-    &lt;flow name=&quot;Add_Data_To_Index_Flow&quot; doc:name=&quot;Add_Data_To_Index_Flow&quot;&gt;
-        &lt;http:inbound-endpoint exchange-pattern=&quot;request-response&quot; host=&quot;localhost&quot; port=&quot;8081&quot; path=&quot;adddata&quot; doc:name=&quot;HTTP&quot;/&gt;
-        &lt;splunk:add-data-to-index config-ref=&quot;Splunk&quot; indexName=&quot;#[message.inboundProperties[&#39;indexname&#39;]]&quot; stringData=&quot;#[message.inboundProperties[&#39;stringdata&#39;]]&quot; doc:name=&quot;Add Data To Index&quot;/&gt;
-    &lt;/flow&gt;
-    &lt;flow name=&quot;Remove_Index_Flow&quot; doc:name=&quot;Remove_Index_Flow&quot;&gt;
-        &lt;http:inbound-endpoint exchange-pattern=&quot;request-response&quot; host=&quot;localhost&quot; port=&quot;8081&quot; path=&quot;removeindex&quot; doc:name=&quot;HTTP&quot;/&gt;
-        &lt;splunk:remove-index config-ref=&quot;Splunk&quot; indexName=&quot;#[message.inboundProperties[&#39;indexname&#39;]]&quot; doc:name=&quot;Remove Index&quot;/&gt;
-    &lt;/flow&gt;
-&lt;/mule&gt;
-</code></pre></div>
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;splunk:config</span> <span class="na">name=</span><span class="s">"Splunk"</span> <span class="na">username=</span><span class="s">"#{splunk.username}"</span> <span class="na">password=</span><span class="s">"#{splunk.password}"</span> <span class="na">host=</span><span class="s">"#{splunk.host}"</span> <span class="na">port=</span><span class="s">"#{splunk.port}"</span> <span class="na">doc:name=</span><span class="s">"Splunk"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;flow</span> <span class="na">name=</span><span class="s">"Create_Index_Flow"</span> <span class="na">doc:name=</span><span class="s">"Create_Index_Flow"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;http:inbound-endpoint</span> <span class="na">exchange-pattern=</span><span class="s">"request-response"</span> <span class="na">host=</span><span class="s">"localhost"</span> <span class="na">port=</span><span class="s">"8081"</span> <span class="na">path=</span><span class="s">"createindex"</span> <span class="na">doc:name=</span><span class="s">"HTTP"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;splunk:create-index</span> <span class="na">config-ref=</span><span class="s">"Splunk"</span> <span class="na">indexName=</span><span class="s">"#[message.inboundProperties['indexname']]"</span> <span class="na">doc:name=</span><span class="s">"Create Index"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/flow&gt;</span>
+    <span class="nt">&lt;flow</span> <span class="na">name=</span><span class="s">"Add_Data_To_Index_Flow"</span> <span class="na">doc:name=</span><span class="s">"Add_Data_To_Index_Flow"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;http:inbound-endpoint</span> <span class="na">exchange-pattern=</span><span class="s">"request-response"</span> <span class="na">host=</span><span class="s">"localhost"</span> <span class="na">port=</span><span class="s">"8081"</span> <span class="na">path=</span><span class="s">"adddata"</span> <span class="na">doc:name=</span><span class="s">"HTTP"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;splunk:add-data-to-index</span> <span class="na">config-ref=</span><span class="s">"Splunk"</span> <span class="na">indexName=</span><span class="s">"#[message.inboundProperties['indexname']]"</span> <span class="na">stringData=</span><span class="s">"#[message.inboundProperties['stringdata']]"</span> <span class="na">doc:name=</span><span class="s">"Add Data To Index"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/flow&gt;</span>
+    <span class="nt">&lt;flow</span> <span class="na">name=</span><span class="s">"Remove_Index_Flow"</span> <span class="na">doc:name=</span><span class="s">"Remove_Index_Flow"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;http:inbound-endpoint</span> <span class="na">exchange-pattern=</span><span class="s">"request-response"</span> <span class="na">host=</span><span class="s">"localhost"</span> <span class="na">port=</span><span class="s">"8081"</span> <span class="na">path=</span><span class="s">"removeindex"</span> <span class="na">doc:name=</span><span class="s">"HTTP"</span><span class="nt">/&gt;</span>
+        <span class="nt">&lt;splunk:remove-index</span> <span class="na">config-ref=</span><span class="s">"Splunk"</span> <span class="na">indexName=</span><span class="s">"#[message.inboundProperties['indexname']]"</span> <span class="na">doc:name=</span><span class="s">"Remove Index"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/flow&gt;</span>
+<span class="nt">&lt;/mule&gt;</span>
+</code></pre></div></div>
+
 <p><strong>Testing the app</strong></p>
 
-<p>Now it&rsquo;s time to test the app. Run the app in Anypoint Studio and open a browser window. Visit <a href="http://localhost:8081/createindex?indexname=demoindex">http://localhost:8081/createindex?indexname=demoindex</a>. This will create an index on the Splunk server.
+<p>Now it’s time to test the app. Run the app in Anypoint Studio and open a browser window. Visit <a href="http://localhost:8081/createindex?indexname=demoindex">http://localhost:8081/createindex?indexname=demoindex</a>. This will create an index on the Splunk server.
 Now visit <a href="http://localhost:8081/adddata?indexname=demoindex&amp;stringdata=testing">http://localhost:8081/adddata?indexname=demoindex&amp;stringdata=testing</a>. This will send data to the index (you can verify this in the Splunk Search App).
 Now visit <a href="http://localhost:8081/removeindex?indexname=demoindex">http://localhost:8081/removeindex?indexname=demoindex</a>. This will remove the previously created index.</p>
 
@@ -303,17 +312,17 @@ Now visit <a href="http://localhost:8081/removeindex?indexname=demoindex">http:/
 <h2 id="best-practices">Best Practices</h2>
 
 <ul>
-<li>It is important to understand how the internal Splunk Architecture works in order to effectively use the Connector, especially the relationships between indexes, searches, inputs and data. Review the Splunk Enterprise documentation to learn more.</li>
-<li>Be careful of using Real-time and Export Searches. They will run permanently until completed (Export) or terminated (Real-time). This can cause unexpected load on your Mule ESB server and should be used with caution. Saved Searches should be preferred as a general rule.</li>
+  <li>It is important to understand how the internal Splunk Architecture works in order to effectively use the Connector, especially the relationships between indexes, searches, inputs and data. Review the Splunk Enterprise documentation to learn more.</li>
+  <li>Be careful of using Real-time and Export Searches. They will run permanently until completed (Export) or terminated (Real-time). This can cause unexpected load on your Mule ESB server and should be used with caution. Saved Searches should be preferred as a general rule.</li>
 </ul>
 
 <h1 id="go-further">Go Further</h1>
 
 <ul>
-<li><a href="http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/">Release Notes</a></li>
-<li><a href="http://dev.splunk.com/view/java-sdk/SP-CAAAEFH">Splunk SDK for Java Documentation</a></li>
-<li>API Documentation is available at <a href="http://whitesky-labs.github.io/splunk-connector/apidocs">http://whitesky-labs.github.io/splunk-connector/apidocs</a></li>
-<li>Read more about <a href="AnyPoint%20Connectors">http://www.mulesoft.org/documentation/display/current/Anypoint+Connectors</a></li>
+  <li><a href="http://whitesky-labs.github.io/splunk-connector/2015/01/22/release-notes/">Release Notes</a></li>
+  <li><a href="http://dev.splunk.com/view/java-sdk/SP-CAAAEFH">Splunk SDK for Java Documentation</a></li>
+  <li>API Documentation is available at <a href="http://whitesky-labs.github.io/splunk-connector/apidocs">http://whitesky-labs.github.io/splunk-connector/apidocs</a></li>
+  <li>Read more about <a href="AnyPoint Connectors">http://www.mulesoft.org/documentation/display/current/Anypoint+Connectors</a></li>
 </ul>
 
 </article>
